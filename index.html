@@ -3,6 +3,7 @@
     <head>
         <link rel="stylesheet" href="style.css">
         <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+        <script src="jQuery.js"></script>
     </head>
     <body>
         <div class="background-flex">
@@ -16,11 +17,45 @@
                     <br><br>
                     <span class="div-3-span-2">Delivering now all accross lebanon!</span>
                     <br><br><br>
-                    <input type="button" class="start-button" value="Order Now">
+                    <input type="button" class="start-button" value="Order Now" id="order-button">
                 </div>
             </div>
             <div class="flex-column background-div-2">
             </div>
         </div>
+        <div class="login-box" id="login-box">
+            <div class="login-toolbar">
+                <div class="toolbar-x" id="toolbar-x"></div>
+            </div>
+            <div class="login-div">
+                
+                <div class="login-form">
+                    <h2>Login</h2>
+                    <form>
+                        <div class="input-div">
+                            <input type="text" placeholder="Username">
+                        </div>
+                        <div class="input-div">
+                            <input type="password" placeholder="Password">
+                        </div>
+                        <div class="input-div">
+                            <input type="submit" value="Login">
+                        </div>
+                        <p class="forget">Forgot password ? <a href="#">Click Here</a></p>
+                        <p class="forget">Don't have an account ? <a href="#">Sign up</a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
     </body>
+    <script>
+        $('#order-button').click(function()
+        {
+            $('#login-box').show(400);
+        });
+        $('#toolbar-x').click(function()
+        {
+            $('#login-box').hide(400);
+        });
+    </script>
 </html>
