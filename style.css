@@ -100,7 +100,7 @@ font-family:'Courier New';
     transform: translate(-50%,-50%);
     width:26%;
     height:50%;
-    min-width:280px;
+    min-width:200px;
     max-width:80%;
 }
 .login-div
@@ -253,7 +253,7 @@ font-family:'Courier New';
 }
 .tooltiptext {
     visibility: hidden;
-    width: 120px;
+    width:350px;
     background-color: black;
     color: #fff;
     text-align: center;
@@ -263,14 +263,16 @@ font-family:'Courier New';
     /* Position the tooltip */
     position: absolute;
     z-index: 3;
-    bottom: 100%;
-    margin-left:-100px;
+    top:170%;
+    left:98%;
+    transform: translate(-98%,-170%);
   }
   
-.spinner-error:hover .tooltiptext 
+.spinner-error:hover .tooltiptext
   {
     visibility: visible;
   }
+
 .spinner
 {
     display:none;

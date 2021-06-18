@@ -50,10 +50,19 @@
                     <h2 class="login-text">Sign-up</h2>
                     <form method="POST" action="CreateAccount.php">
                         <div class="input-div">
-                            <input type="text" id="signup-user" placeholder="Username" onkeyup="CheckUsername()">
+                            <input type="text" id="signup-user" placeholder="Username">
                         </div>
                         <div class="input-div">
-                            <input type="text" placeholder="Email">
+                            <input type="text" placeholder="Email" id="signup-email">
+                            <div class="spinner-parent">
+                                <div class="spinner" id="email-spinner">
+                                </div>
+                                <div class="spinner-error" id="email-error">
+                                    <div class="tooltiptext" id="error-msg">You need to type a valid email.</div>
+                                </div>
+                                <div class="spinner-correct" id="email-correct">
+                                </div>
+                            </div>
                         </div>
                         <div class="input-div">
                             <input type="password" placeholder="Password" id="signup-pass">
@@ -61,14 +70,25 @@
                                 <div class="spinner" id="pass-spinner">
                                 </div>
                                 <div class="spinner-error" id="pass-error">
-                                    <span class="tooltiptext" id="error-msg">Password needs to be atleast 8 characters and contains atleast a number and a special character</span>
+                                    <div class="tooltiptext" id="error-msg">Password needs to be atleast 8 characters and 
+                                        contains atleast a number and a special character</div>
                                 </div>
                                 <div class="spinner-correct" id="pass-correct">
                                 </div>
                             </div>
+                            
                         </div>
                         <div class="input-div">
                             <input type="password" placeholder="Confirm Password" id="signup-cpass">
+                            <div class="spinner-parent">
+                                <div class="spinner" id="cpass-spinner">
+                                </div>
+                                <div class="spinner-error" id="cpass-error">
+                                    <div class="tooltiptext" id="error-msg">Passwords need to match</div>
+                                </div>
+                                <div class="spinner-correct" id="cpass-correct">
+                                </div>
+                            </div>
                         </div>
                         <div class="input-div">
                             <input type="submit" value="Sign-up">
@@ -119,7 +139,7 @@
                 $('#pass-spinner').show();
                 $('#pass-error').hide();
                 $('#pass-correct').hide();
-                
+
                 clearTimeout(timeout);
                 timeout = setTimeout(function () {
                     if(CheckPass(input.val())==true)
@@ -133,20 +153,11 @@
                         $('#pass-error').show();
                         $('#pass-correct').hide();
                     }
-                   /* if(input.val().length<=8)
-                    {
-                        
-                    }else
-                    {
-                        
-                    }*/
-                    
                 }, 400);
             });
 
         function CheckPass(str)
         {
-            var pass_msg=document.getElementById("error-msg");
             var reg=/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
             if(str.match(reg))
@@ -154,13 +165,71 @@
                 return true;
             }
             return false;
-            
         }
-         function CheckUsername()
-        {
-            var signup_username=document.getElementById("signup-user");
-            var name=signup_username.value;
+            var cinput = $('#signup-cpass');
+
+            // Init a timeout variable to be used below
+            var ctimeout = null;
+
+            // Listen for keystroke events
+            cinput.keyup(function(){
+                $('#cpass-spinner').show();
+                $('#cpass-error').hide();
+                $('#cpass-correct').hide();
+
+                clearTimeout(ctimeout);
+                ctimeout = setTimeout(function () {
+                    if(cinput.val()==$('#signup-pass').val())
+                    {
+                        $('#cpass-spinner').hide();
+                        $('#cpass-error').hide();
+                        $('#cpass-correct').show();
+                    }else
+                    {
+                        $('#cpass-spinner').hide();
+                        $('#cpass-error').show();
+                        $('#cpass-correct').hide();
+                    }
+                }, 400);
+            });
+
+            var emailinput = $('#signup-email');
+
+            // Init a timeout variable to be used below
+            var emailtimeout = null;
+
+            // Listen for keystroke events
+            emailinput.keyup(function(){
+                $('#email-spinner').show();
+                $('#email-error').hide();
+                $('#email-correct').hide();
+
+                clearTimeout(emailtimeout);
+                emailtimeout = setTimeout(function () {
+                    if(CheckEmail(emailinput.val())==true)
+                    {
+                        $('#email-spinner').hide();
+                        $('#email-error').hide();
+                        $('#email-correct').show();
+                    }else
+                    {
+                        $('#email-spinner').hide();
+                        $('#email-error').show();
+                        $('#email-correct').hide();
+                    }
+                }, 400);
+            });
             
-        }
+            function CheckEmail(str)
+            {
+                var reg=/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/gi;
+
+                if(str.match(reg))
+                {
+                    return true;
+                }
+                return false;
+            }
+            
     </script>
 </html>
