@@ -5,7 +5,10 @@ padding:0;
 box-sizing: border-box;
 font-family:'Courier New';
 }
-
+.border
+{
+    border:1px solid red;
+}
 .background-flex
 {
     height: 100vh;
@@ -14,6 +17,7 @@ font-family:'Courier New';
     background-size: 75%;
     display:flex;
     flex-wrap: wrap;
+
 }
 .flex-column
 {
@@ -31,6 +35,7 @@ font-family:'Courier New';
     display: flex;
     flex-direction: column;
 }
+
 .background-div-1_1
 {
     background-image: url("images/logo.png");
@@ -62,6 +67,10 @@ font-family:'Courier New';
     background-repeat: no-repeat;
     background-size: 120%;
     background-position: left;
+}
+.background-div-1-buymenu
+{
+ max-width: 50%;   
 }
 .background-div-3
 {
@@ -252,6 +261,233 @@ font-family:'Courier New';
     top:50%;
     transform: translate(-50%,-50%);
 }
+.buymenu-parent
+{
+    position: absolute;
+    width:100%; 
+    height:100%;
+    display:flex;
+}
+.buymenu
+{
+    position: relative;
+    width:75%;
+    height:80%;
+    top:20%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+.buymenu-settings
+{
+    position:relative;
+    width:25%;
+    height:100%;
+    border:1px solid white;
+}
+.buymenu-title
+{
+    display:flex;
+    width:80%;
+    height:6%;
+    justify-content: flex-start;
+    background: rgba( 255, 255, 255, 0.1);
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+    border:1px solid rgba(255, 255, 255, 0.5);
+    border-right:1px solid rgba(255, 255, 255, 0.2);
+    border-bottom:1px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+}
+
+.buymenu-title-item
+{
+    width:100%;
+    min-width:32px;
+    display:flex;
+    color:white;
+    align-items: center;
+    overflow: hidden;
+    justify-content: center;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    
+}
+.buymenu-title-item:hover
+{
+    background-color:rgba(255, 255, 255, 0.3);
+}
+.food-text
+{
+    padding:5px;
+    font-size:18px;
+    overflow: hidden;
+}
+.logo-img
+{
+    width:30px;
+}
+.buymenu-items
+{
+    width:80%;
+    height:94%;
+}
+.buymenu-categorie
+{
+    width:100%;
+    height:100%;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    padding:20px 0;
+    box-sizing: border-box;
+    grid-template-columns: 50% 50%;
+}
+.container
+{
+    position: relative;
+    z-index:10;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    transition: 0.5s;
+}
+.container .item-card
+{
+    position: relative;
+    width: 350px;
+    height:400px;
+    margin:20px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255,255,255,0.1);
+    box-shadow: 0 10px 25px rgba( 0, 0, 0, 0.05);
+    backdrop-filter: blur(5px);
+    border-radius: 20px;
+    transition: 0.5s;
+}
+.container .item-card:hover
+{
+    background:#F3A800 ;
+}
+.container .item-card .item-imgBox
+{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding:20px;
+    transition:0.5s;
+    height:100%;
+    flex-basis: 0;
+    flex-grow: 4;
+
+}
+.container .item-card .item-imgBox img
+{
+    width:256px;
+    margin: 0 0 20px;
+    transition:0.5s;
+
+}
+.container .item-card .item-imgBox h2
+{
+    color:white;
+    font-weight: 600;
+}
+.container .item-card .item-content
+{
+    width:100%;
+    height:75%;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    transition: 0.5s;
+    border-left:1px solid rgba( 255, 255, 255, 0.1);
+    overflow: hidden;
+    flex-basis: 0;
+    flex-grow: 10;
+    display:none;
+    
+}
+.container .item-card .item-content .description,
+.container .item-card .item-content .ingredients
+{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    padding:8px 20px;
+}
+.container .item-card .item-content .description h3
+{
+    color:white;
+    font-weight: 300;
+    font-size:14px;
+    letter-spacing: 2px;
+    margin-right: 10px;
+}
+.container .item-card .item-content .ingredients input
+{
+    width:20px;
+    height:20px; 
+    margin:2px;
+}
+.container .item-card .item-content .description span
+{
+    width:26px;
+    height:26px;
+    text-align: center;
+    line-height: 24px;
+    display: inline-block;
+    color:#111;
+    background: white;
+    border-radius: 4px;
+    font-size:14px;
+    margin:0 5px;
+    font-weight: 500;
+    transition: 0.5s;
+    cursor: pointer;
+}
+.container .item-card .item-content .desciption span:hover
+{
+    background: #2AC940;
+}
+.container .item-card .item-content .ingredients span
+{
+    width:20px;
+    height:20px;
+    background: #f00;
+    border-radius: 50%;
+    margin:0 5px;
+    border:2px solid white;
+    box-sizing: border-box;
+    cursor:pointer;
+    
+}
+.container .item-card .item-content .a
+{
+    padding:12px 30px;
+    background: white;
+    border-radius: 40px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color:#111;
+    text-decoration: none;
+    text-transform: uppercase;
+    width:50%;
+    text-align: center;
+   
+}
 .tooltiptext {
     visibility: hidden;
     width:350px;
@@ -349,6 +585,21 @@ font-family:'Courier New';
         
         border:4px solid white;
         border-top:4px solid red;
+    }
+    .background-div-1-buymenu
+    {
+    max-width:100%;   
+    }
+    .buymenu
+    {
+        width:100%;
+        height: 85%;
+        top:15%;
+    }
+    .buymenu-settings
+    {
+        width:0;
+        display:none;
     }
 
 }

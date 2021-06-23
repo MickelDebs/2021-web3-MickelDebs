@@ -16,10 +16,10 @@
     </head>
     <body>
         <div class="background-flex">
-            <div class="flex-column logo-div">
-                <div class="background-div-1">
-                        <div class="background-div-1_1"></div>
-                        <div class="background-div-1_2"><span>BFE</span></div>
+            <div class="flex-column logo-div ">
+                <div class="background-div-1 ">
+                        <div class="background-div-1_1 "></div>
+                        <div class="background-div-1_2 "><span>BFE</span></div>
                 </div>
                 <div class="background-div-3">
                     <span class="div-3-span-1">JUICY & HOT FOOD</span>

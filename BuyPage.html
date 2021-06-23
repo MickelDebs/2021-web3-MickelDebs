@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+        <script src="jQuery.js"></script>
+    </head>
+    <body>
+        <div class="background-flex ">
+            <div class="flex-column logo-div">
+                <div class="background-div-1 background-div-1-buymenu">
+                        <div class="background-div-1_1 "></div>
+                        <div class="background-div-1_2 "><span>BFE</span></div>
+                </div>
+                
+            </div>
+            <div class="buymenu-parent">
+                <div class="buymenu">
+                    <div class="buymenu-title">
+                        <!--Item-->
+                        <div class="buymenu-title-item">
+                            <img src="images/burger-logo.png" class="logo-img">
+                            <div class="food-text">Burgers</div>
+                        </div>
+                        <!--Item-->
+                        <div class="buymenu-title-item">
+                            <img src="images/pizza-logo.png" class="logo-img">
+                            <div class="food-text">Pizzas</div>
+                        </div>
+                        <!--Item-->
+                        <div class="buymenu-title-item">
+                            <img src="images/burger-logo.png" class="logo-img">
+                            <div class="food-text">Burgers</div>
+                        </div>
+                        <!--Item-->
+                        <div class="buymenu-title-item">
+                            <img src="images/burger-logo.png" class="logo-img">
+                            <div class="food-text">Burgers</div>
+                        </div>
+                    </div>
+                    <div class="buymenu-items">
+                        <div class="buymenu-categorie">
+                            <div class="container">
+                                <div class="item-card" onclick="EnableDescription(this)">
+                                    <div class="item-imgBox">
+                                        <img src="images/burgers/burger1.png">
+                                        <h2>Classic Burger</h2>
+                                    </div>
+                                    <div class="item-content">
+                                        <div class="description">
+                                                <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus cumque natus, alias similique aut nemo. Illo dicta reiciendis quae rerum.</h3>
+                                        </div>
+                                        <div class="ingredients">
+                                            <input type="checkbox">
+                                            <input type="checkbox">
+                                            <input type="checkbox">
+                                            <input type="checkbox">
+                                        </div>
+                                        <div class="a">
+                                            BuyNow
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container">
+                                <div class="item-card" onclick="EnableDescription(this)">
+                                    <div class="item-imgBox">
+                                        <img src="images/burgers/burger1.png">
+                                        <h2>Classic Burger</h2>
+                                    </div>
+                                    <div class="item-content">
+                                        <div class="description">
+                                                <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus cumque natus, alias similique aut nemo. Illo dicta reiciendis quae rerum.</h3>
+                                        </div>
+                                        <div class="ingredients">
+                                            <input type="checkbox">
+                                            <input type="checkbox">
+                                            <input type="checkbox">
+                                            <input type="checkbox">
+                                        </div>
+                                        <div class="a">
+                                            BuyNow
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container">
+                                <div class="item-card" onclick="EnableDescription(this)">
+                                    <div class="item-imgBox">
+                                        <img src="images/burgers/burger1.png">
+                                        <h2>Classic Burger</h2>
+                                    </div>
+                                    <div class="item-content">
+                                        <div class="description">
+                                                <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus cumque natus, alias similique aut nemo. Illo dicta reiciendis quae rerum.</h3>
+                                        </div>
+                                        <div class="ingredients">
+                                            <input type="checkbox">
+                                            <input type="checkbox">
+                                            <input type="checkbox">
+                                            <input type="checkbox">
+                                        </div>
+                                        <div class="a">
+                                            BuyNow
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                                        
+                        </div>
+                    </div>
+                </div>
+                <div class="buymenu-settings">
+
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+        function EnableDescription (element)
+        {
+            DisableAll();
+            var card=element;
+            var categorie=card.parentElement.parentElement;
+            var container=element.parentElement;
+            var imgBox=card.firstElementChild;
+            var img=card.firstElementChild.firstElementChild;
+            var content=card.children[1];
+
+            card.style.width="100%";
+            img.style.width="150px";
+            content.style.display="inline";
+            container.style.width="100%";
+        }
+        function DisableAll()
+        {
+            var cards=$(".item-card");
+            var containers=$(".container");
+            var contents=$(".item-content");
+            var imgs=$(".item-imgBox");
+            for(var i=0;i<cards.length;i++)
+            {
+                
+                cards[i].style.width="350px";
+                imgs[i].firstElementChild.style.width="256px";
+                contents[i].style.display="none";
+                containers[i].style.width="auto";
+            }
+        }
+    </script>
+</html>
