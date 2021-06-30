@@ -30,7 +30,8 @@ if(isset($_POST["login"]))
                     if(password_verify($loginPass,$a[$i]["password"])) 
                     {
                         $_SESSION['username']=$loginUsername;
-                        header('location:testpage.php');
+                        $_SESSION['status']=$a[$i]['status'];
+                        header('location:BuyPage.php');
                     }else
                     {
                         $invalidLogin=true;

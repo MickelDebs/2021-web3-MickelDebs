@@ -1,4 +1,5 @@
 <?php
+//session_start();
 $user_error=false;
 if(isset($_POST['signup']))
 {
@@ -41,12 +42,14 @@ if(isset($_POST['signup']))
         {
            $user_error=false;
 
-           $query = "INSERT INTO users (username,email,password) 
-      	   VALUES ('$username', '$email', '".password_hash($password,PASSWORD_DEFAULT)."')";
+           $query = "INSERT INTO users (username,email,password,status) 
+      	   VALUES ('$username', '$email', '".password_hash($password,PASSWORD_DEFAULT)."','normal')";
            
            $results = mysqli_query($database, $query);
            mysqli_close($database);
-           header('location:AccountCreated.php');
+           /*$_SESSION['username']=$username;
+           $_SESSION['status']='normal';*/
+           header('location:BuyPage.php');
         }
 
     }else
