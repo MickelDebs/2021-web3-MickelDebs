@@ -7,6 +7,10 @@ session_start();
     include './admin/addmeal.php';
     include './admin/deletemeal.php';
     include './admin/editmeal.php';
+    include './admin/addingredient.php';
+    include './admin/deleteingredient.php';
+    include './admin/editingredient.php';
+
 ?>
 <html>
     <head>
@@ -44,12 +48,12 @@ session_start();
                                     }else if
                                     ($mealAlreadyExists==true)
                                     {
-                                        echo('<span style="color:red">Meal name already exists</span>');
+                                        echo('<span style="color:red">Meal name already exists -> Meal not added</span>');
                                     }
                                     else if
                                     ($mealAdded==true)
                                     {
-                                        echo('<span style="color:green">Meal added!</span>');
+                                        echo('<span style="color:green">Meal added!</span><br><span>Refresh Page to take effect</span>');
                                     }
                                 ?>
                             </td>
@@ -92,7 +96,7 @@ session_start();
                             <td>
                             <img style="width:150px" src="">
                                 <input class="input" onchange="changeMealImage(this)"type="file">
-                                <input type="text" readonly name="edit-meal-image" name="meal-image" style="display:none">
+                                <input type="text" readonly name="meal-image" style="display:none">
                             </td>
                         </tr>
                         <tr>
@@ -155,6 +159,25 @@ session_start();
                         <?php
                         if(isset($meals_array))
                         {
+                            
+                            if($editMealError==true)
+                            {
+                                echo('<span style="color:red">Some values are empty -> Meal not edited </span>');
+                            }
+                            else if
+                            ($mealEdited==true)
+                            {
+                                echo('<span style="color:green">Meal edited!</span><span>Refresh Page to take effect.</span>');
+                            }
+                            else if($mealDeleted==true)
+                            {
+                                echo('<span style="color:red">Meal deleted!</span><span>Refresh Page to take effect.</span>');
+                            }
+                            else if($mealEditAlreadyExists==true)
+                            {
+                                echo('<span style="color:red">Meal name already exists -> Meal not edited </span>');
+                            }
+                                
                             for($i=0;$i<count($meals_array);$i++)
                             {
                                 echo('
@@ -193,9 +216,6 @@ session_start();
                         <tr>
                             <td colspan="2" align="center">
                                 <input type="text" readonly  id="edit-meal-id" name="edit-meal-id" style="display:none">
-                                <?php
-                                    
-                                ?>
                             </td>
                         </tr>
                         <tr>
@@ -204,6 +224,7 @@ session_start();
                             </td>
                             <td>
                                 <input class="input" type="text" id="edit-meal-name" name="edit-meal-name">
+                                <input type="text" id="edit-meal-originalname" name="edit-meal-originalname" style="display:none">
                             </td>
                         </tr>
                         <tr>
@@ -235,7 +256,7 @@ session_start();
                             </td>
                             <td>
                                 <img style="width:150px" id="edit-meal-image" src="">
-                                <input class="input" onchange="changeMealImage(this)" type="file" id="file-edit-meal-image" >
+                                <input class="input" onchange="changeMealImage(this)" type="file" >
                                 <input type="text" readonly name="edit-meal-image" style="display:none">
                             </td>
                         </tr>
@@ -253,7 +274,7 @@ session_start();
                             </td>
                             <td>
                                 <div class="ingredients-div">
-                                    <input type="text" class="input"  onkeyup="filter(this)" id="edit-ingredient-search" placeholder="Search">
+                                    <input type="text" class="input"  onkeyup="filter(this)" placeholder="Search">
                                     <div class="ingredient">
                                         <ul class="ingredients-list" id="edit-ingredients-list">
                                            
@@ -305,17 +326,192 @@ session_start();
                 </form>
             </div>
         </div>
-    </div>
-        
+        <div class="add-meals-panel" id="add-meals-panel" style="display:none">
+            <div class="login-toolbar">
+                <div class="toolbar-x" id="toolbar-x" onclick="closePanel(this)"></div>
+            </div>
+            <div class="add-meals">
+                <div class="title" >Add Ingredients</div>
+                <div class="add">
+                    <form action="./BuyPage.php" method="POST">
+                        <table>
+                            <tr>
+                                <td colspan="2">
+                                    <?php
+                                        if($addingredientError==true)
+                                        {
+                                            echo('<span style="color:red">Some values are empty -> Ingredient not added </span>');
+                                        }else if
+                                        ($ingredientAlreadyExists==true)
+                                        {
+                                            echo('<span style="color:red">Ingredient name already exists -> Ingredient not added</span>');
+                                        }
+                                        else if
+                                        ($ingredientAdded==true)
+                                        {
+                                            echo('<span style="color:green">Ingredient added!</span><br><span>Refresh Page to take effect</span>');
+                                        }
+                                    ?>
+                                </td>
+                            </tr>        
+                            <tr>
+                                <td>
+                                    Name:
+                                </td>
+                                <td>
+                                    <input class="input" type="text" name="ingredient-name">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Image:
+                                </td>
+                                <td>
+                                    <img style="width:150px" src="">
+                                    <input class="input" onchange="changeIngredientImage(this)"type="file">
+                                    <input type="text" readonly name="ingredient-image" style="display:none">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="text-align:center">
+                                    <input name="add-ingredient-submit"class="addmeal-submit" type="submit" value="Add">
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="add-meals-panel" id="edit-meals-panel" style="display:none">
+            <div class="login-toolbar">
+                <div class="toolbar-x"  onclick="closePanel(this)"></div>
+                <div class="toolbar-x blue" onclick="backPanel(this)"></div>
+            </div>
+            <div class="add-meals" id="edit-ingredients-page" >
+                <div class="title" >Edit Ingredients
+                </div>
+                <div class="search-meal">
+                    <input type="text" class="input" style="width:80%" id="edit-ingredient-search" oninput="filterIngredients()" placeholder="Search">
+                </div>
+                <div class="edit">
+                <?php
+                        if(isset($ingredients_array))
+                        {
+                            
+                            if($editingredientError==true)
+                            {
+                                echo('<span style="color:red">Some values are empty -> Ingredient not edited </span>');
+                            }
+                            else if
+                            ($ingredientEdited==true)
+                            {
+                                echo('<span style="color:green">Ingredient edited!</span><span>Refresh Page to take effect.</span>');
+                            }
+                            else if($ingredientDeleted==true)
+                            {
+                                echo('<span style="color:red">Ingredient deleted!</span><span>Refresh Page to take effect.</span>');
+                            }else if($ingredientEditAlreadyExists==true)
+                            {
+                                echo('<span style="color:red">Ingredient name already exists -> Ingredient not edited </span>');
+                            }
+                                
+                            for($i=0;$i<count($ingredients_array);$i++)
+                            {
+                                echo('
+                            
+                        <div class="edit-meal" style="background:rgba(0,0,0,0.8);height:70px">
+                                <img src="'.$ingredients_array[$i]['image'].'">
+                                <div class="edit-ingredient-desc">
+                                    '.$ingredients_array[$i]['name'].'
+                                    <div class="hidden-desc">
+                                        <div>
+                                            <input type="text" readonly name="id" value="'.$ingredients_array[$i]['Id'].'">
+                                            <input type="text" readonly name="name" value="'.$ingredients_array[$i]['name'].'">
+                                            <input type="text" readonly name="image" value="'.$ingredients_array[$i]['image'].'">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="edit-meal-control">
+                                    <input type="button" value="Edit" onclick="editIngredient(this)">
+                                    <input type="button" class="delete-button" value="Delete" onclick="deleteIngredient(this)">
+                                </div>
+                        </div>');
+                            }
+                        }
+                        ?>
+                </div>
+            </div>
+            <div class="add-meals" id="ingredient-edit-page" style="display:none" >
+                <div class="title" id="edit-ingredient-title">Edit Ingredients</div>
+                <div class="add">
+                    <form action="./BuyPage.php" method="POST">
+                        <table>
+                            <tr>
+                                <td colspan="2">
+                                    <input type="text" name="edit-ingredient-id" readonly id="edit-ingredient-id" style="display:none">
+                                </td>
+                            </tr>        
+                            <tr>
+                                <td>
+                                    Name:
+                                </td>
+                                <td>
+                                    <input class="input" type="text" name="edit-ingredient-name" id="edit-ingredient-name">
+                                    <input type="text" name="edit-ingredient-originalname" id="edit-ingredient-originalname" style="display:none">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Image:
+                                </td>
+                                <td>
+                                    <img style="width:150px" src="" id="edit-ingredient-image">
+                                    <input class="input" onchange="changeIngredientImage(this)"type="file">
+                                    <input type="text" readonly name="edit-ingredient-image" style="display:none">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="text-align:center">
+                                    <input name="edit-ingredient-submit"class="addmeal-submit" type="submit" value="Edit">
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            <div class="delete-pop" id="delete-ingredient-pop" >
+                <form action="BuyPage.php" method="POST">
+                    <table>
+                        <tr>
+                            <td colspan="2" id="delete-ingredient-pop-msg">
+                                Are you sure you want to delete?
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" name="delete-ingredient-id" readonly style="display:none" id="delete-ingredient-pop-text">
+                                <input type="submit"  name="delete-ingredient-submit" class="delete-yes"value="Yes">
+                            </td>
+                            <td>
+                                <input type="button" class="delete-no"value="No" onclick="disableDelete(this)">
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
     </div>
         <div class="background-flex ">
             <div class="flex-column logo-div">
                 <div class="background-div-1 background-div-1-buymenu">
                         <div class="background-div-1_1 "></div>
                         <div class="background-div-1_2 "><span>BFE</span></div>
+                        <div class="cellphone-menu" onclick="EnableSettingsMenu()">
+                            <img src="./images/icons/menu.png">
+                        </div>
                 </div>
             </div>
-            <div class="buymenu-parent">
+            <div class="buymenu-parent ">
                 <div class="buymenu">
                     <div class="buymenu-title">
                         <?php
@@ -470,9 +666,9 @@ session_start();
                         </div>-->
                     
                 </div>
-                <div class="buymenu-settings">
+                <div class="buymenu-settings" id="buymenu-settings">
                     <div class="title">
-                        <div class="cart" onclick="EnableSidePanels(this,0)" style="background:#F3A800">
+                        <div class="cart" id="cart-title" onclick="EnableSidePanels(this,0)" style="background:#F3A800">
                             <img src="images/icons/cart-icon.png">
                         </div>
                         <div class="profile" onclick="EnableSidePanels(this,1)">
@@ -506,16 +702,18 @@ session_start();
                             </div>
                             -->
                         </div>
-                        <div class="profile-content" id="profile-content">
+                        <div class="profile-content" id="profile-content" style="display:none">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, recusandae!
                         </div>
-                        <div class="settings-content" id="settings-content" >
+                        <div class="settings-content" id="settings-content" style="display:none">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, recusandae!
                         </div>
-                        <div class="admin-content" id="admin-content" >
+                        <div class="admin-content" id="admin-content" style="display:none">
                             <div class="control-panel">
-                                <input type="button" id="add-meals-button"value="Add Meals" onclick="EnablePanel(0)">
-                                <input type="button" value="Edit Meals" onclick="EnablePanel(1)">
+                                <input type="button" id="add-meals-button" value="Add Meals" onclick="EnablePanel(0)">
+                                <input type="button" id="edit-meals-button" value="Edit Meals" onclick="EnablePanel(1)">
+                                <input type="button" id="add-ingredients-button" value="Add Ingredients" onclick="EnablePanel(2)">
+                                <input type="button" id="edit-ingredients-button" value="Edit Ingredients" onclick="EnablePanel(3)">
                             </div>
                         </div>
                     </div>
@@ -538,6 +736,27 @@ session_start();
                 $("#add-meals-button").click();
             });');
         }
+
+        if($mealEditAlreadyExists==true||$editMealError==true||$mealEdited==true||$mealDeleted==true){
+            echo('$(window).on("load", function(){
+                    $("#admin-control-div").click();
+                    $("#edit-meals-button").click();
+                });');
+            }
+
+        if($addingredientError==true||$ingredientAlreadyExists==true||$ingredientAdded==true){
+        echo('$(window).on("load", function(){
+                $("#admin-control-div").click();
+                $("#add-ingredients-button").click();
+            });');
+        }
+        if($ingredientEditAlreadyExists==true||$editingredientError==true||$ingredientEdited==true||$ingredientDeleted==true){
+            echo('$(window).on("load", function(){
+                    $("#admin-control-div").click();
+                    $("#edit-ingredients-button").click();
+                });');
+            }
+
         ?>
         var str="";
         function filter(element)
@@ -565,6 +784,23 @@ session_start();
                 input = document.getElementById('edit-meal-search');
                 filter = input.value.toUpperCase();
                 names = document.getElementsByClassName('edit-meal-desc');
+
+                for (i = 0; i < names.length; i++) {
+                    a = names[i];
+                    txtValue = a.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        names[i].parentElement.style.display = "";
+                    } else {
+                        names[i].parentElement.style.display = "none";
+                    }
+                }
+            }
+            function filterIngredients()
+            {
+                var input, filter,names, a, i,txtValue;
+                input = document.getElementById('edit-ingredient-search');
+                filter = input.value.toUpperCase();
+                names = document.getElementsByClassName('edit-ingredient-desc');
 
                 for (i = 0; i < names.length; i++) {
                     a = names[i];
@@ -610,6 +846,17 @@ session_start();
             text.value="./images/"+cat+"/"+name;
             }
         }
+        function changeIngredientImage(element)
+        {
+            var img=element.previousElementSibling;
+            var text=element.nextElementSibling;
+            
+            if(element.files.item(0)!=null){
+            var name=element.files.item(0).name;
+            img.src="./images/ingredients/"+name;
+            text.value="./images/ingredients/"+name;
+            }
+        }
         function editMeal(element)
         {
             var id,name,price,desc,img,ingr,cat,parent,ingr_array,list,li;
@@ -640,11 +887,33 @@ session_start();
             document.getElementById('edit-meal-title').innerText="Edit "+name;
             document.getElementById('edit-meal-id').value=id;
             document.getElementById('edit-meal-name').value=name;
+            document.getElementById('edit-meal-originalname').value=name;
             document.getElementById('edit-meal-price').value=price;
             document.getElementById('edit-meal-description').value=desc;
             document.getElementById('edit-meal-categorie').value=cat;
             document.getElementById('edit-meal-image').src=img;
+            document.getElementById('edit-meal-image').nextElementSibling.nextElementSibling.value=img;
         }
+
+        function editIngredient(element)
+        {
+            var id,name,img;
+            $('#edit-ingredients-page').hide();
+            $('#ingredient-edit-page').show();
+            $(document.getElementById("edit-ingredients-page").parentElement.firstElementChild.children[1]).show();
+            parent=element.parentElement.previousElementSibling.firstElementChild.firstElementChild;
+            id=parent.children[0].value;
+            name=parent.children[1].value;
+            img=parent.children[2].value;
+
+            document.getElementById('edit-ingredient-title').innerText="Edit "+name;
+            document.getElementById('edit-ingredient-id').value=id;
+            document.getElementById('edit-ingredient-name').value=name;
+            document.getElementById('edit-ingredient-originalname').value=name;
+            document.getElementById('edit-ingredient-image').src=img;
+            document.getElementById('edit-ingredient-image').nextElementSibling.nextElementSibling.value=img;
+        }
+
         function addIngredient(element)
         {
             var textarea=element.parentElement.parentElement.parentElement.parentElement.nextElementSibling.firstElementChild;
@@ -665,6 +934,14 @@ session_start();
             document.getElementById("delete-pop-text").value=id;
             document.getElementById("delete-pop-msg").innerText="Are you sure you want to delete "+name+" ?";
             $('#delete-pop').slideToggle();
+        }
+        function deleteIngredient(element)
+        {
+            var name=element.parentElement.previousElementSibling.firstElementChild.firstElementChild.children[1].value;
+            var id=element.parentElement.previousElementSibling.firstElementChild.firstElementChild.firstElementChild.value;
+            document.getElementById("delete-ingredient-pop-text").value=id;
+            document.getElementById("delete-ingredient-pop-msg").innerText="Are you sure you want to delete "+name+" ?";
+            $('#delete-ingredient-pop').slideToggle();
         }
         function clickCheckbox(element)
         {
@@ -756,6 +1033,20 @@ session_start();
             }
         }
 
+        function EnableSettingsMenu()
+        {
+            var menu=$('#buymenu-settings');
+
+            if(menu.css("visibility")=="hidden"){
+                menu.css("visibility","visible");
+                menu.css("width","100%");
+            }else
+            {
+                menu.css("visibility","hidden");
+                menu.css("width","0");
+            }
+        }
+
         function AddToCart(element)
         {
             var cartContent=document.getElementById("cart-content");
@@ -804,7 +1095,7 @@ session_start();
             close.innerHTML='<div class="x-button" onclick="RemoveFromCart(this)">';
             item.appendChild(close);
             cartContent.appendChild(item);
-            $('#cart-content').show();
+            $('#cart-title').click()
             $(item).hide();
             $(item).slideToggle("fast",function(){
                 $(item).animate({"margin-left":"2%"}, "fast",function()

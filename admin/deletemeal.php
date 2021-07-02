@@ -23,7 +23,7 @@
                 $delete_results = mysqli_query($database, $delete_query);
                 mysqli_close($database);
                 $mealDeleted=true;
-                header("Refresh:0");
+                
             }
             
         }else

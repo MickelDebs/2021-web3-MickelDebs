@@ -17,7 +17,7 @@
             $price=$_POST['meal-price'];
             $description=$_POST['meal-description'];
             $categorie=$_POST['meal-categorie'];
-            $image='./images/'.$categorie.'/'.$_POST['meal-image'];
+            $image=$_POST['meal-image'];
             $ingredients=$_POST['meal-ingredients'];
             $ingredients=str_replace(' ',',',$ingredients);
             $ingredients=substr($ingredients, 0, -1);
