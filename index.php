@@ -15,17 +15,70 @@
         <script src="jQuery.js"></script>
     </head>
     <body>
-        <div class="background-flex">
-            <div class="flex-column logo-div ">
-                <div class="background-div-1 ">
-                        <div class="background-div-1_1 "></div>
-                        <div class="background-div-1_2 "><span>BFE</span></div>
+        <div class="root">
+            <!--pc interface-->
+            <div class="pc">
+                <div class="header">
+                    <div class="header-div">
+                        <div class="logo">
+                            <div class="logo-img"><img src="./images/logo.png"></div>
+                            <a class="logo-text" href="index.php">BFE</a>
+                        </div>
+                        <div class="header-container">
+                            <a href="BuyPage.php">Menu</a>
+                        </div>
+                        <div class="header-container">
+                            <a href="about.php">About</a>
+                        </div>
+                        <div class="header-container" style="flex-grow:10">
+                            <div class="searchDiv">
+                                <div class="searchIcon"><img src="./images/icons/search.png"></div>
+                                <input type="text" class="searchMealsInput" placeholder="Search meals">
+                            </div>
+                        </div>
+                        <div class="header-container">
+                            <input type="button" value="Sign in" id="signin">
+                        </div>
+                    </div>
                 </div>
+            </div>
+            <!--Mobile interface-->
+            <div class="mobile">
+                <div class="header">
+                    <div class="header-div">
+                        <div class="header-container" style="width:45px;margin-left:7px">
+                            <img src="./images/icons/menu.png">
+                        </div>
+                        <div class="logo">
+                            <div class="logo-img"><img src="./images/logo.png"></div>
+                            <a class="logo-text" href="index.php">BFE</a>
+                        </div>
+                        <div class="header-container" id="searchButton">
+                            <img src="./images/icons/search.png">
+                        </div>
+                        <div class="header-container" id="loginButtonMobile">
+                            <img src="./images/icons/profile-icon.png">
+                        </div>
+                    </div>
+                    <div class="searchDiv" id="searchDiv">
+                        <div class="innerSearchDiv">
+                            <div class="searchImage">
+                                <img src="./images/icons/search.png">
+                            </div>
+                            <input type="text" placeholder="Search meals">
+                            <div class="closeSearchImage" id="searchCloseButton">
+                                <img src="./images/icons/close.png">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        <div class="background-flex">
+            <div class="flex-column background-div-1">
                 <div class="background-div-3">
-                    <span class="div-3-span-1">JUICY & HOT FOOD</span>
-                    <br><br>
-                    <span class="div-3-span-2">Delivering now all accross lebanon!</span>
-                    <br><br><br>
+                    <span class="s1">JUICY & HOT FOOD</span>
+                    <span class="s2">Delivering now all accross lebanon!</span>
                     <input type="button" class="start-button" value="Order Now" id="order-button">
                 </div>
             </div>
@@ -36,11 +89,10 @@
             <div class="login-toolbar">
                 <div class="toolbar-x" id="toolbar-x"></div>
             </div>
-            <div class="login-div" id="login-div">
                 <!--Login-->
                 <div class="login-form" id="login-form">
-                    <h2 class="login-text">Login</h2>
                     <form method="POST" onsubmit="loginfunction();" action="index.php">
+                    <h2 class="login-text">Login</h2>
                         <div class="input-div">
                             <input type="text" oninput="ChangeColor(this);" placeholder="Username" <?php if($invalidLogin==true){echo('style="color:red"');}?>name="login-username" id="login-user"> 
                             <div class="spinner-parent">
@@ -135,7 +187,7 @@
                         <p class="forget">Already have an account ? <a id="login" href="#">Login</a></p>
                     </form>
                 </div>
-            </div>
+        </div>
         </div>
     </body>
     <script>
@@ -165,6 +217,22 @@
     }
 
     ?>
+        //Scripts for mobile only
+        $("#searchButton").click(function()
+        {
+            $("#searchDiv").slideToggle("fast");
+            $("#searchDiv").css("display","flex");
+        });
+
+        $("#searchCloseButton").click(function()
+        {
+            $("#searchDiv").slideToggle("fast");
+        });
+        $('#loginButtonMobile').click(function()
+        {
+            $('#login-box').show(400);
+        });
+        //End of scripts for mobile only
 
         var loginUserInput = $('#login-user');
 
@@ -192,6 +260,11 @@
                 }
             }, 400);
         });
+        
+        $('#signin').click(function()
+        {
+            $('#login-box').show(400);
+        });
 
         $('#order-button').click(function()
         {
@@ -205,20 +278,36 @@
         $('#signup').click(function(){
             var loginform = $('#login-form');
             var signupform = $('#signup-form');
+            var loginbox=$('#login-box');
 
-            loginform.animate({"left":"-1000px"}, "medium");
-            signupform.animate({"left":"0px"},"medium");
-            $('#login-box').animate({"height":"65%"},"medium");
+            loginform.fadeOut({duration:400,queue:false})
+            loginform.animate({"left":"-1000px"},{duration:400,queue:false});
+            signupform.fadeIn({duration:400,queue:false});
+            signupform.animate({"left":"0px"},{duration:400,queue:false});
+           
+            //Check if on mobile or pc
+            if(loginbox.css("overflow-y")=="hidden")
+            {
+                $('#login-box').animate({"height":"65%"},"medium");
+            }
             return false;
          });
         
          $('#login').click(function(){
             var loginform = $('#login-form');
             var signupform = $('#signup-form');
+            var loginbox=$('#login-box');
 
-            loginform.animate({"left":"0px"}, "medium");
-            signupform.animate({"left":"1000px"},"medium");
-            $('#login-box').animate({"height":"50%"},"medium");
+            loginform.fadeIn({duration:400,queue:false})
+            loginform.animate({"left":"0"},{duration:400,queue:false});
+            signupform.fadeOut({duration:400,queue:false});
+            signupform.animate({"left":"1000px"},{duration:400,queue:false});
+            
+            //Check if on mobile or pc
+            if(loginbox.css("overflow-y")=="hidden")
+            {
+                $('#login-box').animate({"height":"50%"},"medium");
+            }
             return false;
          });
          //Check Password

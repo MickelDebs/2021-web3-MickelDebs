@@ -683,24 +683,32 @@ session_start();
                     </div>
                     <div class="content" id="content">
                         <div class="cart-content" id="cart-content">
+                            <div class="cart-content-items" id="cart-content-items">
                             <!--
-                            <div class="item" style="margin-left: 0px;">
-                                <img src="images/burgers/burger1.png">
-                                <div class="desc">
-                                    <span class="name">Double Cheese Bacon Burger</span>
-                                    <div class="checkboxs">
-                                        <div class="not-included">
-                                            <img src="images/burger-logo.png">
+                                <div class="item" style="margin-left: 0px;">
+                                    <img src="images/burgers/burger1.png">
+                                    <div class="desc">
+                                        <span class="name">Double Cheese Bacon Burger</span>
+                                        <div class="checkboxs">
+                                            <div class="not-included">
+                                                <img src="images/burger-logo.png">
+                                            </div>
+                                        </div>
+                                        <span class="price">24,000LL</span>
+                                    </div>
+                                    <div class="close">
+                                        <div class="x-button" onclick="RemoveFromCart(this)">
                                         </div>
                                     </div>
-                                    <span class="price">24,000LL</span>
                                 </div>
-                                <div class="close">
-                                    <div class="x-button" onclick="RemoveFromCart(this)">
-                                    </div>
+                            -->
+                            </div>
+                            <div class="cart-content-buynow" id="cart-content-buynow">
+                                <div>
+                                    <span>Total:</span>
+                                    <input type="button" value="Buy Now">
                                 </div>
                             </div>
-                            -->
                         </div>
                         <div class="profile-content" id="profile-content" style="display:none">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, recusandae!
@@ -722,6 +730,8 @@ session_start();
         </div>
     </body>
     <script>
+        var itemsCount=0;
+
         $(window).on("load",function()
         {
             if ( window.history.replaceState ) {
@@ -1040,6 +1050,7 @@ session_start();
             if(menu.css("visibility")=="hidden"){
                 menu.css("visibility","visible");
                 menu.css("width","100%");
+                
             }else
             {
                 menu.css("visibility","hidden");
@@ -1049,7 +1060,7 @@ session_start();
 
         function AddToCart(element)
         {
-            var cartContent=document.getElementById("cart-content");
+            var cartContent=document.getElementById("cart-content").firstElementChild;
             //GetInfos
             var imgsrc=element.parentElement.parentElement.parentElement.firstElementChild.firstElementChild.src;
             var name=element.parentElement.parentElement.parentElement.firstElementChild.children[1].innerHTML;
@@ -1103,14 +1114,57 @@ session_start();
                     $(item).animate({"margin-left":"0"}, "fast");
                 });  
             });
-
+            UpdateTotal();
+            itemsCount++;
         }
         function RemoveFromCart(element)
         {
             var item=element.parentElement.parentElement;
-            $(item).slideToggle('fast', function(){ $(item).remove(); });
+            $(item).slideToggle('fast', function()
+            { 
+                $(item).remove();
+                itemsCount--;
+                UpdateTotal(); 
+            });
         }
 
-        
+        function UpdateTotal()
+        {
+            var buynow=$('#cart-content-buynow');
+            var cartcontentitems=document.getElementById("cart-content-items");
+            var total=0;
+            var span=buynow.get(0).firstElementChild.firstElementChild;
+            if(itemsCount==0)
+            {
+                buynow.slideToggle();
+            }
+            for(var i=0;i<cartcontentitems.children.length;i++)
+            {
+                total+=fixPrice(cartcontentitems.children[i].children[1].children[2].innerHTML);
+            }
+            span.innerText="Total:"+total;
+
+            
+        }
+        function fixPrice(str)
+        {
+            /*if(Number.isInteger(str))
+            {
+                var price=str+"";
+                
+                for(var i=price.length;i>0;i--)
+                {
+                   if((i+1)%3==0){
+                       price=[price.slice(0,i),price.slice(i)].join();
+                        console.log(price);
+                    }
+                }
+
+                return price;
+            }*/
+            s=str.replace(",","");
+            s=s.replace("LL","");
+            return parseInt(s);
+        }
     </script>
 </html>
