@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
-    <?php 
-    include 'CreateAccount.php';
+    <?php
     include 'Login.php';
 
     if(isset($_SESSION['username']))
     {
-        header('location:testpage.php');
+        header('location:index.php');
     }
     ?>
     <head>
@@ -16,149 +15,144 @@
     </head>
     <body>
         <div class="root">
-            <!--pc interface-->
-            <div class="pc-header">
-                <div class="header">
-                    <div class="header-div">
-                        <div class="logo">
-                            <div class="logo-img"><img src="./images/logo.png"></div>
-                            <a class="logo-text" href="index.php">BFE</a>
-                        </div>
-                        <div class="header-container">
-                            <a href="BuyPage.php">Menu</a>
-                        </div>
-                        <div class="header-container">
-                            <a href="about.php">About</a>
-                        </div>
-                        <div class="header-container" style="flex-grow:10">
-                            <div class="searchDiv">
-                                <div class="searchIcon"><img src="./images/icons/search.png"></div>
-                                <input type="text" class="searchMealsInput" placeholder="Search meals">
+            <div class="AuthPage">
+                <div class="AuthPage-header">
+                    <div class="logo">
+                                <div class="logo-img"><img src="./images/logo.png"></div>
+                                <a class="logo-text" href="index.php">BFE</a>
+                            </div>
+                    </div>
+                <div class="AuthPage-login">
+                </div>
+            </div>
+                <!--Login-->
+                <div class="login-form" id="login-form">
+                    <form method="POST" onsubmit="loginfunction();" action="index.php">
+                    <h2 class="login-text">Login</h2>
+                        <div class="input-div">
+                            <input type="text" oninput="ChangeColor(this);" placeholder="Username" <?php if($invalidLogin==true){echo('style="color:red"');}?>name="login-username" id="login-user"> 
+                            <div class="spinner-parent">
+                                <div class="spinner" id="user-login-spinner">
+                                </div>
+                                <div class="spinner-error" id="user-login-error">
+                                    <div class="tooltiptext" >Username cannot contain spaces.</div>
+                                </div>
+                                <div class="spinner-correct" id="user-login-correct">
+                                </div>
                             </div>
                         </div>
-                        <!-- To do in php-->
-                        <div class="header-container" onclick="location.href='admin.php';">
-                            <img src="./images/icons/admin-icon.png">
+                        <div class="input-div">
+                            <input type="password" placeholder="Password" name="login-password" id="login-pass">
                         </div>
-                        <!-- -->
-                        <div class="header-container">
-                            <input type="button" value="Sign in" id="signin">
+                        <?php
+                            if($invalidLogin==true)
+                            {
+                                echo('<div class="input-div">
+                                <p class="forget" style="color:red">Invalid Login</p>
+                                </div>
+                                ');
+                            }
+                        ?>
+                        <div class="input-div">
+                            <input type="submit" value="Login" name="login">
                         </div>
-                    </div>
+                        <p class="forget">Forgot password ? <a href="#">Click Here</a></p>
+                        <p class="forget">Don't have an account ? <a id="signup" href="">Sign up</a></p>
+                    </form>
                 </div>
-            </div>
-            <!--Mobile interface-->
-            <div class="mobile-header">
-                <div class="header">
-                    <div class="header-div">
-                        <div class="header-container" style="width:45px;margin-left:7px" onclick="openMenu()">
-                            <img src="./images/icons/menu.png" id="menu-img">
-                        </div>
-                        <div class="logo">
-                            <div class="logo-img"><img src="./images/logo.png"></div>
-                            <a class="logo-text" href="index.php">BFE</a>
-                        </div>
-                        <div class="header-container" id="searchButton">
-                            <img src="./images/icons/search.png">
-                        </div>
-                        <div class="header-container" id="loginButtonMobile">
-                            <img src="./images/icons/profile-icon.png">
-                        </div>
-                        <!-- To do in php-->
-                        <div class="header-container" onclick="location.href='admin.php';">
-                            <img src="./images/icons/admin-icon.png">
-                        </div>
-                        <!-- -->
-                    </div>
-                    <div class="searchDiv" id="searchDiv">
-                        <div class="innerSearchDiv">
-                            <div class="searchImage">
-                                <img src="./images/icons/search.png">
+                <!--Sign_up-->
+                <div class="signup-form" id="signup-form">
+                    <h2 class="login-text">Sign-up</h2>
+                    <form method="POST" onsubmit="signupfunction();" action="index.php">
+                        <div class="input-div">
+                            <input type="text" name="username"id="signup-user" oninput="ChangeColor(this);" <?php if($user_error==true){echo('style="color:red"');} ?> placeholder="Username">
+                            <div class="spinner-parent">
+                                <div class="spinner"></div>
+                            <div class="spinner-error"<?php if($user_error==true){echo('style="display:inline"');}?>>
+                                    <div class="tooltiptext"><?php echo("Username already exists.<br>Suggested user names:<br>");
+                                    for($i=0;$i<count($suggested);$i++)
+                                    {
+                                        echo($suggested[$i]." ");
+                                    }
+                                    ?>
+                                    </div>
                             </div>
-                            <input type="text" placeholder="Search meals">
-                            <div class="closeSearchImage" id="searchCloseButton">
-                                <img src="./images/icons/close.png">
                             </div>
                         </div>
-                    </div>
+                        <div class="input-div">
+                            <input type="text" name="email" placeholder="Email" id="signup-email">
+                            <div class="spinner-parent">
+                                <div class="spinner" id="email-spinner">
+                                </div>
+                                <div class="spinner-error" id="email-error">
+                                    <div class="tooltiptext" >You need to type a valid email.</div>
+                                </div>
+                                <div class="spinner-correct" id="email-correct" <?php if($user_error==true){echo('style="display:inline"');} ?>>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-div">
+                            <input type="password" name="password" placeholder="Password" id="signup-pass">
+                            <div class="spinner-parent">
+                                <div class="spinner" id="pass-spinner">
+                                </div>
+                                <div class="spinner-error" id="pass-error">
+                                    <div class="tooltiptext" >Password needs to be atleast 8 characters and 
+                                        contains atleast a number and a special character</div>
+                                </div>
+                                <div class="spinner-correct" id="pass-correct" <?php if($user_error==true){echo('style="display:inline"');} ?>>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="input-div">
+                            <input type="password" placeholder="Confirm Password" id="signup-cpass">
+                            <div class="spinner-parent">
+                                <div class="spinner" id="cpass-spinner">
+                                </div>
+                                <div class="spinner-error" id="cpass-error">
+                                    <div class="tooltiptext" >Passwords need to match</div>
+                                </div>
+                                <div class="spinner-correct" id="cpass-correct" <?php if($user_error==true){echo('style="display:inline"');} ?>>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-div">
+                            <input type="submit" name="signup" id="signup-submit" value="Sign-up">
+                        </div>
+                        <p class="forget">Already have an account ? <a id="login" href="#">Login</a></p>
+                    </form>
                 </div>
-                
-            </div>
-        <div class="background-flex">
-            <div class="flex-column background-div-1">
-                <div class="background-div-3">
-                    <span class="s1">JUICY & HOT FOOD</span>
-                    <span class="s2">Delivering now all accross lebanon!</span>
-                    <input type="button" class="start-button" value="Order Now" id="order-button">
-                </div>
-            </div>
-            <div class="flex-column background-div-2">
-            </div>
-            <div class="mobile-menu" id="menu">
-                <div class="menu">
-                    <div onclick="location.href='BuyPage.php';">Menu</div>
-                    <div onclick="location.href='about.php';">About</div>
-                </div>
-            </div>
-        </div>
         </div>
     </body>
     <script>
-        //Scripts for mobile only
-        $("#searchButton").click(function()
-        {
-            $("#searchDiv").slideToggle("fast");
-            $("#searchDiv").css("display","flex");
+    <?php
+    if($invalidLogin==true)
+    {
+        echo('$(window).on("load", function(){
+            $("#order-button").click();
+            $("#login-user").val('.'"'.$loginUsername.'"'.');
+            $("#login-pass").val('.'"'.$loginPass.'"'.');
         });
+        ');
+    }
 
-        $("#searchCloseButton").click(function()
-        {
-            $("#searchDiv").slideToggle("fast");
-        });
-        $('#loginButtonMobile').click(function()
-        {
-            $('#login-box').show(400);
-        });
+    if($user_error==true)
+    {
+        echo(
+            '$(window).on("load", function(){
+                $("#order-button").click();
+                $("#signup").click();
+                $("#signup-user").val('.'"'.$username.'"'.');
+                $("#signup-email").val('.'"'.$email.'"'.');
+                $("#signup-pass").val('.'"'.$password.'"'.');
+                $("#signup-cpass").val('.'"'.$password.'"'.');
+            });'
+        );
+    }
+
+    ?>
         
-        var cnt=0;
-        function openMenu()
-        {
-            var menu=$('#menu');
-            var img=$("#menu-img");
-            cnt++;
-
-            if(menu.css("display")=="none")
-            {
-                if(cnt==1)
-                {
-                menu.css("display","flex");
-                menu.animate({"width":"100%"},500);
-                img.fadeOut(250,function()
-                {
-                    img.attr('src','./images/icons/close.png');
-                    img.fadeIn(250);
-                });
-                cnt=0;
-                }
-            }else
-            {
-                if(cnt=1)
-                {
-                    img.fadeOut(250,function()
-                    {
-                        img.attr('src','./images/icons/menu.png');
-                        img.fadeIn(250);
-                    });
-                    menu.animate({"width":"0"},500,function()
-                    {
-                        menu.css("display","none");
-                        cnt=0;
-                    })
-                }
-            }
-        }
-        //End of scripts for mobile only
-
         var loginUserInput = $('#login-user');
 
         // Init a timeout variable to be used below
@@ -186,35 +180,15 @@
             }, 400);
         });
         
-        $('#signin').click(function()
-        {
-            $('#login-box').show(400);
-        });
-
-        $('#order-button').click(function()
-        {
-            $('#login-box').show(400);
-        });
-        $('#toolbar-x').click(function()
-        {
-            $('#login-box').hide(400);
-        });
-
         $('#signup').click(function(){
             var loginform = $('#login-form');
             var signupform = $('#signup-form');
-            var loginbox=$('#login-box');
 
             loginform.fadeOut({duration:400,queue:false})
             loginform.animate({"left":"-1000px"},{duration:400,queue:false});
             signupform.fadeIn({duration:400,queue:false});
             signupform.animate({"left":"0px"},{duration:400,queue:false});
            
-            //Check if on mobile or pc
-            if(loginbox.css("overflow-y")=="hidden")
-            {
-                $('#login-box').animate({"height":"65%"},"medium");
-            }
             return false;
          });
         
@@ -228,11 +202,6 @@
             signupform.fadeOut({duration:400,queue:false});
             signupform.animate({"left":"1000px"},{duration:400,queue:false});
             
-            //Check if on mobile or pc
-            if(loginbox.css("overflow-y")=="hidden")
-            {
-                $('#login-box').animate({"height":"50%"},"medium");
-            }
             return false;
          });
          //Check Password
@@ -388,8 +357,6 @@
                 }
                 event.preventDefault();
                 return false;
-
-
             }
             
     </script>

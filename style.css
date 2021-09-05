@@ -5,18 +5,32 @@ padding:0;
 box-sizing: border-box;
 font-family:'Courier New';
 }
-.pc
+.pc-header
 {
     display:inline;
 }
-.mobile
+.mobile-header
 {
     display:none;
+}
+.mobile-menu
+{
+    display:none;
+}
+.admin-container
+{
+    width:100%;
+    height:90%;
+    background-image: url("./images/background.jpg");
+    background-size: 75%;
+    display:flex;
+    justify-content: center;
+    align-items: center;
 }
 .admin-panel
 {
     position:absolute;
-    width:50%;
+    width:70%;
     height:95%;
     left:50%;
     top:50%;
@@ -25,21 +39,21 @@ font-family:'Courier New';
 }
 .admin-content
 {
-    overflow-y: auto;
-    height:100%;
+   width:320px;
+   height:320px;
+   display: flex;
+   flex-direction: column;
+   border:1px solid white;
+   justify-content: space-evenly;
+   padding:0 20px;
+   background: rgba(255,255,255,0.1);
+   box-shadow: 0 10px 25px rgba( 0, 0, 0, 0.05);
+   backdrop-filter: blur(5px);
+   border-radius: 10px; 
 }
-.admin-content .control-panel
+.admin-content input
 {
-    width:100%;
-    height:100%;
-    display:flex;
-    flex-direction: column;
-}
-.admin-content .control-panel input
-{
-    
-    padding:20px;
-    margin:20px;
+    padding:14px 10px;
     font-size:18px;
     font-weight: bold;
     color:black;
@@ -53,7 +67,8 @@ font-family:'Courier New';
     width:100%;
     height:100%;
     display:flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: start;
     align-items: center;
     background: #E1E0E2;
     backdrop-filter: blur(5px);
@@ -63,16 +78,13 @@ font-family:'Courier New';
     border-right:1px solid rgba(255, 255, 255, 0.2);
     border-bottom:1px solid rgba(255, 255, 255, 0.2);
     overflow: hidden;
-    /*display:none;*/
-
 }
 .add-meals-panel .add-meals
 {
     width:100%;
-    height:100%;
+    height:96%;
     display:flex;
     flex-direction: column;
-    margin-top:20px;
 }
 .admin-button-div
 {
@@ -340,6 +352,8 @@ form table tr td
     border-right:1px solid rgba(255, 255, 255, 0.2);
     border-bottom:1px solid rgba(255, 255, 255, 0.2);
     display:none;
+    color:white;
+    border:1px solid white;
 
 }
 .delete-pop form
@@ -398,7 +412,7 @@ form table tr td
 }
 .background-flex
 {
-    height: 100%;
+    height: 90%;
     width: 100%;
     background-image: url("./images/background.jpg");
     background-size: 75%;
@@ -418,9 +432,10 @@ form table tr td
     padding:8%;
 }
 
-/*Pc header*/
-.pc .header
+/*pc-header header*/
+.pc-header .header
 {
+    height:10%;
     display: flex;
     top:0;
     position:sticky;
@@ -429,32 +444,41 @@ form table tr td
     background-color: #232728;
     padding:0 30px;
 }
-.pc .header-div
+.pc-header .header-div
 {
     display:flex;
     width:100%;
     padding:5px 0;
     border-bottom:1px solid rgba( 255, 255, 255, 0.2);
 }
-.pc .header-container
+.pc-header .header-container
 {
     font-size:18px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.pc .header-container a
+.pc-header .header-container a
 {
     color:white;
     text-decoration: none;
     font-weight: 600;
     padding:0 20px;
 }
-.pc .header-container a:hover
+.pc-header .header-container a:hover
 {
     color:#F3A800;
 }
-.pc .header-container input[type=button]
+.pc-header .header-container img
+{
+    width:30px;
+    cursor:pointer;
+}
+.pc-header .header-container img:hover
+{
+    filter: invert(15%) sepia(24%) saturate(7499%) brightness(100%) contrast(103%);
+}
+.pc-header .header-container input[type=button]
 {
     margin-left:20px;   
     background-color: #F3A800;
@@ -467,32 +491,32 @@ form table tr td
     cursor: pointer;
 }
 
-.pc .logo
+.pc-header .logo
 {
     display:flex;
     align-items: center;
     padding-right: 40px;
 }
-.pc .logo .logo-img
+.pc-header .logo .logo-img
 {
     display: flex;
     justify-content: center;
     align-items: center;
     width:60px;
 }
-.pc .logo .logo-img img
+.pc-header .logo .logo-img img
 {
     width:40px;
     padding-left:5px;
     padding-bottom: 5px;
 }
-.pc .logo .logo-text
+.pc-header .logo .logo-text
 {
     color:white;
     font-size: 50px;
     text-decoration: none;
 }
-.pc .searchDiv
+.pc-header .searchDiv
 {
     width:100%;
     border-radius: 5px;
@@ -502,22 +526,22 @@ form table tr td
     margin:0 20px;
     transition:0.2s;
 }
-.pc .searchDiv:focus-within
+.pc-header .searchDiv:focus-within
 {
     border:1px solid white; 
 }
-.pc .searchIcon
+.pc-header .searchIcon
 {
     display: flex;
     justify-content: center;
     align-items: center;
     padding:10px 12px;
 }
-.pc .searchIcon img
+.pc-header .searchIcon img
 {
     width:15px;
 }
-.pc .searchMealsInput
+.pc-header .searchMealsInput
 {
     height:80%;
     width:100%;
@@ -528,15 +552,16 @@ form table tr td
     color:white;
     font-size:16px;
 }
-.pc .searchMealsInput::placeholder
+.pc-header .searchMealsInput::placeholder
 {
     font-weight: bold;
 }
-/*End of pc header*/
+/*End of pc-header header*/
 
-/*Mobile header*/
-.mobile .header
+/*mobile-header header*/
+.mobile-header .header
 {
+    height:10%;
     display: flex;
     top:0;
     position:sticky;
@@ -544,14 +569,14 @@ form table tr td
     z-index: 1;
     background-color: #232728;
 }
-.mobile .header-div
+.mobile-header .header-div
 {
     display:flex;
     width:100%;
     padding:5px 0;
     border-bottom:1px solid rgba( 255, 255, 255, 0.2);
 }
-.mobile .header-container
+.mobile-header .header-container
 {
     display: flex;
     justify-content: center;
@@ -560,44 +585,44 @@ form table tr td
     margin-right: 5px;
 
 }
-.mobile .header-container img
+.mobile-header .header-container img
 {
     width:21px;
 }
-.mobile .header-container img:hover
+.mobile-header .header-container img:hover
 {
     filter: invert(15%) sepia(24%) saturate(7499%) brightness(100%) contrast(103%);
 }
 
-.mobile .logo
+.mobile-header .logo
 {
     display:flex;
     flex-grow: 2;
     align-items: center;
     padding-left:7px;
 }
-.mobile .logo .logo-img
+.mobile-header .logo .logo-img
 {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-right: 6px;
 }
-.mobile .logo .logo-img img
+.mobile-header .logo .logo-img img
 {
     width:32px;
     padding-left:5px;
     padding-bottom: 5px;
 }
-.mobile .logo .logo-text
+.mobile-header .logo .logo-text
 {
     color:white;
     font-size: 40px;
     text-decoration: none;
 }
-/*End of mobile header*/
-/*Mobile Search*/
-.mobile .searchDiv
+/*End of mobile-header header*/
+/*mobile-header Search*/
+.mobile-header .searchDiv
 {
     display: none;
     top:0;
@@ -609,7 +634,7 @@ form table tr td
     justify-content: center;
     align-items: center;
 }
-.mobile .innerSearchDiv
+.mobile-header .innerSearchDiv
 {
     display: flex;
     background-color: #232728;
@@ -619,11 +644,11 @@ form table tr td
     height:75%;
     border-radius: 5px;
 }
-.mobile .innerSearchDiv:focus-within
+.mobile-header .innerSearchDiv:focus-within
 {
     background-color: #2B2F30;
 }
-.mobile .innerSearchDiv input
+.mobile-header .innerSearchDiv input
 {
     border:none;
     flex-grow: 2;
@@ -634,7 +659,7 @@ form table tr td
     padding:5px 0;
     margin-bottom:-2px;
 }
-.mobile .searchImage
+.mobile-header .searchImage
 {
     display:flex;
     justify-content: center;
@@ -642,26 +667,66 @@ form table tr td
     margin-left:18px;
     margin-right:10px;
 }
-.mobile .searchImage img
+.mobile-header .searchImage img
 {
     width:15px;
 }
-.mobile .closeSearchImage
+.mobile-header .closeSearchImage
 {
     display:flex;
     justify-content: center;
     margin-right:15px;
     align-items: center;
 }
-.mobile .closeSearchImage img
+.mobile-header .closeSearchImage img
 {
-    width:12px;
+    width:15px;
     transition:0.2s;
 }
-.mobile .closeSearchImage img:hover
+.mobile-header .closeSearchImage img:hover
 {
     filter: invert(15%) sepia(24%) saturate(7499%) brightness(100%) contrast(103%);
 }
+/*End of mobile-header Search*/
+/*mobile-header Menu*/
+.mobile-menu
+{
+    position: absolute;
+    width:0%;
+    height:90%;
+    left:0;
+    display:none;
+}
+.mobile-menu .menu
+{
+    width:100%;
+    height:100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    background: rgba( 255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+    border-bottom:1px solid rgba(255, 255, 255, 0.2);
+    
+}
+.mobile-menu .menu div
+{
+    width:100%;
+    padding:10px;
+    border-bottom:1px solid rgba( 255, 255, 255, 0.2);
+    background-color: #2B2F30;
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+}
+.mobile-menu .menu div:hover
+{
+    background:rgba(255, 255, 255, 0.3) ;
+    color:#F3A800;
+}
+/*End of mobile-header menu*/
 /*.background-div-1_1
 {
     display:flex;
@@ -678,20 +743,6 @@ form table tr td
     color:white;    
     font-size:50px;
 }*/
-.cellphone-menu
-{
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    height:100%;
-    width:60px;
-    display:none;
-    z-index:1;
-}
-.cellphone-menu img
-{
-    max-width: 70%;
-}
 
 .background-div-2
 {
@@ -737,9 +788,35 @@ form table tr td
     cursor: pointer;
 }
 /*Login*/
+.AuthPage
+{
+    width:100%;
+    height:100%;
+    background-color: #2B2F30;
+}
+.AuthPage-header
+{
+    width:100%;
+    height:10%;
+    background-color: #1E1F20;
+    border-bottom: 1px solid rgba( 255, 255, 255, 0.2);
+}
+.AuthPage-header .logo
+{
+    display:flex;
+    align-items: center;
+    padding-right: 40px;
+}
+.AuthPage-login
+{
+    height:90%;
+    width:100%;
+    background: #2B2F30;
+}
+
+
 .login-box
 {
-    display:none;
     position: absolute;
     left:50%;
     top:50%;
@@ -756,13 +833,20 @@ form table tr td
     border-bottom:1px solid rgba(255, 255, 255, 0.2);
     overflow-x: hidden;
     overflow-y: hidden;
+    display:none;
+}
+.login-box iframe
+{
+    width:100%;
+    height:100%;
+    border:none;
 }
 .login-form
 {
-    position: absolute;
+    position:absolute;
     width:100%;
     height: 100%;
-    padding:10%;
+    padding:7%;
 }
 .login-toolbar
 {
@@ -808,6 +892,7 @@ form table tr td
     border:none;
     outline:none;
     padding: 3% 6%;
+    margin:1% 0;
     border-radius: 35px;
     border:1px solid rgba(255, 255, 255, 0.5);
     border-right:1px solid rgba(255, 255, 255, 0.2);
@@ -887,17 +972,16 @@ form table tr td
 }
 .buymenu-parent
 {
-    position: absolute;
-    width:100%; 
+    width:100%;
     height:100%;
-    display:flex;
+    display: flex;
 }
 .buymenu
 {
     position: relative;
-    width:75%;
-    height:80%;
-    top:20%;
+    width:100%;
+    height:100%;
+    padding:3%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -907,7 +991,7 @@ form table tr td
 .buymenu-title
 {
     display:flex;
-    width:80%;
+    width:100%;
     height:6%;
     min-height:30px;
     justify-content: flex-start;
@@ -953,20 +1037,18 @@ form table tr td
 }
 .buymenu-items
 {
-    width:80%;
-    height:94%;
+    width:100%;
+    height:100%;
 }
 .buymenu-categorie
 {
     width:100%;
     height:100%;
-    display: grid;
-    justify-content: center;
-    align-items: center;
-    overflow-x: hidden;
-    padding:20px 0;
-    box-sizing: border-box;
-    grid-template-columns: 50% 50%;
+    display:grid;
+    grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+    padding:20px;
+    overflow-y: scroll;
 }
 /*Scroll*/
 *::-webkit-scrollbar,
@@ -986,28 +1068,22 @@ form table tr td
 /*Item*/
 .container
 {
-    position: relative;
     display:flex;
-    justify-content: center;
+    justify-content:center;
     align-items: center;
     flex-wrap: wrap;
-    transition: 0.5s;
+    width:100%;
+    height: 400px;
 }
 .container .item-card
 {
-    position: relative;
-    width: 70%;
-    height:auto;
-    min-height: 400px;
-    margin:20px 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 100%;
+    height: 100%;
     background: rgba(255,255,255,0.1);
     box-shadow: 0 10px 25px rgba( 0, 0, 0, 0.05);
     backdrop-filter: blur(5px);
-    border-radius: 20px;
-    transition: 0.5s;
+    border-radius: 10px; 
+    overflow: hidden;
 }
 .container .item-card:hover
 {
@@ -1015,7 +1091,7 @@ form table tr td
 }
 .container .item-card .item-imgBox
 {
-    position: relative;
+    position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1023,9 +1099,7 @@ form table tr td
     padding:20px;
     transition:0.5s;
     height:100%;
-    flex-basis: 0;
-    flex-grow: 4;
-
+    width:100%;
 }
 .container .item-card .item-imgBox img
 {
@@ -1034,27 +1108,38 @@ form table tr td
     transition:0.5s;
 
 }
-.container .item-card .item-imgBox h2
+.container .item-card .item-imgBox span
 {
     color:white;
     font-weight: 600;
-    font-size:3vh;
+    font-size:21px;
 }
 .container .item-card .item-content
 {
+    position: absolute;
     width:100%;
-    height:75%;
+    height:5%;
+    border-radius: 10px;
+    bottom:0;
     display:flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-content: center;
     transition: 0.5s;
     border-left:1px solid rgba( 255, 255, 255, 0.1);
-    overflow-x: hidden;
-    flex-basis: 0;
-    flex-grow: 10;
-    display:none;
-    
+    background: #2B2F30;
+}
+.container .item-card .item-content .arrow
+{
+    height:20px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    cursor:pointer;
+}
+.container .item-card .item-content .arrow img
+{
+    width:20px;
 }
 .container .item-card .item-content .description,
 .container .item-card .item-content .order
@@ -1064,13 +1149,14 @@ form table tr td
     align-items: center;
     padding:8px 20px;
     width:100%;
+    color:white;
 }
 .container .item-card .item-content .ingredients
 {
     display:grid;
     justify-content:start;
     align-items: center;
-    grid-template-columns:1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns:repeat(5,1fr);
     padding:8px 20px;
 }
 .container .item-card .item-content .order input
@@ -1130,11 +1216,6 @@ form table tr td
     background-color:rgb(43, 218, 43);
   }
 
-
-.container .item-card-size
-{
-    width:100%;
-}
 /*buymenu settings*/
 .buymenu-settings
 {
@@ -1144,7 +1225,6 @@ form table tr td
     border:1px solid rgba( 255, 255, 255, 0.2);
     display:flex;
     flex-direction: column;
-    z-index:10;
     overflow: hidden;
 }
 
@@ -1370,6 +1450,17 @@ form table tr td
     animation: spin 2s linear infinite;
 }
 
+@keyframes rotate
+{
+    0%{ transform: rotate(0deg);}
+    100%{transform: rotate(180deg);}
+}
+@keyframes rotateback
+{
+    0%{ transform: rotate(180deg);}
+    100%{transform: rotate(0deg);}
+}
+
 @keyframes spin {
     0% { transform: rotateZ(0deg); }
     100% { transform: rotateZ(360deg); }
@@ -1377,6 +1468,11 @@ form table tr td
   
   @media (max-width:599px),(min-width:600px) and (max-width:800px)
   {
+    .admin-panel
+    {
+        width:100%;
+        height:100%;
+    }
       .flex-column
       {
           flex:50%;
@@ -1405,19 +1501,16 @@ form table tr td
         background-color: #F3A800;
         cursor: pointer;
       }
+      .mobile-menu .menu
+      {
+          max-width:40%;
+      }
       /*Login*/
 .login-box
 {
     width:100%;
     height:100%;
     overflow-y: auto;
-}
-.login-form
-{
-    position:absolute;
-    width:100%;
-    height: auto;
-    padding:4%;
 }
 .login-text
 {
@@ -1460,12 +1553,11 @@ form table tr td
 {
     padding:4%;
 }
-
-      .pc
+      .pc-header
       {
           display:none;
       }
-      .mobile
+      .mobile-header
       {
           display:inline;
       }
@@ -1503,61 +1595,8 @@ form table tr td
         border:4px solid white;
         border-top:4px solid red;
     }*/
-    .background-div-1-buymenu
-    {
-    max-width:100%;   
-    }
-    .buymenu
-    {
-        width:100%;
-        height: 85%;
-        top:15%;
-    }
-    .buymenu-settings
-    {
-        right:0;
-        bottom:0;
-        position: absolute;
-        width:0;
-        height:85%;
-        visibility: hidden;
-        transition: 0.5s;
-        
-    }
-    .cellphone-menu
-    {
-    display:flex;
-    }
-    .container .item-card
-    {
-        width: 100%;
-        min-height: 30vh;
-        flex-direction: column;
-        margin:20px 0;
-        justify-content: center;
-        align-items: center;
-    }
 
-    .buymenu-categorie
-    {
-        grid-template-columns: 100%;
-    }
-    .container .item-card-size
-    {
-        height:500px;
-    }
-    .container .item-card .item-content
-    {
-        width:98%;
-        height:100%;
-        border-left:none;
-        border-top:1px solid rgba( 255, 255, 255, 0.5);
-    }
-    .admin-panel
-    {
-        width:100%;
-        height:100%;
-    }
+    
     /*Login*/
     .login-box
     {
@@ -1577,6 +1616,10 @@ form table tr td
         border-bottom:1px solid rgba(255, 255, 255, 0.2);
         overflow-x: hidden;
         overflow-y: hidden;
+    }
+    .mobile-menu .menu
+    {
+        max-width: 100%;
     }
     
 }
