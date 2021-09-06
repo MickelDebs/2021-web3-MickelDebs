@@ -18,139 +18,67 @@
             <div class="AuthPage">
                 <div class="AuthPage-header">
                     <div class="logo">
-                                <div class="logo-img"><img src="./images/logo.png"></div>
-                                <a class="logo-text" href="index.php">BFE</a>
-                            </div>
+                        <div class="logo-img"><img src="./images/logo.png"></div>
+                        <a class="logo-text" href="index.php">BFE</a>
                     </div>
-                <div class="AuthPage-login">
+                    <div class="close" onclick="location.href='index.php';">
+                        <img src="./images/icons/close.png">
+                    </div>
                 </div>
-            </div>
+                <div class="AuthPage-login">
                 <!--Login-->
+                <div class="AuthPage-container">
+                <div class="navbar">
+                <a href="signin.php" style="color:#F3A800;text-decoration:underline">Sign in</a>
+                <a href="signup.php">Sign up</a></div>
                 <div class="login-form" id="login-form">
-                    <form method="POST" onsubmit="loginfunction();" action="index.php">
-                    <h2 class="login-text">Login</h2>
+                    <h2 class="title">Sign in to your account</h2>
+                    <div class="form-inner">
+                    <form method="POST" onsubmit="loginfunction();" action="signin.php">
                         <div class="input-div">
-                            <input type="text" oninput="ChangeColor(this);" placeholder="Username" <?php if($invalidLogin==true){echo('style="color:red"');}?>name="login-username" id="login-user"> 
+                            <input type="text" oninput="Check(this)" placeholder="Username" <?php if($invalidLogin==true){echo('style="color:red"');}?>name="login-username" id="login-user"> 
+                            
                             <div class="spinner-parent">
                                 <div class="spinner" id="user-login-spinner">
                                 </div>
-                                <div class="spinner-error" id="user-login-error">
-                                    <div class="tooltiptext" >Username cannot contain spaces.</div>
+                                <div class="spinner-error" data-title="Username can't be empty and cannot contain spaces." id="user-login-error">
                                 </div>
                                 <div class="spinner-correct" id="user-login-correct">
                                 </div>
                             </div>
                         </div>
                         <div class="input-div">
-                            <input type="password" placeholder="Password" name="login-password" id="login-pass">
+                            <input type="password" oninput="Check(this)" placeholder="Password" name="login-password" id="login-pass">
                         </div>
                         <?php
                             if($invalidLogin==true)
                             {
-                                echo('<div class="input-div">
-                                <p class="forget" style="color:red">Invalid Login</p>
-                                </div>
+                                echo('
+                                <p class="forget" style="color:red;margin-bottom:20px">Invalid Login</p>
                                 ');
                             }
                         ?>
-                        <div class="input-div">
-                            <input type="submit" value="Login" name="login">
+                        <p class="forget"><a href="#">Forgot password ? </a></p>
+                        <p class="forget"><a href="signup.php">Don't have an account ? </a></p>
+                        <div class="hr">
                         </div>
-                        <p class="forget">Forgot password ? <a href="#">Click Here</a></p>
-                        <p class="forget">Don't have an account ? <a id="signup" href="">Sign up</a></p>
+                        <input type="submit" id="submit" class="submit" value="Sign in" name="login">
                     </form>
+                        </div>
                 </div>
-                <!--Sign_up-->
-                <div class="signup-form" id="signup-form">
-                    <h2 class="login-text">Sign-up</h2>
-                    <form method="POST" onsubmit="signupfunction();" action="index.php">
-                        <div class="input-div">
-                            <input type="text" name="username"id="signup-user" oninput="ChangeColor(this);" <?php if($user_error==true){echo('style="color:red"');} ?> placeholder="Username">
-                            <div class="spinner-parent">
-                                <div class="spinner"></div>
-                            <div class="spinner-error"<?php if($user_error==true){echo('style="display:inline"');}?>>
-                                    <div class="tooltiptext"><?php echo("Username already exists.<br>Suggested user names:<br>");
-                                    for($i=0;$i<count($suggested);$i++)
-                                    {
-                                        echo($suggested[$i]." ");
-                                    }
-                                    ?>
-                                    </div>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="input-div">
-                            <input type="text" name="email" placeholder="Email" id="signup-email">
-                            <div class="spinner-parent">
-                                <div class="spinner" id="email-spinner">
-                                </div>
-                                <div class="spinner-error" id="email-error">
-                                    <div class="tooltiptext" >You need to type a valid email.</div>
-                                </div>
-                                <div class="spinner-correct" id="email-correct" <?php if($user_error==true){echo('style="display:inline"');} ?>>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="input-div">
-                            <input type="password" name="password" placeholder="Password" id="signup-pass">
-                            <div class="spinner-parent">
-                                <div class="spinner" id="pass-spinner">
-                                </div>
-                                <div class="spinner-error" id="pass-error">
-                                    <div class="tooltiptext" >Password needs to be atleast 8 characters and 
-                                        contains atleast a number and a special character</div>
-                                </div>
-                                <div class="spinner-correct" id="pass-correct" <?php if($user_error==true){echo('style="display:inline"');} ?>>
-                                </div>
-                            </div>
-                            
-                        </div>
-                        <div class="input-div">
-                            <input type="password" placeholder="Confirm Password" id="signup-cpass">
-                            <div class="spinner-parent">
-                                <div class="spinner" id="cpass-spinner">
-                                </div>
-                                <div class="spinner-error" id="cpass-error">
-                                    <div class="tooltiptext" >Passwords need to match</div>
-                                </div>
-                                <div class="spinner-correct" id="cpass-correct" <?php if($user_error==true){echo('style="display:inline"');} ?>>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="input-div">
-                            <input type="submit" name="signup" id="signup-submit" value="Sign-up">
-                        </div>
-                        <p class="forget">Already have an account ? <a id="login" href="#">Login</a></p>
-                    </form>
-                </div>
+            </div>
         </div>
+    </div>            
     </body>
     <script>
     <?php
     if($invalidLogin==true)
     {
         echo('$(window).on("load", function(){
-            $("#order-button").click();
             $("#login-user").val('.'"'.$loginUsername.'"'.');
-            $("#login-pass").val('.'"'.$loginPass.'"'.');
         });
         ');
     }
-
-    if($user_error==true)
-    {
-        echo(
-            '$(window).on("load", function(){
-                $("#order-button").click();
-                $("#signup").click();
-                $("#signup-user").val('.'"'.$username.'"'.');
-                $("#signup-email").val('.'"'.$email.'"'.');
-                $("#signup-pass").val('.'"'.$password.'"'.');
-                $("#signup-cpass").val('.'"'.$password.'"'.');
-            });'
-        );
-    }
-
     ?>
         
         var loginUserInput = $('#login-user');
@@ -179,134 +107,32 @@
                 }
             }, 400);
         });
-        
-        $('#signup').click(function(){
-            var loginform = $('#login-form');
-            var signupform = $('#signup-form');
 
-            loginform.fadeOut({duration:400,queue:false})
-            loginform.animate({"left":"-1000px"},{duration:400,queue:false});
-            signupform.fadeIn({duration:400,queue:false});
-            signupform.animate({"left":"0px"},{duration:400,queue:false});
-           
-            return false;
-         });
-        
-         $('#login').click(function(){
-            var loginform = $('#login-form');
-            var signupform = $('#signup-form');
-            var loginbox=$('#login-box');
-
-            loginform.fadeIn({duration:400,queue:false})
-            loginform.animate({"left":"0"},{duration:400,queue:false});
-            signupform.fadeOut({duration:400,queue:false});
-            signupform.animate({"left":"1000px"},{duration:400,queue:false});
-            
-            return false;
-         });
-         //Check Password
-            var input = $('#signup-pass');
-
-            // Init a timeout variable to be used below
-            var timeout = null;
-
-            // Listen for keystroke events
-            input.keyup(function(){
-                $('#pass-spinner').show();
-                $('#pass-error').hide();
-                $('#pass-correct').hide();
-
-                clearTimeout(timeout);
-                timeout = setTimeout(function () {
-                    if(CheckPass(input.val())==true)
-                    {
-                        $('#pass-spinner').hide();
-                        $('#pass-error').hide();
-                        $('#pass-correct').show();
-                    }else
-                    {
-                        $('#pass-spinner').hide();
-                        $('#pass-error').show();
-                        $('#pass-correct').hide();
-                    }
-                }, 400);
-            });
-
-        function CheckPass(str)
-        {
-            var reg=/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?& ]{8,}$/;
-
-            if(str.match(reg))
+ function Check(element)
             {
-                return true;
-            }
-            return false;
-        }
-            var cinput = $('#signup-cpass');
-
-            // Init a timeout variable to be used below
-            var ctimeout = null;
-
-            // Listen for keystroke events
-            cinput.keyup(function(){
-                $('#cpass-spinner').show();
-                $('#cpass-error').hide();
-                $('#cpass-correct').hide();
-
-                clearTimeout(ctimeout);
-                ctimeout = setTimeout(function () {
-                    if(cinput.val()==$('#signup-pass').val())
-                    {
-                        $('#cpass-spinner').hide();
-                        $('#cpass-error').hide();
-                        $('#cpass-correct').show();
-                    }else
-                    {
-                        $('#cpass-spinner').hide();
-                        $('#cpass-error').show();
-                        $('#cpass-correct').hide();
-                    }
-                }, 400);
-            });
-
-            var emailinput = $('#signup-email');
-
-            // Init a timeout variable to be used below
-            var emailtimeout = null;
-
-            // Listen for keystroke events
-            emailinput.keyup(function(){
-                $('#email-spinner').show();
-                $('#email-error').hide();
-                $('#email-correct').hide();
-
-                clearTimeout(emailtimeout);
-                emailtimeout = setTimeout(function () {
-                    if(CheckEmail(emailinput.val())==true)
-                    {
-                        $('#email-spinner').hide();
-                        $('#email-error').hide();
-                        $('#email-correct').show();
-                    }else
-                    {
-                        $('#email-spinner').hide();
-                        $('#email-error').show();
-                        $('#email-correct').hide();
-                    }
-                }, 400);
-            });
-            
-            function CheckEmail(str)
-            {
-                var reg=/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/gi;
-
-                if(str.match(reg))
+                if(element.style.color=="red")
                 {
-                    return true;
+                    ChangeColor(element);
                 }
-                return false;
+                var button=document.getElementById("submit");
+                
+                var bool=false;
+
+                var username=document.getElementById("login-user").value;
+                var password=document.getElementById("login-pass").value;
+
+                if(CheckUsername(username)&&password!="")
+                {
+                    button.style.backgroundColor="#F3A800";
+                    button.style.cursor="pointer";
+                    button.style.color="white";
+                }else
+                {
+                    button.style.backgroundColor="#323738";
+                    button.style.cursor="default";
+                    button.style.color="#747778";
+                }
             }
-            
             function CheckUsername(str)
             {
                 var reg=/\s/gi;
@@ -318,28 +144,7 @@
                 }
                 return false;
             }
-            function signupfunction()
-            {
-                var username=document.getElementById("signup-user");
-                var email=document.getElementById("signup-email");
-                var pass=document.getElementById("signup-pass");
-                var cpass=document.getElementById("signup-cpass");
-                
-                var boolArray=[];
-                    boolArray.push(CheckUsername(username.value));
-                    boolArray.push(CheckEmail(email.value));
-                    boolArray.push(CheckPass(pass.value));
-                    boolArray.push(pass.value==cpass.value);
-                    for(var i=0;i<boolArray.length;i++)
-                        {
-                            if(boolArray[i]==false)
-                            {
-                            event.preventDefault();
-                            return false;
-                            }
-                        }
-                return true;
-            }
+            
             function ChangeColor(element)
             {
                 element.style.color="white";

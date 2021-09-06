@@ -50,7 +50,7 @@ session_start();
                         </div>
                         <!-- -->
                         <div class="header-container">
-                            <input type="button" value="Sign in" id="signin">
+                            <input type="button" onclick="location.href='signin.php';" value="Sign in" id="signin">
                         </div>
                     </div>
                 </div>
@@ -69,7 +69,7 @@ session_start();
                         <div class="header-container" id="searchButton">
                             <img src="./images/icons/search.png">
                         </div>
-                        <div class="header-container" id="loginButtonmobile-header">
+                        <div class="header-container" id="loginButtonmobile-header" onclick="location.href='signin.php';">
                             <img src="./images/icons/profile-icon.png">
                         </div>
                         <!-- To do in php-->

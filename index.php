@@ -42,7 +42,7 @@
                         </div>
                         <!-- -->
                         <div class="header-container">
-                            <input type="button" value="Sign in" id="signin">
+                            <input type="button" value="Sign in" id="signin" onclick="location.href='signin.php';">
                         </div>
                     </div>
                 </div>
@@ -61,7 +61,7 @@
                         <div class="header-container" id="searchButton">
                             <img src="./images/icons/search.png">
                         </div>
-                        <div class="header-container" id="loginButtonMobile">
+                        <div class="header-container" id="loginButtonMobile" onclick="location.href='signin.php';">
                             <img src="./images/icons/profile-icon.png">
                         </div>
                         <!-- To do in php-->
@@ -371,10 +371,7 @@
                         }
                 return true;
             }
-            function ChangeColor(element)
-            {
-                element.style.color="white";
-            }
+            
             function loginfunction()
             {
                 var username=document.getElementById("login-user");

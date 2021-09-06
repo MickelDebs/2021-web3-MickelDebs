@@ -800,12 +800,49 @@ form table tr td
     height:10%;
     background-color: #1E1F20;
     border-bottom: 1px solid rgba( 255, 255, 255, 0.2);
+    display: flex;
+    justify-content: space-between;
+
 }
 .AuthPage-header .logo
 {
     display:flex;
     align-items: center;
     padding-right: 40px;
+    margin-left: 5%;
+}
+.AuthPage-header .logo .logo-img
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width:60px;
+}
+.AuthPage-header .logo .logo-img img
+{
+    width:40px;
+    padding-left:5px;
+    padding-bottom: 5px;
+}
+.AuthPage-header .close
+{
+    height:100%;
+    width:60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 5%;
+}
+.AuthPage-header .close img
+{
+    width:30px;
+}
+.AuthPage .logo .logo-text
+{
+    color:white;
+    font-size: 50px;
+    text-decoration: none;
 }
 .AuthPage-login
 {
@@ -813,40 +850,115 @@ form table tr td
     width:100%;
     background: #2B2F30;
 }
-
-
-.login-box
-{
-    position: absolute;
-    left:50%;
-    top:50%;
-    transform: translate(-50%,-50%);
-    width:50vh;
-    height:50%;
-    z-index:10;
-    background: rgba( 255, 255, 255, 0.1);
-    border-radius: 6px;
-    backdrop-filter: blur(5px);
-    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
-    border:1px solid rgba(255, 255, 255, 0.5);
-    border-right:1px solid rgba(255, 255, 255, 0.2);
-    border-bottom:1px solid rgba(255, 255, 255, 0.2);
-    overflow-x: hidden;
-    overflow-y: hidden;
-    display:none;
-}
-.login-box iframe
+.AuthPage-container
 {
     width:100%;
     height:100%;
-    border:none;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    overflow-y: auto;
+}
+.navbar
+{
+    margin-bottom: 60px;
+    margin-top:16px;
+}
+.navbar a
+{
+    color:white;
+    font-size:18px;
+    text-decoration: none;
+    font-weight: bold;
+    margin:0 15px;
+    text-underline-offset: 10px;
+}
+.navbar a:hover
+{
+    color:#F3A800;
 }
 .login-form
 {
-    position:absolute;
+    width:400px;
+    height:500px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction:column;
+}
+.login-form .title
+{
+    font-size:28px;
+    color:white;
+    margin-bottom: 30px;
+    letter-spacing: -2px;
+}
+.form-inner
+{
     width:100%;
-    height: 100%;
-    padding:7%;
+    height:100%;
+    display: flex;
+    flex-direction: column;
+    padding:0px 20px;
+}
+.form-inner .input-div
+{
+    position: relative;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.form-inner .input-div input
+{
+    width:100%;
+    padding:18px 10px;
+    background-color: transparent;
+    border:1px solid rgba( 255, 255, 255, 0.4);
+    border-radius: 8px;
+    font-size:16px;
+    color:white;
+}
+.form-inner .hr
+{
+    border-top:1px solid rgba( 255, 255, 255, 0.2);
+    margin:20px;
+}
+.form-inner .submit
+{
+    width:100%;
+    padding:28px 10px;
+    background-color: #323738;
+    border-radius: 8px;
+    margin:15px 0px;
+    font-size:16px;
+    color:#747778;
+    border:none;
+    outline: none;
+    font-weight: bold;
+}
+.form-inner .input-div input:hover
+{
+    border:1px solid rgba( 255, 255, 255, 0.8);
+}
+.form-inner input::placeholder
+{
+    font-weight: bold;
+}
+.form-inner p
+{
+    margin-bottom: 5px;
+}
+.form-inner p a
+{
+    text-decoration: none;
+    color:white;
+    text-decoration: none;
+}
+.form-inner p a:hover
+{
+    color:#F3A800;
 }
 .login-toolbar
 {
@@ -868,107 +980,35 @@ form table tr td
     background: #FF5F58;
     cursor: pointer;
 }
-.login-text
-{
-    position: relative;
-    color:white; 
-    font-size: 24px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    margin-bottom: 10%;
-}
 
-.input-div
-{
-    position: relative;
-    width:100%;
-    height: 100%;
-    margin-top: 6%;
-}
-.input-div input
-{
-    width:100%;
-    background: rgba(0, 0, 0, 0.2);
-    border:none;
-    outline:none;
-    padding: 3% 6%;
-    margin:1% 0;
-    border-radius: 35px;
-    border:1px solid rgba(255, 255, 255, 0.5);
-    border-right:1px solid rgba(255, 255, 255, 0.2);
-    border-bottom:1px solid rgba(255, 255, 255, 0.2);
-    font-size: 2vh;
-    letter-spacing: 1px;
-    color:white;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-}
-.input-div input::placeholder
-{
-    color:#E1E0E2;
-}
-.input-div input[type="submit"]
-{
-    background:#F3A800;
-    color:white;
-    cursor: pointer;
-    max-width: 40%;
-    margin-bottom: 6%;
-    font-weight: 600;
-}
-.forget
-{
-    margin-top: 1%;
-    color:white;
-    font-size: 2vh;
-}
-.forget a
-{
-    color:white;
-    font-weight: 600;
-}
-/*Signup*/
-.signup-form
-{
-    display: none;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    padding:10%;
-    left:1000px;
-}
 .spinner-parent
 {
     position: absolute;
     z-index: 2;
-    width:25px;
-    height:25px;
-    left:98%;
-    top:50%;
-    transform: translate(-98%,-50%);
+    width:30px;
+    height:30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
 }
 .spinner-correct
 {
     position: absolute;
-    display:none;
+    display: none;
     width:70%;
     height:70%;
     background-color:#2AC940;
     border-radius: 50%;
-    left:50%;
-    top:50%;
-    transform: translate(-50%,-50%);
 }
 .spinner-error
 {
     position: absolute;
-    display:none;
+    display: none;
     width:70%;
     height:70%;
     background: #FF5F58;
     border-radius: 50%;
-    left:50%;
-    top:50%;
-    transform: translate(-50%,-50%);
 }
 .buymenu-parent
 {
@@ -1417,27 +1457,26 @@ form table tr td
     display:none;
 }
 /*Tooltip*/
-.tooltiptext {
-    visibility: hidden;
-    width:2000%;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    font-size:2vh;
-    
-    /* Position the tooltip */
-    position: absolute;
-    z-index: 3;
-    top:170%;
-    left:98%;
-    transform: translate(-98%,-170%);
-  }
-  
-.spinner-error:hover .tooltiptext
-  {
+[data-title]:hover:after {
+    opacity: 1;
+    transition: all 0.1s ease 0.5s;
     visibility: visible;
-  }
+}
+[data-title]:after {
+    content: attr(data-title);
+    color:white;
+    font-size:14px;
+    background-color: black;
+    position: absolute;
+    left:-250px;
+    top:-50px;
+    box-shadow: 1px 1px 3px #222222;
+    z-index: 99999;
+    visibility: hidden;
+}
+[data-title] {
+    position: relative;
+}
 
 .spinner
 {
@@ -1501,59 +1540,39 @@ form table tr td
         background-color: #F3A800;
         cursor: pointer;
       }
+      /*Login*/
+      .login-form
+      {
+          width:100%;
+          height:100%;
+      }
+      .AuthPage-header .logo
+      {
+          margin-left:5px;
+      }
+      .AuthPage-header .logo .logo-img img
+      {
+        width:32px;
+        padding-left:5px;
+        padding-bottom: 5px;
+      }
+      .AuthPage-header .logo .logo-text
+      {
+          font-size: 40px;
+      }
+      .AuthPage-header .close
+      {
+          margin-right:5px;
+      }
+      .AuthPage-header .close img
+      {
+          width:26px;
+      }
       .mobile-menu .menu
       {
           max-width:40%;
       }
-      /*Login*/
-.login-box
-{
-    width:100%;
-    height:100%;
-    overflow-y: auto;
-}
-.login-text
-{
-    position: relative;
-    color:white; 
-    font-size: 24px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    margin-bottom: 4%;
-}
-.input-div
-{
-    position: relative;
-    margin-top: 3%;
-}
-.input-div input
-{
-    padding: 2% 3%;
-    font-size: 16px;
-}
-.input-div input::placeholder
-{
-    color:#E1E0E2;
-}
-.input-div input[type="submit"]
-{
-    background:#F3A800;
-    color:white;
-    cursor: pointer;
-    max-width: 40%;
-    margin-bottom: 2%;
-    font-weight: 600;
-}
-.forget
-{
-    font-size: 14px;
-}
-/*Signup*/
-.signup-form
-{
-    padding:4%;
-}
-      .pc-header
+    .pc-header
       {
           display:none;
       }
@@ -1596,27 +1615,6 @@ form table tr td
         border-top:4px solid red;
     }*/
 
-    
-    /*Login*/
-    .login-box
-    {
-        position: absolute;
-        left:50%;
-        top:50%;
-        transform: translate(-50%,-50%);
-        width:50vh;
-        height:50%;
-        z-index:10;
-        background: rgba( 255, 255, 255, 0.1);
-        border-radius: 6px;
-        backdrop-filter: blur(5px);
-        box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
-        border:1px solid rgba(255, 255, 255, 0.5);
-        border-right:1px solid rgba(255, 255, 255, 0.2);
-        border-bottom:1px solid rgba(255, 255, 255, 0.2);
-        overflow-x: hidden;
-        overflow-y: hidden;
-    }
     .mobile-menu .menu
     {
         max-width: 100%;
