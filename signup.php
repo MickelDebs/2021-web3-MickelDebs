@@ -2,6 +2,11 @@
 <html>
     <?php
     include 'CreateAccount.php';
+    
+    if(isset($_SESSION['username']))
+    {
+        header('location:index.php');
+    }
     ?>
     <head>
         <link rel="stylesheet" href="style.css">

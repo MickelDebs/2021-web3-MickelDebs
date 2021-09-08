@@ -1,5 +1,5 @@
 <?php
-//session_start();
+session_start();
 $user_error=false;
 if(isset($_POST['signup']))
 {
@@ -47,8 +47,8 @@ if(isset($_POST['signup']))
            
            $results = mysqli_query($database, $query);
            mysqli_close($database);
-           /*$_SESSION['username']=$username;
-           $_SESSION['status']='normal';*/
+           $_SESSION['username']=$username;
+           $_SESSION['status']='normal';
            header('location:BuyPage.php');
         }
 
