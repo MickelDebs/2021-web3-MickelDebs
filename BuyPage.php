@@ -1,29 +1,6 @@
 <?php
 session_start();
 include 'fetchmeals.php';
-if(!empty($_GET["action"])) {
-    if($_GET["action"]=="add")
-                $query="";
-                $productByCode = $db_handle->runQuery("SELECT * FROM tblproduct WHERE Id='" . $_GET["Id"] . "'");
-                $itemArray = array($productByCode[0]["code"]=>array('name'=>$productByCode[0]["name"], 'code'=>$productByCode[0]["code"], 'quantity'=>$_POST["quantity"], 'price'=>$productByCode[0]["price"], 'image'=>$productByCode[0]["image"]));
-                
-                if(!empty($_SESSION["cart_item"])) {
-                    if(in_array($productByCode[0]["code"],array_keys($_SESSION["cart_item"]))) {
-                        foreach($_SESSION["cart_item"] as $k => $v) {
-                                if($productByCode[0]["code"] == $k) {
-                                    if(empty($_SESSION["cart_item"][$k]["quantity"])) {
-                                        $_SESSION["cart_item"][$k]["quantity"] = 0;
-                                    }
-                                    $_SESSION["cart_item"][$k]["quantity"] += $_POST["quantity"];
-                                }
-                        }
-                    } else {
-                        $_SESSION["cart_item"] = array_merge($_SESSION["cart_item"],$itemArray);
-                    }
-                } else {
-                    $_SESSION["cart_item"] = $itemArray;
-                }
-            
 ?>
 <!DOCTYPE html>
 <html>
@@ -63,7 +40,7 @@ if(!empty($_GET["action"])) {
                                 <div class="cart-img">
                                     <img src="./images/icons/cart-icon.png">
                                 </div>
-                                <div class="cart-text">
+                                <div id="cart-text"class="cart-text">
                                 0
                                 </div>
                             </div>
@@ -72,18 +49,65 @@ if(!empty($_GET["action"])) {
                                     <span>Cart</span>
                                     <img src="./images/icons/close.png" onclick="enableCart()">
                                 </div>
-                                <div class="cart-content">
-
+                                <div class="cart-content" id="cart-content">
+                                <div class="cart-items">');
+                                if(isset($_SESSION['cart_item']))
+                                {
+                                foreach($_SESSION['cart_item'] as $item)
+                                {
+                                    if($item['notIncluded']!="")
+                                    {
+                                        $ings=substr($item['notIncluded'],0,-1);
+                                        $ingrArray=explode(",",$ings);
+                                    }else
+                                    {
+                                        $ingrArray=array();
+                                    }
+                                    echo('
+                                    <div class="cart-item">
+                                        <img src="'.$item['image'].'">
+                                            <div class="desc">
+                                                <span class="name">'.$item['name'].'</span>
+                                                <div class="checkboxs">
+                                                <div class="not-included">');
+                                                for($i=0;$i<count($ingrArray);$i++)
+                                                {
+                                                    $query_ingr="SELECT * FROM `ingredients` WHERE name='".$ingrArray[$i]."'";
+                                                    $ingr = mysqli_query($database, $query_ingr);
+                                
+                                                    $ingr_array=array();
+                                                    while($row=mysqli_fetch_assoc($ingr))
+                                                    {
+                                                    $ingr_array[]=$row;
+                                                    }
+                                                   echo('
+                                                        <img src="'.$ingr_array[0]['image'].'">
+                                                    ');
+                                                }
+                                                echo('</div>
+                                                </div>
+                                                <span class="price">'.$item['price'].'</span>
+                                            </div>
+                                            <div class="close">
+                                                <div class="x-button" onclick="cartAction(\'remove\',\''.$item['cartNumber'].'\');">
+                                                </div>
+                                            </div>
+                                    </div>
+                                    ');
+                                }	
+                                }
+                                echo('</div>
+                                <div id="total-hidden" style="display:none">'.$_SESSION['total'].'</div>    
                                 </div>
                                 <div class="cart-footer">
                                     <div class="footer-header">
                                         <span class="total">Total</span>
-                                        <span class="price">200,000LL</span>
+                                        <span id="cart-total" class="price">0</span>
                                     </div>
                                     <div class="cart-checkout">
                                        BUY NOW
                                     </div>
-                                    <div class="cart-clear">
+                                    <div class="cart-clear" onclick="cartAction(\'empty\',\'\');">
                                        CLEAR CART
                                     </div>
                                 </div>
@@ -202,6 +226,7 @@ if(!empty($_GET["action"])) {
             </div>
         <div class="background-flex">
             <div class="buymenu-parent">
+            <div id="progress" class="progress"></div>
                 <div class="buymenu">
                     <div class="buymenu-title">
                         <?php
@@ -244,7 +269,7 @@ if(!empty($_GET["action"])) {
                                     {
                                         if($meals_array[$j]['categorie']==$categories_array[$i]['name']){
                                echo('<div class="container">
-                                        <div class="item-card">
+                                        <div class="item-card" id=meal'.$meals_array[$j]["Id"].'>
                                             <div class="item-imgBox"  onclick="EnableDescription(this)">
                                                 <img src="'.$meals_array[$j]['image'].'">
                                                 <span>'.$meals_array[$j]['name'].'</span>
@@ -262,7 +287,7 @@ if(!empty($_GET["action"])) {
                                                 {
                                                 echo('
                                                     <div>
-                                                        <input type="checkbox" id="checkbox'.$checkboxCount.'" checked="true">
+                                                        <input type="checkbox" name="'.$mealingredients_array[$j][$k].'" id="checkbox'.$checkboxCount.'" checked="true">
                                                         <label for="checkbox'.$checkboxCount.'"><img src="images/ingredients/'.
                                                         $mealingredients_array[$j][$k].
                                                         '.png" /></label>
@@ -272,9 +297,7 @@ if(!empty($_GET["action"])) {
                                                 echo('</div>
                                                 <div class="price"><h2>'.$meals_array[$j]['price'].'</h2></div>
                                                 <div class="order">
-                                                <form method="post" action="BuyPage.php?action=add&code='.$meals_array[$j]['Id'].'">
-                                                    <input type="submit" name="add" class="order-btn" value="Add to Card">
-                                                </form>
+                                                    <input type="button" id="add_'.$meals_array[$j]['Id'].' name="add" class="order-btn" value="Add to Card" onclick="cartAction(\'add\','.$meals_array[$j]['Id'].');">
                                                     <input type="button" class="order-btn" value="Buy Now">
                                                 </div>
                                             </div>
@@ -487,6 +510,15 @@ if(!empty($_GET["action"])) {
         </div>
     </body>
     <script>
+        <?php
+        if(isset($_SESSION['cart_item']))
+        {
+        echo('$(document).ready(function()
+        {
+            refreshCartCount();
+        });');
+        }
+        ?>
         var itemsCount=0;
         
         
@@ -547,77 +579,6 @@ if(!empty($_GET["action"])) {
             }
         }
 
-        
-
-        function AddToCart(element)
-        {
-            var cartContent=document.getElementById("cart-content").firstElementChild;
-            //GetInfos
-            var imgsrc=element.parentElement.parentElement.parentElement.firstElementChild.firstElementChild.src;
-            var name=element.parentElement.parentElement.parentElement.firstElementChild.children[1].innerHTML;
-            var price=element.parentElement.previousElementSibling.firstElementChild.innerHTML;
-            var checkboxsParent=element.parentElement.previousElementSibling.previousElementSibling;
-            //CreateDiv
-            var item=document.createElement("div");
-            item.classList.add("item");
-            var img=document.createElement("img");
-            img.src=imgsrc;
-            item.appendChild(img);
-            var desc=document.createElement("div");
-            desc.classList.add("desc");
-            var nameElement=document.createElement("span");
-            var checkboxElement=document.createElement("div");
-            var notIncluded=document.createElement("div");
-            notIncluded.classList.add("not-included");
-
-            for(var i=0;i<checkboxsParent.children.length;i++)
-            {
-                var isChecked=checkboxsParent.children[i].firstElementChild.checked;
-                var notIncludedimgSrc=checkboxsParent.children[i].children[1].firstElementChild.src;
-                if(!isChecked){
-                    var notIncludedimg=document.createElement("img");
-                    notIncludedimg.src=notIncludedimgSrc;
-                    notIncluded.appendChild(notIncludedimg);
-                }
-            }
-            checkboxElement.classList.add("checkboxs");
-            checkboxElement.appendChild(notIncluded);
-            var priceElement=document.createElement("span");
-            nameElement.classList.add("name");
-            nameElement.innerHTML=name;
-            
-            priceElement.classList.add("price");
-            priceElement.innerHTML=price;
-            desc.appendChild(nameElement);
-            desc.appendChild(checkboxElement);
-            desc.appendChild(priceElement);
-            item.appendChild(desc);
-            var close=document.createElement("div");
-            close.classList.add("close");
-            close.innerHTML='<div class="x-button" onclick="RemoveFromCart(this)">';
-            item.appendChild(close);
-            cartContent.appendChild(item);
-            $('#cart-title').click()
-            $(item).hide();
-            $(item).slideToggle("fast",function(){
-                $(item).animate({"margin-left":"2%"}, "fast",function()
-                {
-                    $(item).animate({"margin-left":"0"}, "fast");
-                });  
-            });
-            UpdateTotal();
-            itemsCount++;
-        }
-        function RemoveFromCart(element)
-        {
-            var item=element.parentElement.parentElement;
-            $(item).slideToggle('fast', function()
-            { 
-                $(item).remove();
-                itemsCount--;
-                UpdateTotal(); 
-            });
-        }
 
         function UpdateTotal()
         {
@@ -750,5 +711,77 @@ if(!empty($_GET["action"])) {
                 cart.css("background-color","#F3A800");
             }
         }
+        
+        var cartNumber=0;
+        <?php
+            if(isset($_SESSION['cartNumber']))
+            {
+                echo("cartNumber=".$_SESSION['cartNumber'].";");
+            }
+        ?>
+        
+
+        function cartAction(action,product_code) {
+	var queryString = "";
+	if(action != "") {
+		switch(action) {
+			case "add":
+                var notIncluded = "";
+            
+                var itemId="meal"+product_code;
+                var item=document.getElementById(itemId);
+                var ingredients=item.getElementsByClassName("ingredients")[0];
+                for(var i=0;i<ingredients.children.length;i++)
+                {
+                    if(ingredients.children[i].firstElementChild.checked==false)
+                    {
+                        notIncluded+=ingredients.children[i].firstElementChild.name+",";
+                    }
+                }
+                cartNumber++;
+                queryString = 'action=add'+'&Id='+ product_code+'&notIncluded='+notIncluded+'&cartNumber='+cartNumber;
+			break;
+			case "remove":
+				queryString = 'action='+action+'&cartNumber='+ product_code;
+                cartNumber--;
+			break;
+			case "empty":
+				queryString = 'action='+action;
+			break;
+		}	 
+	}
+	jQuery.ajax({
+        xhr: function () {
+        var xhr = new window.XMLHttpRequest();
+        xhr.upload.addEventListener("progress", function (evt) {
+            if (evt.lengthComputable) {
+                var percentComplete = evt.loaded / evt.total;
+                console.log(percentComplete);
+                $('.progress').css({
+                    width: percentComplete * 100 + '%'
+                });
+            }
+        }, false);
+        return xhr;
+    },
+	url: "cart_action.php",
+	data:queryString,
+	type: "POST",
+	success:function(response){
+        console.log("done");
+        $('.progress').hide();
+		$('#cart-content').html(response);
+        refreshCartCount();
+	},
+	error:function (){}
+	});
+}
+
+    function refreshCartCount()
+    {
+        document.getElementById("cart-text").innerText=document.getElementsByClassName("cart-item").length+"";
+        var total=document.getElementById("total-hidden").innerText;
+        document.getElementById("cart-total").innerText=total;
+    }
     </script>
 </html>
