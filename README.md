@@ -5,3 +5,4 @@ and now working on add to cart iwth php since before it was written with javascr
 to change it from inspect element in chrome.That way its safer.
 9/13/2021 commit: cart is now working using ajax. it just need to be implemented for mobile interface and 
 on other pages.
+9/15/2021 commit: implemented cart for mobile and index page and now working on user account settings.

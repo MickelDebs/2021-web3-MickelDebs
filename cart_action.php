@@ -116,6 +116,6 @@ foreach($_SESSION['cart_item'] as $kk => $item)
 }	
 }
 echo('</div>
-<div id="total-hidden" style="display:none">'.$total.'</div>');
+<div class="total-hidden" style="display:none">'.$total.'</div>');
     $_SESSION['total']=$total;
 ?>

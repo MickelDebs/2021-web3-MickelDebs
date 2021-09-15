@@ -37,12 +37,12 @@
                         <div class="input-div">
                             <input type="text" name="username"id="signup-user" oninput="Check(this);" <?php if($user_error==true){echo('style="color:red"');} ?> placeholder="Username">
                             <div class="spinner-parent">
-                                <div class="spinner"></div>
+                                <div class="spinner" id="user-spinner"></div>
                                 <div class="spinner-error" id="user-error"<?php 
                                     if($user_error==true)
                                     {
                                         echo('style="display:inline"');
-                                    }
+                                    
                                     $str="Username already exists .Suggested user names:";
 
                                     for($i=0;$i<count($suggested);$i++)
@@ -50,8 +50,10 @@
                                         $str.=$suggested[$i]." ";
                                     }
                                     echo("data-title=".'"'.$str.'"');
+                                    }
                                 ?>>
                                 </div>
+                                <div class="spinner-correct" id="user-correct"></div>
                             </div>
                         </div>
                         <div class="input-div">
@@ -117,6 +119,34 @@
     }
 
     ?>
+    var uinput = $('#signup-user');
+
+// Init a timeout variable to be used below
+var utimeout = null;
+
+// Listen for keystroke events
+uinput.keyup(function(){
+    $('#user-spinner').show();
+    $('#user-error').hide();
+    $('#user-correct').hide();
+
+    clearTimeout(utimeout);
+    utimeout = setTimeout(function () {
+        if(CheckUsername(uinput.val())==true)
+        {
+            $('#user-spinner').hide();
+            $('#user-error').hide();
+            $('#user-correct').show();
+        }else
+        {
+            $('#user-spinner').hide();
+            $('#user-error').show();
+            $('#user-error').attr('data-title',"Username Cannot contain spaces");
+            $('#user-correct').hide();
+        }
+    }, 400);
+});
+
          //Check Password
             var input = $('#signup-pass');
 

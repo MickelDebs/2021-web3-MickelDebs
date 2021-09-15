@@ -96,9 +96,15 @@ include 'fetchmeals.php';
                                     ');
                                 }	
                                 }
+                                echo('</div>');
+                                if(isset($_SESSION['total']))
+                                {
+                                    echo('<div class="total-hidden" style="display:none">'.$_SESSION['total'].'</div>');
+                                }else
+                                {
+                                    echo('<div class="total-hidden" style="display:none">0</div>');
+                                }    
                                 echo('</div>
-                                <div id="total-hidden" style="display:none">'.$_SESSION['total'].'</div>    
-                                </div>
                                 <div class="cart-footer">
                                     <div class="footer-header">
                                         <span class="total">Total</span>
@@ -128,7 +134,7 @@ include 'fetchmeals.php';
                                         '.$_SESSION['username'].'
                                     </div>
                                     <div class="user-links">
-                                        <a class="user-link" href="#">
+                                        <a class="user-link" href="account.php">
                                             <img src="./images/icons/settings-icon.png">
                                             <span>Settings</span>
                                         </a>
@@ -185,8 +191,9 @@ include 'fetchmeals.php';
                             if(isset($_SESSION['status']))
                             {
                                 echo('
-                                <div class="header-container" id="searchButton" onclick="enableCartMobile()">
+                                <div class="header-container" onclick="enableCartMobile()">
                                     <img class="img" src="./images/icons/cart-icon.png">
+                                    <div class="sub" id="cart-text-mobile" style="display:none">0</div>
                                 </div>
                                 <div class="header-container">
                                     <div class="profile-container" onclick="showUserSettingsMobile()">
@@ -465,7 +472,7 @@ include 'fetchmeals.php';
                         <img src="./images/icons/close.png" onclick="showUserSettingsMobile()">
                     </div>
                     <div class="user-links">
-                        <a class="user-link" href="#">
+                        <a class="user-link" href="account.php">
                             <img src="./images/icons/settings-icon.png">
                             <span>Settings</span>
                         </a>
@@ -489,17 +496,71 @@ include 'fetchmeals.php';
                     <span>Cart</span>
                     <img src="./images/icons/close.png" onclick="enableCartMobile()">
                 </div>
-                <div class="cart-content">
-                </div>
+                <div class="cart-content" id="mobile-cart-content">
+                <div class="cart-items">');
+                if(isset($_SESSION['cart_item']))
+                {
+                foreach($_SESSION['cart_item'] as $item)
+                {
+                    if($item['notIncluded']!="")
+                    {
+                        $ings=substr($item['notIncluded'],0,-1);
+                        $ingrArray=explode(",",$ings);
+                    }else
+                    {
+                        $ingrArray=array();
+                    }
+                    echo('
+                    <div class="cart-item">
+                        <img src="'.$item['image'].'">
+                            <div class="desc">
+                                <span class="name">'.$item['name'].'</span>
+                                <div class="checkboxs">
+                                <div class="not-included">');
+                                for($i=0;$i<count($ingrArray);$i++)
+                                {
+                                    $query_ingr="SELECT * FROM `ingredients` WHERE name='".$ingrArray[$i]."'";
+                                    $ingr = mysqli_query($database, $query_ingr);
+                
+                                    $ingr_array=array();
+                                    while($row=mysqli_fetch_assoc($ingr))
+                                    {
+                                    $ingr_array[]=$row;
+                                    }
+                                   echo('
+                                        <img src="'.$ingr_array[0]['image'].'">
+                                    ');
+                                }
+                                echo('</div>
+                                </div>
+                                <span class="price">'.$item['price'].'</span>
+                            </div>
+                            <div class="close">
+                                <div class="x-button" onclick="cartAction(\'remove\',\''.$item['cartNumber'].'\');">
+                                </div>
+                            </div>
+                    </div>
+                    ');
+                }	
+                }
+                echo('</div>');  
+                if(isset($_SESSION['total']))
+                                {
+                                    echo('<div class="total-hidden" style="display:none">'.$_SESSION['total'].'</div>');
+                                }else
+                                {
+                                    echo('<div class="total-hidden" style="display:none">0</div>');
+                                }    
+                echo('</div>
                 <div class="cart-footer">
                     <div class="footer-header">
                         <span class="total">Total</span>
-                        <span class="price">200,000LL</span>
+                        <span class="price" id="cart-total-mobile">0</span>
                     </div>
                     <div class="cart-checkout">
                        BUY NOW
                     </div>
-                    <div class="cart-clear">
+                    <div class="cart-clear" onclick="cartAction(\'empty\')">
                        CLEAR CART
                     </div>
                 </div>
@@ -515,7 +576,7 @@ include 'fetchmeals.php';
         {
         echo('$(document).ready(function()
         {
-            refreshCartCount();
+            refreshCart();
         });');
         }
         ?>
@@ -750,38 +811,49 @@ include 'fetchmeals.php';
 			break;
 		}	 
 	}
+    $('#progress').css("width","0");
+    $('#progress').show();
+    $('#progress').animate({"width":"49%"},400,function()
+    {
+        $('#progress').animate({"width":"50%"},300,function()
+        {
+            $('#progress').animate({"width":"70%"},600);
+        });
+    });
 	jQuery.ajax({
-        xhr: function () {
-        var xhr = new window.XMLHttpRequest();
-        xhr.upload.addEventListener("progress", function (evt) {
-            if (evt.lengthComputable) {
-                var percentComplete = evt.loaded / evt.total;
-                console.log(percentComplete);
-                $('.progress').css({
-                    width: percentComplete * 100 + '%'
-                });
-            }
-        }, false);
-        return xhr;
-    },
 	url: "cart_action.php",
 	data:queryString,
 	type: "POST",
 	success:function(response){
-        console.log("done");
-        $('.progress').hide();
+        $('#progress').animate({"width":"100%"},200,function()
+        {
+            $('#progress').hide();
+        });
 		$('#cart-content').html(response);
-        refreshCartCount();
+        $('#mobile-cart-content').html(response);
+        refreshCart();
 	},
 	error:function (){}
 	});
 }
 
-    function refreshCartCount()
+    function refreshCart()
     {
-        document.getElementById("cart-text").innerText=document.getElementsByClassName("cart-item").length+"";
-        var total=document.getElementById("total-hidden").innerText;
-        document.getElementById("cart-total").innerText=total;
+        var c=document.getElementsByClassName("cart-item").length;
+        document.getElementById("cart-text").innerText=c/2;
+        var cartTextMobile=document.getElementById("cart-text-mobile");
+        if(c==0)
+        {
+            cartTextMobile.style.display="none";
+        }else
+        {
+            cartTextMobile.style.display="flex";
+        }
+        cartTextMobile.innerText=c/2;
+
+        var total=document.getElementsByClassName("total-hidden");
+        document.getElementById("cart-total").innerText=total[0].innerText;
+        document.getElementById("cart-total-mobile").innerText=total[0].innerText;
     }
     </script>
 </html>

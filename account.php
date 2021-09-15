@@ -133,7 +133,7 @@ session_start();
                                         '.$_SESSION['username'].'
                                     </div>
                                     <div class="user-links">
-                                        <a class="user-link" href="account.php">
+                                        <a class="user-link" href="#">
                                             <img src="./images/icons/settings-icon.png">
                                             <span>Settings</span>
                                         </a>
@@ -232,14 +232,158 @@ session_start();
             </div>
         <div class="background-flex">
         <div id="progress" class="progress"></div>
-            <div class="flex-column background-div-1">
-                <div class="background-div-3">
-                    <span class="s1">JUICY & HOT FOOD</span>
-                    <span class="s2">Delivering now all accross lebanon!</span>
-                    <input type="button" class="start-button" value="Order Now" id="order-button">
+            <div class="account-container">
+                <div class="account-content">
+                    <div class="settings-header">
+                        <div class="settings-tab">
+                            <a href="account.php" class="settings-item" style="filter: invert(15%) sepia(24%) saturate(7499%) brightness(100%) contrast(103%);">
+                                <img src="./images/icons/settings-icon.png">
+                                <span>Settings</span>
+                            </a>
+                            <a href="orders.php" class="settings-item">
+                                <img src="./images/icons/orders.png">
+                                <span>Orders</span>
+                            </a>
+                            <a href="favorites.php" class="settings-item">
+                                <img src="./images/icons/heart.png">
+                                <span>Favorites</span>
+                            </a>
+                        </div>
+                        <div class="settings-title">
+                            Settings
+                        </div>
+                    </div>
+                    <div class="account-desc">
+                            <div class="account-info">
+                                <div class="info-categorie">
+                                <div class="info-title">General</div>
+                                <div class="tab-holder">
+                                    <div class="change-password-header-parent" id="change-password-header-parent">
+                                        <div class="change-password-header" id="change-password-header">
+                                            <span>Change Password</span>
+                                            <img src="./images/icons/close.png" onclick="changePassword()">
+                                        </div>
+                                    </div>
+                                    <div class="change-pass-submit" id="click-submit-button" onclick="clickSubmit()">
+                                    Change
+                                    </div>
+                                    <div class="info-container">
+                                        <div class="info">
+                                            <span class="name">Username</span>
+                                            <div class="info-div">
+                                                <input type="text" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="info">
+                                            <span class="name">Email</span>
+                                            <div class="info-div">
+                                                <input type="text" value="mickeldebs@gmail.com" disabled>
+                                            </div>    
+                                        </div>
+                                        <div class="info">
+                                            <span class="name">Password</span>
+                                            <div class="info-div">
+                                                <input type="password" value="placeholder" disabled>
+                                                <img src="./images/icons/change.png" onclick="changePassword()">
+                                            </div>
+                                        </div>
+                                        
+                                        <div id="change-password" class="change-password">
+                                            <form action="changePass.php" Method="POST">
+                                            <div class="change-password-content">
+                                                <div class="info">
+                                                    <input type="password" oninput="Check()" id="oldpass" placeholder="old password"  class="input-pass" >
+                                                </div>
+                                                <div class="info">
+                                                    <input type="password" oninput="Check()" placeholder="new password"  class="input-pass" id="pass">
+                                                    <div class="spinner-parent" style="right:30px">
+                                                        <div class="spinner" id="pass-spinner">
+                                                        </div>
+                                                        <div class="spinner-error" data-title="Password needs to be atleast 8 characters and 
+                                                                contains atleast a number and a special character" id="pass-error">
+                                                        </div>
+                                                        <div class="spinner-correct" id="pass-correct">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="info">
+                                                    <input type="password" oninput="Check()" placeholder="confirm new password"  id="cpass" class="input-pass">
+                                                    <div class="spinner-parent" style="right:30px">
+                                                        <div class="spinner" id="cpass-spinner">
+                                                        </div>
+                                                        <div class="spinner-error" data-title="Passwords need to match" id="cpass-error">
+                                                        </div>
+                                                        <div class="spinner-correct" id="cpass-correct">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                                <input type="submit" value="Change" onclick="changePasswordfunction();" style="display:none" id="change-pass-submit">
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="info-categorie">
+                                    <div class="info-title">
+                                            Profile Picture
+                                        </div>
+                                    <div class="info-container">
+                                        <div class="picture-container">
+                                            <div class="picture-box">
+                                                <img src="./images/blank.png">
+                                            </div>
+                                            <div>
+                                                <input type="file" id="select-picture" style="display:none">
+                                                <div class="picture-info">
+                                                    <input type="button" value="Choose Image" onclick="$('#select-picture').click()">
+                                                    <span>blank.jpg</span>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="account-info">
+                                <div class="info-categorie">
+                                    <div class="info-title">
+                                        Personal Info
+                                    </div>
+                                    <div class="info-container">
+                                        <div class="info">
+                                            <input type="text" placeholder="First Name">
+                                        </div>
+                                        <div class="info">
+                                            <input type="text" placeholder="Last Name">
+                                        </div>
+                                        <div class="subtitle">
+                                            Birthday
+                                        </div>
+                                        <div class="info">
+                                            <input type="date">
+                                        </div>
+                                        <div class="subtitle">
+                                            Default Billing Method
+                                        </div>
+                                        <div class="info">
+                                            <label class="radio">Always ask
+                                            <input type="radio" checked="checked" name="DefaultPayment">
+                                            <span class="checkmark"></span>
+                                            </label>
+                                            <label class="radio">Credit Card
+                                            <input type="radio" name="DefaultPayment">
+                                            <span class="checkmark"></span>
+                                            </label>
+                                            <label class="radio">Cash on Delivery
+                                            <input type="radio" name="DefaultPayment">
+                                            <span class="checkmark"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                    </div>
                 </div>
-            </div>
-            <div class="flex-column background-div-2">
             </div>
             <div class="mobile-menu" id="menu">
                 <div class="menu">
@@ -259,7 +403,7 @@ session_start();
                         <img src="./images/icons/close.png" onclick="showUserSettingsMobile()">
                     </div>
                     <div class="user-links">
-                        <a class="user-link" href="account.php">
+                        <a class="user-link" href="#">
                             <img src="./images/icons/settings-icon.png">
                             <span>Settings</span>
                         </a>
@@ -457,7 +601,7 @@ session_start();
                 cart.css("background-color","#F3A800");
             }
         }
-
+        
         var cartNumber=0;
         <?php
             if(isset($_SESSION['cartNumber']))
@@ -540,6 +684,134 @@ session_start();
         document.getElementById("cart-total").innerText=total[0].innerText;
         document.getElementById("cart-total-mobile").innerText=total[0].innerText;
     }
-            
+    
+    function changePassword()
+    {
+        if($('#change-password').css('height')=="0px")
+        {
+            $('#change-password').css('height','100%');
+            $('#change-password-header-parent').show(500);
+            $('#click-submit-button').show(500);
+        }else
+        {
+            $('#change-password').css('height','0');
+            $('#change-password-header-parent').hide(500);
+            $('#click-submit-button').hide(500);
+
+        }
+    }
+
+    //Check Password
+    var input = $('#pass');
+
+// Init a timeout variable to be used below
+var timeout = null;
+
+// Listen for keystroke events
+input.keyup(function(){
+    $('#pass-spinner').show();
+    $('#pass-error').hide();
+    $('#pass-correct').hide();
+
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+        if(CheckPass(input.val())==true)
+        {
+            $('#pass-spinner').hide();
+            $('#pass-error').hide();
+            $('#pass-correct').show();
+        }else
+        {
+            $('#pass-spinner').hide();
+            $('#pass-error').show();
+            $('#pass-correct').hide();
+        }
+    }, 400);
+});
+
+function CheckPass(str)
+        {
+            var reg=/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?& ]{8,}$/;
+
+            if(str.match(reg))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        var cinput = $('#cpass');
+
+// Init a timeout variable to be used below
+var ctimeout = null;
+
+// Listen for keystroke events
+cinput.keyup(function(){
+    $('#cpass-spinner').show();
+    $('#cpass-error').hide();
+    $('#cpass-correct').hide();
+
+    clearTimeout(ctimeout);
+    ctimeout = setTimeout(function () {
+        if(cinput.val()==$('#pass').val())
+        {
+            $('#cpass-spinner').hide();
+            $('#cpass-error').hide();
+            $('#cpass-correct').show();
+        }else
+        {
+            $('#cpass-spinner').hide();
+            $('#cpass-error').show();
+            $('#cpass-correct').hide();
+        }
+    }, 400);
+});
+
+function Check()
+            {
+                var button=document.getElementById("click-submit-button");
+                
+                var oldpass=document.getElementById("oldpass").value;
+                var password=document.getElementById("pass").value;
+                var cpassword=document.getElementById("cpass").value;
+
+                if(CheckPass(password)&&
+                CheckPass(oldpass)&&
+                password==cpassword)
+                {
+                    button.style.backgroundColor="#F3A800";
+                    button.style.cursor="pointer";
+                    button.style.color="white";
+                }else
+                {
+                    button.style.backgroundColor="#323738";
+                    button.style.cursor="default";
+                    button.style.color="#747778";
+                }
+            }
+            function changePasswordfunction()
+            {
+                var oldpass=document.getElementById("oldpass");
+                var pass=document.getElementById("pass");
+                var cpass=document.getElementById("cpass");
+                
+                var boolArray=[];
+                    boolArray.push(CheckPass(oldpass.value));
+                    boolArray.push(CheckPass(pass.value));
+                    boolArray.push(pass.value==cpass.value);
+                    for(var i=0;i<boolArray.length;i++)
+                        {
+                            if(boolArray[i]==false)
+                            {
+                            event.preventDefault();
+                            return false;
+                            }
+                        }
+                return true;
+            }
+            function clickSubmit()
+            {
+                document.getElementById("change-pass-submit").click();
+            }
     </script>
 </html>
