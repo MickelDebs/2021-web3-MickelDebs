@@ -5,12 +5,320 @@ padding:0;
 box-sizing: border-box;
 font-family:'Courier New';
 }
+.add-cards-container
+{
+    position: absolute;
+    width:890px;
+    border:1px solid rgba(255, 255, 255, 0.3);
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    background-color: #2B2F30;
+    border-radius: 10px;
+    padding:0px 30px;
+    padding-top:15px;
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow:auto;
+}
+.add-cards-c
+{
+    width:100%;
+    padding-top:30px;
+}
+.add-cards-title
+{
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 10px;
+}
+.add-cards-title h3
+{
+    color:white;
+}
+.add-cards-title img
+{
+    width:20px;
+    cursor: pointer;
+}
+.add-cards-footer
+{
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom:30px;
+}
+.add-cards-footer input
+{
+    height:50px;
+    width:150px;
+    border-radius: 10px;
+    outline:none;
+    border:none;
+}
+.card-container
+{
+    display: flex;
+    width:100%;
+    height:100%;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.face-front
+{
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    padding:24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 400px;
+    height: 251px;
+    margin-bottom:30px;
+}
+.face-front::before
+{
+    content:'';
+    position: absolute;
+    bottom:32px;
+    right:32px;
+    width:48px;
+    height: 48px;
+    background-color: #F79E1B;
+    border-radius: 50%;
+    opacity:0.5;
+}
+.face-front::after
+{
+    content:'';
+    position: absolute;
+    bottom:32px;
+    right:64px;
+    width:48px;
+    height:48px;
+    background-color: #EB001B;
+    border-radius: 50%;
+    opacity:0.7;
+}
+ .face-front .card-title
+{
+    width:100%;
+    display:flex;
+    justify-content: space-between;
+}
+ .face-front .card-title .debit
+{
+    color:white;
+    font-weight: 500;
+}
+ .face-front .card-title .bank
+{
+    color:white;
+    font-weight: 500;
+    font-style:italic;
+    font-size:19px;
+}
+ .face-front .chip-div
+{
+    display: flex;
+    align-items: center;
+}
+ .face-front .chip-div .chip
+{
+    margin:14.4px 9px;
+    max-width: 51.2px;
+}
+ .face-front .card-number
+{
+    margin-left:8px;
+}
+ .face-front .number
+{
+    color:white;
+    font-weight: 500;
+    letter-spacing: 5px;
+    font-size:15px;
+    text-shadow: 0 2px 1px #0005;
+    width:100%;
+    height:38px;
+    background-color: transparent;
+    border:1px solid rgba( 255, 255, 255, 0.3);
+    border-radius: 2px;
+    padding:0 8px;
+}
+ .face-front .valid-div
+{
+    display: flex;
+    justify-content: flex-start;
+    margin-left:8px;
+    padding:13.6px 0;
+    height:100%;
+}
+ .face-front .valid-div .valid
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color:white;
+    font-weight: 300;
+    line-height: 1em;
+    text-align: right;
+    height:100%;
+}
+ .face-front .valid-div .valid .date
+{
+    margin-left: 16px;
+    color:white;
+    border:1px solid rgba( 255, 255, 255, 0.3);
+    border-radius: 2px;
+    height:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+ .face-front .valid-div .valid .date select
+{
+    font-size:13px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    background-color: transparent;
+    border:none;
+    color:white;
+    outline:none;
+    padding-right:5px;
+}
+ .face-front .name-div
+{
+    margin-left:8px;
+}
+ .face-front .name-div input
+{
+    font-weight: 300;
+    font-size:13px;
+    letter-spacing: 2px;
+    height:28px;
+    background-color: transparent;
+    border:1px solid rgba( 255, 255, 255, 0.3);
+    border-radius: 2px;
+    color:white;
+    padding:0 8px;
+    text-transform: uppercase;
+}
+ .face-back
+{
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    transform-style: preserve-3d;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 400px;
+    height: 251px;
+    margin-bottom:30px;
+}
+ .face-back .blackbar
+{
+    margin-top:32px;
+    width: 100%;
+    height:48px;
+    background: black;
+}
+ .face-back .ccvtext
+{
+    padding-top:10px;
+    padding-bottom: 5px;
+    padding-left:20px;
+    padding-right:20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+ .face-back .ccvtext h5
+{
+    color:white;
+    font-weight: 400;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+ .face-back .ccvtext .whitebar
+{
+    position: relative;
+    width:92%;
+    height:32px;
+    background: white;
+    margin-top:5px;
+}
+ .face-back .ccvtext .ccv
+{
+    position: absolute;
+    background: #ccc;
+    width:40px;
+    height:24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right:-30px;
+    top:50%;
+    transform: translateY(-50%);
+}
+ .face-back .ccvtext .ccv input
+{
+    width:40px;
+    height:24px;
+    background-color: transparent;
+    border:none;
+    padding:0 4px;
+    color:black;
+    letter-spacing: 2px;
+    border:1px solid rgba( 255, 255, 255, 0.3);
+    border-radius: 2px;
+}
+ .face-back .text
+{
+    color:white;
+    font-size: 8px;
+    line-height: 1.4em;
+    font-weight: 300;
+    padding:0 20px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+}
+input:-webkit-autofill
+{
+ -webkit-text-fill-color: white !important;
+}
+.button-disabled
+{
+    background-color: #323738;
+    color:#747778;
+    cursor: default;
+}
+.button-enabled
+{
+    background-color: #F3A800;
+    color:white;
+    cursor: pointer;
+}
 .progress
 {
     height:3px;
     background-color: #F3A800;
     position: absolute;
     width:0;
+    z-index: 100;
 }
 .account-container
 {
@@ -70,11 +378,13 @@ font-family:'Courier New';
 {
     display: flex;
     width:100%;
+    flex-wrap: wrap;
 }
 .account-info
 {
-    width: 50%;
+    width: 45.5%;
     margin:0px 20px;
+    flex-grow:1;
 }
 .subtitle
 {
@@ -83,11 +393,14 @@ font-family:'Courier New';
 }
 /*Radio Button*/
 .radio {
-    display: block;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
     position: relative;
     padding-left: 35px;
     cursor: pointer;
     font-size: 14px;
+    height:22px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -106,8 +419,8 @@ font-family:'Courier New';
     position: absolute;
     top: 0;
     left: 0;
-    height: 25px;
-    width: 25px;
+    height: 22px;
+    width: 22px;
     background-color: #eee;
     border-radius: 50%;
   }
@@ -139,8 +452,8 @@ font-family:'Courier New';
       top:50%;
       left:50%;
       transform: translate(-50%,-50%);
-      width: 10px;
-      height: 10px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
       background: white;
   }
@@ -172,6 +485,7 @@ font-family:'Courier New';
     padding:20px 0px;
     display:flex;
     justify-content: flex-start;
+    align-items: center;
 }
 .picture-box
 {
@@ -180,21 +494,21 @@ font-family:'Courier New';
     border:1px solid rgba( 255, 255, 255, 0.2);
     border-radius: 14px;
     overflow: hidden;
+    flex-shrink: 0;
 }
 .picture-box img
 {
     width:100%;
     height:100%;
 }
-.picture-container input
+.picture-container .input-button
 {
-    background-color: #F3A800;
     border:none;
-    padding:20px 30px;
-    border-radius: 15px;
-    cursor: pointer;
-    color:white;
+    border-radius: 5px;
+    height:50px;
     font-size:15px;
+    flex-grow: 0;
+    
 }
 .picture-info
 {
@@ -205,6 +519,42 @@ font-family:'Courier New';
     justify-content: space-between;
     height:100%;
     padding:10px 0;
+    flex-grow: 2;
+    flex-basis: 0;
+}
+.picture-save-div
+{
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+}
+.picture-save
+{
+    width:100px;
+    height:50px;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    border:none;
+    outline: none;
+    align-items: center;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-left:20px;
+    flex-grow: 1;
+    flex-basis: 0;
+}
+.pinfo-save
+{
+    width:160px;
+    height:50px;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 .info-container .change-password
 {
@@ -218,6 +568,15 @@ font-family:'Courier New';
     padding:0 20px;
     
 }
+.pass-change-result
+{
+    height:16px;
+    text-align: center;
+    color:white;
+    line-height: 16px;
+    margin-top:5px;
+    font-weight: bold;
+}
 .change-pass-submit
 {
     position: absolute;
@@ -227,10 +586,7 @@ font-family:'Courier New';
     right:0;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
-    background-color: #323738;
     text-align: center;
-    color:#747778;
-    cursor: default;
     display:none;
 }
 .tab-holder
@@ -281,7 +637,45 @@ font-family:'Courier New';
     color:white;
     font-size:15px;
     justify-content: space-between;
+    
 }
+.info .cards-select
+{
+    width:100%;
+}
+.info .cards-select .cards
+{
+    margin:10px 0px;
+    display:flex;
+    justify-content: space-between;
+    width:100%;
+}
+.cards .card
+{
+    display: flex;
+    justify-content: flex-start;
+}
+.cards .edit-card img
+{
+    width:20px;
+    cursor: pointer;
+}
+.add-cards
+{
+    background-color: #F3A800;
+    color:white;
+    font-weight: bold;
+    font-size: 15px;
+    border-radius: 10px;
+    height:50px;
+    width:100px;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    margin-top:14px;
+    cursor: pointer;
+}
+
 .info input
 {
    color:rgba( 255, 255, 255, 0.5);
@@ -290,16 +684,29 @@ font-family:'Courier New';
    border:none;
    width:100%;
 }
+
+.info .input-enabled
+{
+    color:white;
+}
 .info .input-pass
 {
     color:white;
     font-size:15px;
 }
-.info img
+.info .info-change
 {
     width:26px;
     cursor: pointer;
     margin-left:5px;
+}
+.info-lock
+{
+    position: absolute;
+    width:20px;
+    cursor: pointer;
+    margin-left:5px;
+    right:40px;
 }
 .info .info-div
 {
@@ -1980,6 +2387,27 @@ form table tr td
   
   @media (max-width:599px),(min-width:600px) and (max-width:800px)
   {
+      .add-cards-container
+      {
+          width:100%;
+          height:90%;
+          top:10%;
+          left:0;
+          transform: translate(0,0);
+      }
+      .card-container
+      {
+          justify-content: center;
+      }
+      .settings-tab
+      {
+          justify-content: space-between;
+          align-items: center;
+      }
+      .settings-item
+      {
+          margin:0;
+      }
     .admin-panel
     {
         width:100%;
@@ -2057,6 +2485,58 @@ form table tr td
   }
 @media (max-width:599px)
 {
+    .add-cards-container
+    {
+        padding:10px 5px;
+    }
+    .account-container
+    {
+        padding:0;
+    }
+    .account-content
+    {
+        padding:0;
+    }
+    .account-info
+    {
+        width:50%;
+        margin:0 5px;
+    }
+    .settings-tab
+      {
+          justify-content: space-between;
+          align-items: center;
+          margin-top:10px;
+          padding:8px;
+      }
+      .settings-item img
+      {
+        width:18px;
+        margin-right:4px;
+      }
+      .info .name
+      {
+          margin-right:30px;
+      }
+      .info .info-div
+      {
+          width:100%;
+      }
+      .picture-box
+      {
+          width:100px;
+          height:100px;
+      }
+      .radio
+      {
+          width:100%;
+          margin:6px 0px;
+          
+      }
+      .info
+      {
+          flex-wrap: wrap;
+      }
     .flex-column
     {
         flex:100%;

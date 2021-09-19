@@ -29,8 +29,28 @@ if(isset($_POST["login"]))
                 {
                     if(password_verify($loginPass,$a[$i]["password"])) 
                     {
-                        $_SESSION['username']=$loginUsername;
-                        $_SESSION['status']=$a[$i]['status'];
+                        $_SESSION['user']=$a[$i];
+
+                        $cardsQuery="SELECT `number`,`card_id` FROM `cards` NATURAL JOIN `user_cards` WHERE user_cards.user_id='".$_SESSION['user']['Id']."'";
+                        $resultCards=mysqli_query($database,$cardsQuery);
+                        if(mysqli_num_rows($resultCards) > 0)
+                        {
+                            while($row=mysqli_fetch_assoc($resultCards))
+                            {
+                                $cards[]=$row;
+                            }
+                        }
+                        for($i=0;$i<count($cards);$i++)
+                        {
+                            foreach($cards[$i] as $k => $v)
+                            {
+                                if($k=='number')
+                                {
+                                    $cards[$i]['number']="**** **** **** ".substr($v,-4);
+                                }
+                            }
+                        }
+                        $_SESSION['user']['cards']=$cards;
                         header('location:BuyPage.php');
                     }else
                     {

@@ -1,0 +1,60 @@
+
+    <div class="card-container">
+            <div class="face-front">
+                <div class="card-title">
+                    <h3 class="debit">Debit Card</h3>
+                    <h3 class="bank">Bank Name</h3>
+                </div>
+                <div class="chip-div">
+                    <img src="./images/icons/chip.png" class="chip">
+                </div>
+                <div class="card-number">
+                    <input type="text" maxLength="20" oninput="checkCardInfo();fixCardNum(this);" id="card-number" class="number" placeholder="Card Number">
+                </div>
+                <div class="valid-div">
+                    <h5 class="valid">
+                        <span>Valid<br>thru</span>
+                        <div class="date">
+                            <select id="card-month" name="month" style="border-right:1px solid rgba( 255, 255, 255, 0.3);">
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">06</option>
+                                <option value="07">07</option>
+                                <option value="08">08</option>
+                                <option value="09">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select>
+                            <select id="card-year" name="year">
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                            </select>
+                        </div>
+                    </h5>
+                </div>
+                <div class="name-div">
+                    <h5><input type="text" id="card-name" oninput="checkCardInfo()" placeholder="Full name"></h5>
+                </div>
+            </div>
+            <div class="face-back">
+                <div class="blackbar"></div>
+                <div class="ccvtext">
+                    <h5>Authorized Signature-not valid unless signed</h5>
+                    <div class="whitebar">
+                        <div class="ccv">
+                            <input type="text" maxLength="3" id="ccv" oninput="checkCardInfo()" placeholder="CCV">
+                        </div>
+                    </div>
+                </div>
+                <div class="text">
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quaerat cupiditate quibusdam velit, tempora praesentium excepturi animi quod consequatur nihil error accusamus rerum sequi eveniet et aperiam id doloremque labore repudiandae molestias minima, sapiente exercitationem ab reiciendis! Officia ab voluptas sapiente commodi quas earum nostrum culpa nobis neque molestias quo consectetur ipsum, amet asperiores deserunt quis quam explicabo enim, rem facere.
+                </div>
+            </div>
+        </div>

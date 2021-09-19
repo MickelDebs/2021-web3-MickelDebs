@@ -31,7 +31,7 @@ session_start();
                             </div>
                         </div>
                         <?php
-                        if(isset($_SESSION['status']))
+                        if(isset($_SESSION['user']['status']))
                         {
                             echo('
                             <div class="header-container">
@@ -121,7 +121,7 @@ session_start();
                         <div class="header-container">
                             <div class="profile-container" onclick="showUserSettings()">
                                 <div class="profile-img-container">
-                                    <img src="./images/blank.png">
+                                    <img src="'.$_SESSION['user']['picture'].'">
                                 </div>
                                 <div id="user-arrow" class="profile-arrow">
                                     <img src="./images/icons/arrow.png">
@@ -130,7 +130,7 @@ session_start();
                             <div id="user-settings" class="user-container">
                                 <div class="user-dropdown">
                                     <div>
-                                        '.$_SESSION['username'].'
+                                        '.$_SESSION['user']['username'].'
                                     </div>
                                     <div class="user-links">
                                         <a class="user-link" href="account.php">
@@ -153,7 +153,7 @@ session_start();
                                 </div>
                             </div>
                         </div>');
-                            if($_SESSION['status']=="admin")
+                            if($_SESSION['user']['status']=="admin")
                                 {
                                     echo('<div class="header-container" onclick="location.href=\'admin.php\';">
                                     <img class="img" src="./images/icons/admin-icon.png">
@@ -187,7 +187,7 @@ session_start();
                             <img class="img" src="./images/icons/search.png">
                         </div>
                         <?php
-                            if(isset($_SESSION['status']))
+                            if(isset($_SESSION['user']['status']))
                             {
                                 echo('
                                 <div class="header-container" id="searchButton" onclick="enableCartMobile()">
@@ -197,12 +197,12 @@ session_start();
                                 <div class="header-container">
                                     <div class="profile-container" onclick="showUserSettingsMobile()">
                                         <div class="profile-img-container">
-                                            <img src="./images/blank.png">
+                                            <img src="'.$_SESSION['user']['picture'].'">
                                         </div>
                                     </div>
                                 </div>
                                 ');
-                                if($_SESSION['status']=="admin")
+                                if($_SESSION['user']['status']=="admin")
                                 {
                                     echo('<div class="header-container" onclick="location.href=\'admin.php\';">
                                     <img class="img" src="./images/icons/admin-icon.png">
@@ -248,13 +248,13 @@ session_start();
                 </div>
             </div>
             <?php
-            if(isset($_SESSION['status']))
+            if(isset($_SESSION['user']['status']))
             {
                 echo('<div id="user-settings-mobile" class="user-container">
                 <div class="user-dropdown">
                     <div class="user-header">
                         <span>
-                            '.$_SESSION['username'].'
+                            '.$_SESSION['user']['username'].'
                         </span>
                         <img src="./images/icons/close.png" onclick="showUserSettingsMobile()">
                     </div>

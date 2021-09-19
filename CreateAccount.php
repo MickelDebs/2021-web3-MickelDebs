@@ -46,9 +46,19 @@ if(isset($_POST['signup']))
       	   VALUES ('$username', '$email', '".password_hash($password,PASSWORD_DEFAULT)."','normal')";
            
            $results = mysqli_query($database, $query);
+
+           $idQuery="SELECT * from users WHERE `username`='".$username."'";
+           $result_id = mysqli_query($database, $idQuery);
+           $a=array();
+           if(mysqli_num_rows($result_id) == 1)
+            {
+                while($row=mysqli_fetch_assoc($result_id))
+                {
+                    $a[]=$row;
+                }
+            }
            mysqli_close($database);
-           $_SESSION['username']=$username;
-           $_SESSION['status']='normal';
+           $_SESSION['user']=$a[0];
            header('location:BuyPage.php');
         }
 

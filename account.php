@@ -31,7 +31,7 @@ session_start();
                             </div>
                         </div>
                         <?php
-                        if(isset($_SESSION['status']))
+                        if(isset($_SESSION['user']['status']))
                         {
                             echo('
                             <div class="header-container">
@@ -121,7 +121,7 @@ session_start();
                         <div class="header-container">
                             <div class="profile-container" onclick="showUserSettings()">
                                 <div class="profile-img-container">
-                                    <img src="./images/blank.png">
+                                    <img src="'.$_SESSION['user']['picture'].'">
                                 </div>
                                 <div id="user-arrow" class="profile-arrow">
                                     <img src="./images/icons/arrow.png">
@@ -130,7 +130,7 @@ session_start();
                             <div id="user-settings" class="user-container">
                                 <div class="user-dropdown">
                                     <div>
-                                        '.$_SESSION['username'].'
+                                        '.$_SESSION['user']['username'].'
                                     </div>
                                     <div class="user-links">
                                         <a class="user-link" href="#">
@@ -153,7 +153,7 @@ session_start();
                                 </div>
                             </div>
                         </div>');
-                            if($_SESSION['status']=="admin")
+                            if($_SESSION['user']['status']=="admin")
                                 {
                                     echo('<div class="header-container" onclick="location.href=\'admin.php\';">
                                     <img class="img" src="./images/icons/admin-icon.png">
@@ -187,7 +187,7 @@ session_start();
                             <img class="img" src="./images/icons/search.png">
                         </div>
                         <?php
-                            if(isset($_SESSION['status']))
+                            if(isset($_SESSION['user']['status']))
                             {
                                 echo('
                                 <div class="header-container" id="searchButton" onclick="enableCartMobile()">
@@ -197,12 +197,12 @@ session_start();
                                 <div class="header-container">
                                     <div class="profile-container" onclick="showUserSettingsMobile()">
                                         <div class="profile-img-container">
-                                            <img src="./images/blank.png">
+                                            <img src="'.$_SESSION['user']['picture'].'">
                                         </div>
                                     </div>
                                 </div>
                                 ');
-                                if($_SESSION['status']=="admin")
+                                if($_SESSION['user']['status']=="admin")
                                 {
                                     echo('<div class="header-container" onclick="location.href=\'admin.php\';">
                                     <img class="img" src="./images/icons/admin-icon.png">
@@ -264,32 +264,31 @@ session_start();
                                             <img src="./images/icons/close.png" onclick="changePassword()">
                                         </div>
                                     </div>
-                                    <div class="change-pass-submit" id="click-submit-button" onclick="clickSubmit()">
+                                    <div class="change-pass-submit button-disabled" id="click-submit-button" onclick="ChangePasswordAJAX()">
                                     Change
                                     </div>
                                     <div class="info-container">
                                         <div class="info">
                                             <span class="name">Username</span>
                                             <div class="info-div">
-                                                <input type="text" disabled>
+                                                <input type="text" value="<?php echo($_SESSION['user']['username']);?>" disabled>
                                             </div>
                                         </div>
                                         <div class="info">
                                             <span class="name">Email</span>
                                             <div class="info-div">
-                                                <input type="text" value="mickeldebs@gmail.com" disabled>
+                                                <input type="text" value="<?php echo($_SESSION['user']['email']);?>" disabled>
                                             </div>    
                                         </div>
                                         <div class="info">
                                             <span class="name">Password</span>
                                             <div class="info-div">
                                                 <input type="password" value="placeholder" disabled>
-                                                <img src="./images/icons/change.png" onclick="changePassword()">
+                                                <img class="info-change" src="./images/icons/change.png" onclick="changePassword()">
                                             </div>
                                         </div>
                                         
                                         <div id="change-password" class="change-password">
-                                            <form action="changePass.php" Method="POST">
                                             <div class="change-password-content">
                                                 <div class="info">
                                                     <input type="password" oninput="Check()" id="oldpass" placeholder="old password"  class="input-pass" >
@@ -306,7 +305,7 @@ session_start();
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="info">
+                                                <div class="info" style="margin:0px">
                                                     <input type="password" oninput="Check()" placeholder="confirm new password"  id="cpass" class="input-pass">
                                                     <div class="spinner-parent" style="right:30px">
                                                         <div class="spinner" id="cpass-spinner">
@@ -317,32 +316,37 @@ session_start();
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                                <input type="submit" value="Change" onclick="changePasswordfunction();" style="display:none" id="change-pass-submit">
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                </div>
-                                <div class="info-categorie">
-                                    <div class="info-title">
-                                            Profile Picture
-                                        </div>
-                                    <div class="info-container">
-                                        <div class="picture-container">
-                                            <div class="picture-box">
-                                                <img src="./images/blank.png">
-                                            </div>
-                                            <div>
-                                                <input type="file" id="select-picture" style="display:none">
-                                                <div class="picture-info">
-                                                    <input type="button" value="Choose Image" onclick="$('#select-picture').click()">
-                                                    <span>blank.jpg</span>
+                                                <div id="pass-change-result">
+                                                    
                                                 </div>
                                             </div>
-                                        </div>    
+                                        </div>
                                     </div>
                                 </div>
+                                </div>
+                                <form action="" method="POST" enctype="multipart/form-data">
+                                    <div class="info-categorie">
+                                        <div class="info-title">
+                                                Profile Picture
+                                            </div>
+                                        <div class="info-container">
+                                            <div class="picture-container">
+                                                <div class="picture-box">
+                                                    <img id="img-src" src="<?php echo($_SESSION['user']['picture']);?>">
+                                                </div>
+                                                    <input type="file" accept=".png, .jpg, .jpeg" name="profileImg" id="select-picture" style="display:none" onchange="changeProfilePictureAJAX()">
+                                                    <div class="picture-info">
+                                                        <input type="button" class="input-button button-enabled" value="Choose Image" onclick="$('#select-picture').click()">
+                                                        <div id="img-name"></div>
+                                                    </div>
+                                                <div class="picture-save-div">
+                                                    <input type="button" value="Save" class="button-disabled picture-save" id="picture-save" onclick="uploadPicture()">
+                                                    <input type="submit" style="display:none" name="profileSubmit">
+                                                </div>
+                                            </div>    
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                             <div class="account-info">
                                 <div class="info-categorie">
@@ -351,33 +355,133 @@ session_start();
                                     </div>
                                     <div class="info-container">
                                         <div class="info">
-                                            <input type="text" placeholder="First Name">
+                                            <input type="text" id="firstname" oninput="checkInfo()" placeholder="First Name" class="input-enabled"
+                                            <?php 
+                                            if(isset($_SESSION['user']['firstname']))
+                                            {
+                                                echo('style="color:#747778" disabled value="'.$_SESSION['user']['firstname'].'"');
+                                            }
+                                            ?>
+                                            >
+                                            <?php
+                                            if(isset($_SESSION['user']['firstname']))
+                                            {
+                                                echo('<img src="./images/icons/lock.png" class="info-lock" onclick="unlockInfo(this)">');
+                                            }
+                                            ?>
                                         </div>
                                         <div class="info">
-                                            <input type="text" placeholder="Last Name">
+                                            <input type="text" id="lastname"  oninput="checkInfo()"class="input-enabled" placeholder="Last Name"
+                                            <?php 
+                                            if(isset($_SESSION['user']['lastname']))
+                                            {
+                                                echo('style="color:#747778" disabled value="'.$_SESSION['user']['lastname'].'"');
+                                            }
+                                            ?>
+                                            >
+                                            <?php
+                                            if(isset($_SESSION['user']['lastname']))
+                                            {
+                                                echo('<img src="./images/icons/lock.png" class="info-lock" onclick="unlockInfo(this)">');
+                                            }
+                                            ?>
                                         </div>
                                         <div class="subtitle">
                                             Birthday
                                         </div>
                                         <div class="info">
-                                            <input type="date">
+                                            <input type="date" id="date" oninput="checkInfo()"
+                                            <?php 
+                                            if(isset($_SESSION['user']['birthday']))
+                                            {
+                                                echo('style="color:#747778" disabled value="'.$_SESSION['user']['birthday'].'"');
+                                            }
+                                            ?>
+                                            >
+                                            <?php
+                                            if(isset($_SESSION['user']['birthday']))
+                                            {
+                                                echo('<img src="./images/icons/lock.png" class="info-lock" onclick="unlockInfo(this)">');
+                                            }
+                                            ?>
                                         </div>
                                         <div class="subtitle">
-                                            Default Billing Method
+                                            Default Payment Method
                                         </div>
                                         <div class="info">
                                             <label class="radio">Always ask
-                                            <input type="radio" checked="checked" name="DefaultPayment">
-                                            <span class="checkmark"></span>
+                                                <input type="radio" onchange="checkInfo()" checked name="DefaultPayment" value="Always ask">
+                                                <span class="checkmark"></span>
                                             </label>
                                             <label class="radio">Credit Card
-                                            <input type="radio" name="DefaultPayment">
-                                            <span class="checkmark"></span>
+                                                <input type="radio" onchange="checkInfo()" <?php if($_SESSION['user']['payment']=='Credit Card'){echo('checked');}?> name="DefaultPayment" value="Credit Card">
+                                                <span class="checkmark"></span>
                                             </label>
                                             <label class="radio">Cash on Delivery
-                                            <input type="radio" name="DefaultPayment">
-                                            <span class="checkmark"></span>
+                                                <input type="radio" onchange="checkInfo()" <?php if($_SESSION['user']['payment']=='Cash on Delivery'){echo('checked');}?> name="DefaultPayment" value="Cash on Delivery">
+                                                <span class="checkmark"></span>
                                             </label>
+                                        </div>
+                                        <div class="subtitle">
+                                            Credit or debit cards
+                                        </div>
+                                        <div class="info">
+                                            <div class="cards-select">
+                                                <div class="cards">
+                                                    <label class="radio">Always ask
+                                                        <input type="radio" id="all-always" onchange="checkInfo()" checked="checked" name="DefaultCard" value="Always ask">
+                                                        <span class="checkmark"></span>
+                                                    </label>
+                                                </div>
+                                                <div id="all-cards">
+                                                    
+                                                        <?php
+                                                        if(isset($_SESSION['user']['cards']))
+                                                        {
+                                                            $cards=$_SESSION['user']['cards'];
+                                                            foreach($cards as $card)
+                                                            {
+                                                                if($card['card_id']==$_SESSION['user']['card'])
+                                                                {
+                                                                    echo('<div class="cards">
+                                                                    <div class="card">
+                                                                            <label class="radio">'.$card['number'].'
+                                                                                <input type="radio" onchange="checkInfo()" checked name="DefaultCard" value="'.$card['card_id'].'">
+                                                                                <span class="checkmark"></span>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="edit-card">
+                                                                            <img src="./images/icons/delete.png" onclick="removeCardAjax('.$card['card_id'].')">
+                                                                        </div>
+                                                                        </div>');
+                                                                }else
+                                                                {
+                                                                    echo('<div class="cards">
+                                                                    <div class="card">
+                                                                            <label class="radio">'.$card['number'].'
+                                                                                <input type="radio" onchange="checkInfo()" name="DefaultCard" value="'.$card['card_id'].'">
+                                                                                <span class="checkmark"></span>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="edit-card">
+                                                                            <img src="./images/icons/delete.png" onclick="removeCardAjax('.$card['card_id'].')">
+                                                                        </div>
+                                                                        </div>');
+                                                                }
+                                                                
+                                                            }
+                                                        } 
+                                                        ?>
+                                                </div>
+                                                <div class="cards" style="justify-content:flex-end">
+                                                    <div class="add-cards" onclick="addCard()">
+                                                    Add card
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="pinfo-save button-disabled" id="pinfo-save" onclick="updateInfo()">
+                                            Save
                                         </div>
                                     </div>
                                 </div>
@@ -392,13 +496,13 @@ session_start();
                 </div>
             </div>
             <?php
-            if(isset($_SESSION['status']))
+            if(isset($_SESSION['user']['status']))
             {
                 echo('<div id="user-settings-mobile" class="user-container">
                 <div class="user-dropdown">
                     <div class="user-header">
                         <span>
-                            '.$_SESSION['username'].'
+                            '.$_SESSION['user']['username'].'
                         </span>
                         <img src="./images/icons/close.png" onclick="showUserSettingsMobile()">
                     </div>
@@ -498,6 +602,17 @@ session_start();
             </div>');
             }
             ?>
+            <div id="add-cards-container" style="display:none" class="add-cards-container">
+                <div class="add-cards-title">
+                    <h3>Add Card</h3>
+                    <img src="./images/icons/close.png" onclick="closeAddCard()">
+                </div>
+                <div id="add-cards-c" class="add-cards-c">  
+                </div>
+                <div class="add-cards-footer">
+                    <input type="button" value="Add" id="card-save" onclick="addCardDb()" class="button-disabled">
+                </div>
+            </div>
         </div>
         </div>
     </body>
@@ -769,7 +884,7 @@ cinput.keyup(function(){
 
 function Check()
             {
-                var button=document.getElementById("click-submit-button");
+                var button=$("#click-submit-button");
                 
                 var oldpass=document.getElementById("oldpass").value;
                 var password=document.getElementById("pass").value;
@@ -779,14 +894,12 @@ function Check()
                 CheckPass(oldpass)&&
                 password==cpassword)
                 {
-                    button.style.backgroundColor="#F3A800";
-                    button.style.cursor="pointer";
-                    button.style.color="white";
+                    button.addClass("button-enabled");
+                    button.removeClass("button-disabled");
                 }else
                 {
-                    button.style.backgroundColor="#323738";
-                    button.style.cursor="default";
-                    button.style.color="#747778";
+                    button.removeClass("button-enabled");
+                    button.addClass("button-disabled");
                 }
             }
             function changePasswordfunction()
@@ -809,9 +922,440 @@ function Check()
                         }
                 return true;
             }
-            function clickSubmit()
+
+            function ChangePasswordAJAX()
             {
-                document.getElementById("change-pass-submit").click();
+                var queryString="";
+
+                var oldpass=document.getElementById("oldpass");
+                var newpass=document.getElementById("pass");
+                var cpass=document.getElementById("cpass");
+
+                var boolArray=[];
+                boolArray.push(CheckPass(oldpass.value));
+                boolArray.push(CheckPass(pass.value));
+                boolArray.push(pass.value==cpass.value);
+                for(var i=0;i<boolArray.length;i++)
+                    {
+                    if(boolArray[i]==false)
+                    {
+                        event.preventDefault();
+                        return false;
+                    }
+                }
+                queryString='action=changePassword'+'&oldpass='+oldpass.value+'&newpass='+newpass.value+'&cpass='+cpass.value;
+
+                $('#progress').css("width","0");
+                $('#progress').show();
+                $('#progress').animate({"width":"49%"},400,function()
+                {
+                    $('#progress').animate({"width":"50%"},300,function()
+                    {
+                        $('#progress').animate({"width":"70%"},600);
+                    });
+                });
+
+                $.ajax({
+                url: "account-action.php",
+                data:queryString,
+                type: "POST",
+                success:function(response){
+                    $('#progress').animate({"width":"100%"},200,function()
+                    {
+                        $('#progress').hide();
+                    });
+                    $('#pass-change-result').html(response);
+                    
+                },
+                error:function (){}
+                });
             }
+            function checkProfilePicture(element)
+            {
+                var files=$(element)[0].files;
+                var save=$("#picture-save");
+
+                if(files.length>0)
+                {
+                    save.addClass("button-enabled");
+                    save.removeClass("button-disabled");
+                }else
+                {
+                    save.removeClass("button-enabled");
+                    save.addClass("button-disabled");
+                }
+            }
+            function changeProfilePictureAJAX()
+            {
+                var fd = new FormData();
+                var files = $('#select-picture')[0].files;
+                
+                // Check file selected or not
+                if(files.length > 0 ){
+                    fd.append('file',files[0]);
+                        $('#progress').css("width","0");
+                        $('#progress').show();
+                        $('#progress').animate({"width":"49%"},400,function()
+                        {
+                            $('#progress').animate({"width":"50%"},300,function()
+                            {
+                                $('#progress').animate({"width":"70%"},600);
+                            });
+                        });
+                    $.ajax({
+                        url: 'account-action.php',
+                        type: 'POST',
+                        data: fd,
+                        contentType: false,
+                        processData: false,
+                        success: function(response){
+                            $('#progress').animate({"width":"100%"},200,function()
+                            {
+                                $('#progress').hide();
+                            });
+                            $('#img-src').attr('src',response);
+                            checkProfilePicture($('#select-picture'));
+                        },
+                    });
+                }
+            }
+            function uploadPicture()
+            {
+                var src=$('#img-src').attr('src');
+                var queryString='action=uploadPicture'+'&source='+src;
+                $('#progress').css("width","0");
+                        $('#progress').show();
+                        $('#progress').animate({"width":"49%"},400,function()
+                        {
+                            $('#progress').animate({"width":"50%"},300,function()
+                            {
+                                $('#progress').animate({"width":"70%"},600);
+                            });
+                        });
+                $.ajax({
+                    url: "account-action.php",
+                    data:queryString,
+                    type: "POST",
+                    success:function(response){
+                        $('#progress').animate({"width":"100%"},200,function()
+                        {
+                            $('#progress').hide();
+                        });
+                        $('#img-name').html(response);
+                        $('#select-picture').val('');
+                        $('#picture-save').addClass("button-disabled");
+                        $('#picture-save').removeClass("button-enabled");
+                    },
+                });
+            }
+
+            function checkInfo()
+            {
+                var fn=$('#firstname');
+                var ln=$('#lastname');
+                var bday=$('#date');
+                var save=$('#pinfo-save');
+
+                if(checkName(fn.val())&&
+                checkName(ln.val())&&
+                bday.val()!="")
+                {
+                    
+                    save.addClass("button-enabled");
+                    save.removeClass("button-disabled");
+                }else
+                {
+                    save.removeClass("button-enabled");
+                    save.addClass("button-disabled");
+                }
+                
+                
+            }
+            function checkName(str)
+            {
+                var reg=/^[a-zA-Z0-9]+$/;
+                if(reg.test(str))
+                {
+                    return true;
+                }
+                return false;
+            }
+            function unlockInfo(element)
+            {
+                element.parentElement.firstElementChild.disabled=false;
+                element.parentElement.firstElementChild.style.color="white";
+                element.style.display="none";
+            }
+            function lockInfo()
+            {
+                var element=document.getElementsByClassName("info-lock");
+                for(var i=0;i<element.length;i++)
+                {
+                    element[i].parentElement.firstElementChild.disabled=true;
+                    element[i].parentElement.firstElementChild.style.color="#747778";
+                    element[i].style.display="block";
+                }
+            }
+
+            var lastfn="";
+            var lastln="";
+            var lastbd="";
+            <?php
+                if(isset($_SESSION['user']['firstname']))
+                {
+                    echo('lastfn="'.$_SESSION['user']['firstname'].'";');
+                }
+                if(isset($_SESSION['user']['lastname']))
+                {
+                    echo('lastln="'.$_SESSION['user']['lastname'].'";');
+                }
+                if(isset($_SESSION['user']['birthday']))
+                {
+                    echo('lastbd="'.$_SESSION['user']['birthday'].'";');
+                }
+            ?>
+            function updateInfo()
+            {
+                var queryString="";
+                
+                var fn=$('#firstname');
+                var ln=$('#lastname');
+                var bday=$('#date');
+
+                var defaultpayment=$('input[name="DefaultPayment"]:checked').val();
+                var card=$('input[name="DefaultCard"]:checked').val();
+                var save=$('#pinfo-save');
+
+                if(checkName(fn.val())&&
+                checkName(ln.val())&&
+                bday.val()!="")
+                {
+                    if(lastfn==""&&
+                    lastln==""&&
+                    lastbd=="")
+                    {
+                    }else
+                    {
+                        
+                            $('#progress').css("width","0");
+                                    $('#progress').show();
+                                    $('#progress').animate({"width":"49%"},400,function()
+                                    {
+                                        $('#progress').animate({"width":"50%"},300,function()
+                                        {
+                                            $('#progress').animate({"width":"70%"},600);
+                                        });
+                                    });
+                            queryString="action=changeInfo&firstname="+fn.val()+"&lastname="+ln.val()+"&birthday="+bday.val()+"&defaultpayment="+defaultpayment+"&card="+card;
+                            $.ajax({
+                                url: "account-action.php",
+                                data:queryString,
+                                type: "POST",
+                                success:function(response){
+                                    $('#progress').animate({"width":"100%"},200,function()
+                                    {
+                                        $('#progress').hide();
+                                    });
+                                    if(response=="success")
+                                    {
+                                        lockInfo();
+                                        lastfn=fn.val();
+                                        lastln=ln.val();
+                                        lastbd=bday.val();
+                                        $('#pinfo-save').addClass("button-disabled");
+                                        $('#pinfo-save').removeClass("button-enabled");
+                                    }
+                                },
+                            });
+                        
+                    }
+                }
+            }
+            function addCard()
+            {
+                $.ajax({
+                    url: "card.html",
+                    success:function(response){
+                        $('#add-cards-c').html(response);
+                        $('#add-cards-container').show(400);
+                    },
+                });
+            }
+            function closeAddCard()
+            {
+                $('#add-cards-container').hide(400);
+            }
+            function checkCardInfo()
+            {
+                var cardnum = $('#card-number');
+                var cardname = $('#card-name');
+                var ccv = $('#ccv');
+
+                if(checkCardNum(cardnum.val())&&
+                checkCardName(cardname.val())&&
+                checkCCV(ccv.val()))
+                {
+                    $('#card-save').addClass("button-enabled");
+                    $('#card-save').removeClass("button-disabled");
+                }else
+                {
+                    $('#card-save').addClass("button-disabled");
+                    $('#card-save').removeClass("button-enabled");
+                }
+            }
+            function checkCardName(str)
+            {
+                var reg=/^[a-zA-Z]+[a-zA-Z\s]+$/;
+                if(reg.test(str))
+                {
+                    return true;
+                }
+                return false;
+            }
+            function checkCardNum(str)
+            {
+                var reg=/^([0-9]{4}\s){4}$/;
+                if(reg.test(str))
+                {
+                    return true;
+                }
+                return false;
+            }
+            var nextCount=4;
+            function fixCardNum(element)
+            {
+                var count=element.value.length;
+                if(count==nextCount)
+                {
+                    element.value=element.value+" ";
+                    nextCount+=5;
+                }
+                if(nextCount-count>5)
+                {
+                    nextCount-=5;
+                }
+            }
+            function checkCCV(str)
+            {
+                var reg=/^[0-9]{3}$/;
+                if(reg.test(str))
+                {
+                    return true;
+                }
+                return false;
+            }
+            function addCardDb()
+            {
+                var queryString="";
+                var cardnum = $('#card-number');
+                var cardname = $('#card-name');
+                var cardmonth=$('#card-month');
+                var cardyear=$('#card-year');
+                var ccv = $('#ccv');
+
+
+                $('#progress').css("width","0");
+                                    $('#progress').show();
+                                    $('#progress').animate({"width":"49%"},400,function()
+                                    {
+                                        $('#progress').animate({"width":"50%"},300,function()
+                                        {
+                                            $('#progress').animate({"width":"70%"},600);
+                                        });
+                                    });
+                            queryString="action=addCard&number="+cardnum.val()+"&name="+cardname.val()+"&month="+cardmonth.val()+"&year="+cardyear.val()+"&ccv="+ccv.val();
+                            $.ajax({
+                                url: "./actions/card-action.php",
+                                data:queryString,
+                                type: "POST",
+                                success:function(response){
+                                    $('#progress').animate({"width":"100%"},200,function()
+                                    {
+                                        $('#progress').hide();
+                                    });
+                                    parseCards(response);
+                                    
+                                },
+                            });
+            }
+            function removeCardAjax(cardid)
+            {
+                var queryString="";
+
+                $('#progress').css("width","0");
+                                    $('#progress').show();
+                                    $('#progress').animate({"width":"49%"},400,function()
+                                    {
+                                        $('#progress').animate({"width":"50%"},300,function()
+                                        {
+                                            $('#progress').animate({"width":"70%"},600);
+                                        });
+                                    });
+                            queryString="action=removeCard&id="+cardid;
+                            $.ajax({
+                                url: "./actions/card-action.php",
+                                data:queryString,
+                                type: "POST",
+                                success:function(response){
+                                    $('#progress').animate({"width":"100%"},200,function()
+                                    {
+                                        $('#progress').hide();
+                                    });
+                                    $('#all-always').prop("checked",true);
+                                    parseCards(response);
+                                },
+                            });
+            }
+            var currentCard="";
+            <?php
+                if(isset($_SESSION['user']['cards']))
+                {
+                    if($_SESSION['user']['card']!='Always ask')
+                    {
+                        echo('currentCard="'.$_SESSION['user']['card'].'";');
+                    }   
+                }
+            ?>
+            function parseCards(response)
+            {
+                var cards=JSON.parse(response);
+                                    $('#all-cards').html('');
+                                    for(var i=0;i<cards.length;i++)
+                                    {
+                                        var ht='';
+                                        if(cards[i]['card_id']==currentCard)
+                                        {
+                                                ht='<div class="cards">'
+                                                        +'<div class="card">'
+                                                            +'<label class="radio">'+cards[i]['number']
+                                                                +'<input type="radio" onchange="checkInfo()" checked name="DefaultCard" value="'+cards[i]['card_id']+'">'
+                                                                +'<span class="checkmark"></span>'
+                                                            +'</label>'
+                                                        +'</div>'
+                                                        +'<div class="edit-card">'
+                                                            +'<img src="./images/icons/delete.png" onclick="removeCardAjax('+cards[i]['card_id']+')">'
+                                                        +'</div>'
+                                                    +'</div>';
+                                        }
+                                        else
+                                        {
+                                                ht='<div class="cards">'
+                                                        +'<div class="card">'
+                                                            +'<label class="radio">'+cards[i]['number']
+                                                                +'<input type="radio" onchange="checkInfo()" name="DefaultCard" value="'+cards[i]['card_id']+'">'
+                                                                +'<span class="checkmark"></span>'
+                                                            +'</label>'
+                                                        +'</div>'
+                                                        +'<div class="edit-card">'
+                                                            +'<img src="./images/icons/delete.png" onclick="removeCardAjax('+cards[i]['card_id']+')">'
+                                                        +'</div>'
+                                                    +'</div>';
+                                        }
+                                       
+                                        $('#all-cards').append(ht);
+                                    }
+                                    closeAddCard();
+            }
+                
     </script>
 </html>

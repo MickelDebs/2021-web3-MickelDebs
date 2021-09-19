@@ -6,3 +6,4 @@ to change it from inspect element in chrome.That way its safer.
 9/13/2021 commit: cart is now working using ajax. it just need to be implemented for mobile interface and 
 on other pages.
 9/15/2021 commit: implemented cart for mobile and index page and now working on user account settings.
+9/19/2021 commit: finished account page by adding user information, picture and saved credit cards.
