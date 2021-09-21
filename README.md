@@ -7,3 +7,4 @@ to change it from inspect element in chrome.That way its safer.
 on other pages.
 9/15/2021 commit: implemented cart for mobile and index page and now working on user account settings.
 9/19/2021 commit: finished account page by adding user information, picture and saved credit cards.
+9/21/2021 commit: made progress in favorites page and added add to favorite button to meals in menu page .Favorites page still lacks the sorting by functionnality.

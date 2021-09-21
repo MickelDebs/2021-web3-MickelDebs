@@ -46,11 +46,24 @@ if(isset($_POST["login"]))
                             {
                                 if($k=='number')
                                 {
-                                    $cards[$i]['number']="**** **** **** ".substr($v,-4);
+                                    $cards[$i]['number']="●●●● ●●●● ●●●● ".substr($v,-4);
                                 }
                             }
                         }
                         $_SESSION['user']['cards']=$cards;
+
+                        $favQuery="SELECT `meal_id` FROM `favorites` NATURAL JOIN `users` WHERE favorites.user_id='".$_SESSION['user']['Id']."'";
+                        $resultfav=mysqli_query($database,$favQuery);
+                        $fav=array();
+                        if(mysqli_num_rows($resultfav) > 0)
+                        {
+                            while($row=mysqli_fetch_assoc($resultfav))
+                            {
+                                $fav[]=$row;
+                            }
+                        }
+                        $_SESSION['user']['favorites']=$fav;
+
                         header('location:BuyPage.php');
                     }else
                     {

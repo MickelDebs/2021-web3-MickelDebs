@@ -133,15 +133,15 @@ session_start();
                                         '.$_SESSION['user']['username'].'
                                     </div>
                                     <div class="user-links">
-                                        <a class="user-link" href="#">
+                                        <a class="user-link" href="account.php">
                                             <img src="./images/icons/settings-icon.png">
                                             <span>Settings</span>
                                         </a>
-                                        <a class="user-link" href="#">
+                                        <a class="user-link" href="orders.php">
                                             <img src="./images/icons/orders.png">
                                             <span>Orders</span>
                                         </a>
-                                        <a class="user-link" href="#">
+                                        <a class="user-link" href="favorites.php">
                                             <img src="./images/icons/heart.png">
                                             <span>Favorites</span>
                                         </a>

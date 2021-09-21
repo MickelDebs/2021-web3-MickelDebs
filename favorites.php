@@ -1,6 +1,5 @@
 <?php
 session_start();
-include 'fetchmeals.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -10,9 +9,9 @@ include 'fetchmeals.php';
         <script src="jQuery.js"></script>
     </head>
     <body>
-        <div class="root"> 
-        <!--pc interface-->
-        <div class="pc-header">
+        <div class="root">
+            <!--pc interface-->
+            <div class="pc-header">
                 <div class="header">
                     <div class="header-div">
                         <div class="logo">
@@ -103,17 +102,17 @@ include 'fetchmeals.php';
                                 }else
                                 {
                                     echo('<div class="total-hidden" style="display:none">0</div>');
-                                }    
+                                }
                                 echo('</div>
                                 <div class="cart-footer">
                                     <div class="footer-header">
                                         <span class="total">Total</span>
-                                        <span id="cart-total" class="price">0</span>
+                                        <span id="cart-total"class="price">0</span>
                                     </div>
                                     <div class="cart-checkout">
                                        BUY NOW
                                     </div>
-                                    <div class="cart-clear" onclick="cartAction(\'empty\',\'\');">
+                                    <div class="cart-clear" onclick="cartAction(\'empty\');">
                                        CLEAR CART
                                     </div>
                                 </div>
@@ -138,11 +137,11 @@ include 'fetchmeals.php';
                                             <img src="./images/icons/settings-icon.png">
                                             <span>Settings</span>
                                         </a>
-                                        <a class="user-link" href="#">
+                                        <a class="user-link" href="orders.php">
                                             <img src="./images/icons/orders.png">
                                             <span>Orders</span>
                                         </a>
-                                        <a class="user-link" href="#">
+                                        <a class="user-link" href="favorites.php">
                                             <img src="./images/icons/heart.png">
                                             <span>Favorites</span>
                                         </a>
@@ -191,7 +190,7 @@ include 'fetchmeals.php';
                             if(isset($_SESSION['user']['status']))
                             {
                                 echo('
-                                <div class="header-container" onclick="enableCartMobile()">
+                                <div class="header-container" id="searchButton" onclick="enableCartMobile()">
                                     <img class="img" src="./images/icons/cart-icon.png">
                                     <div class="sub" id="cart-text-mobile" style="display:none">0</div>
                                 </div>
@@ -232,73 +231,117 @@ include 'fetchmeals.php';
                 
             </div>
         <div class="background-flex">
-            <div class="buymenu-parent">
-            <div id="progress" class="progress"></div>
-                <div class="buymenu">
-                    <div class="buymenu-title">
-                        <?php
-                            if(isset($categories_array))
-                            {
-                                for($i=0;$i<count($categories_array);$i++)
-                                {
-                                    echo('
-                                        <div class="buymenu-title-item" onclick="EnableCategories(this,'.$i.')">
-                                        <img src="'.$categories_array[$i]['image'].'" class="logo-img">
-                                        <div class="food-text">'.$categories_array[$i]['name'].'</div>
-                                        </div>
-                                    ');
-                                }
-                            }
-
-                        ?>
-                        <!--<div class="buymenu-title-item" onclick="EnableCategories(this,0)" style="background:#F3A800">
-                            <img src="images/burger-logo.png" class="logo-img">
-                            <div class="food-text">Burgers</div>
+        <div id="progress" class="progress"></div>
+            <div class="favorites-container">
+                    <div class="favorites-content">
+                        <div class="favorites-tab">
+                                <a href="favorites.php" class="settings-item" style="filter: invert(15%) sepia(24%) saturate(7499%) brightness(100%) contrast(103%);">
+                                    <img src="./images/icons/heart.png">
+                                    <span>Favorites</span>
+                                </a>
+                                <a href="account.php" class="settings-item">
+                                    <img src="./images/icons/settings-icon.png">
+                                    <span>Settings</span>
+                                </a>
+                                <a href="orders.php" class="settings-item">
+                                    <img src="./images/icons/orders.png">
+                                    <span>Orders</span>
+                                </a>
                         </div>
-
-                        <div class="buymenu-title-item" onclick="EnableCategories(this,1)">
-                            <img src="images/pizza-logo.png" class="logo-img">
-                            <div class="food-text">Pizzas</div>
-                        </div>-->
-                    </div>
-                    <div class="buymenu-items">
+                        <div class="favorites-header">
+                            <div class="favorites-title">
+                                Favorites
+                            </div>
+                            <div class="sort-div" onclick="toggleSort()">
+                                <div class="sort">
+                                    <div id="sort-title" class="sort-selected">expensive first</div>
+                                    <img class="sort-arrow" id="sort-arrow" src="./images/icons/arrow.png">
+                                </div>
+                                <div id="sort-dropdown" class="sort-dropdown">
+                                    <div class="sort-dropdown-item sort-dropdown-item--active" onclick="sort(this);">
+                                        <div class="sort-item-text">
+                                            Expensive first
+                                        </div>
+                                    </div>
+                                    <div class="sort-dropdown-item" onclick="sort(this);">
+                                        <div class="sort-item-text">
+                                            Cheapest first
+                                        </div>
+                                    </div>
+                                    <div class="sort-dropdown-item" onclick="sort(this);">
+                                        <div class="sort-item-text">
+                                            Newest
+                                        </div>
+                                    </div>
+                                    <div class="sort-dropdown-item" onclick="sort(this);">
+                                        <div class="sort-item-text">
+                                            Oldest
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="favorites">
                             <?php
-                                if(!empty($categories_array))
+                            if(isset($_SESSION['user']['favorites']))
+                            {
+                                include 'cnx.php';
+                                $checkboxCount=0;
+                                $allmeals=array();
+                                foreach($_SESSION['user']['favorites'] as $fav_meal)
                                 {
-                                    for($i=0;$i<count($categories_array);$i++){
-                                        if($i==0){
-                                            echo('<div class="buymenu-categorie">');
-                                        }else
-                                        {
-                                            echo('<div class="buymenu-categorie" style="display:none">');
-                                        }
-                                    for($j=0;$j<count($meals_array);$j++)
+                                $getFavQuery="SELECT * FROM `meals` WHERE Id='".$fav_meal['meal_id']."'";
+                                
+                                $resultGetFav=mysqli_query($database,$getFavQuery);
+                                    $mealArray=array();
+                                    if(mysqli_num_rows($resultGetFav) == 1)
                                     {
-                                        if($meals_array[$j]['categorie']==$categories_array[$i]['name']){
-                               echo('<div class="container">
-                                        <div class="item-card" id=meal'.$meals_array[$j]["Id"].'>
-                                            <div class="item-imgBox"  onclick="EnableDescription(this)">
-                                                <img src="'.$meals_array[$j]['image'].'">
-                                                <span>'.$meals_array[$j]['name'].'</span>
-                                            </div>
-                                            <div class="item-content">
-                                                <div class="arrow" onclick="DisableDescription(this)">
-                                                    <img src="./images/icons/arrow.png"> 
-                                                </div>
-                                                    <div class="main-heart">
+                                        while($row=mysqli_fetch_assoc($resultGetFav))
+                                        {
+                                            $mealArray[]=$row;
+                                        }
+                                        $meal=$mealArray[0];
+                                        array_push($allmeals,$meal);
+                                    }
+                                }
+                                $allcategories=array();
+                                foreach($allmeals as $currentmeal)
+                                {
+                                    array_push($allcategories,$currentmeal['categorie']);
+                                }
+                                $allcategories=array_unique($allcategories);
+                                foreach($allcategories as $cat)
+                                {
+                                    echo('<div class="favorites-categorie-title">'.$cat.'</div>
+                                        <div class="favorites-categorie">');
+                                    foreach($allmeals as $currentmeal)
+                                    {
+                                        
+                                        if($currentmeal['categorie']==$cat)
+                                        {
+                                            echo('
+                                            <div class="favorites-item-container">
+                                                <div class="favorites-item" id="meal'.$currentmeal['Id'].'">
+                                                    <div class="fav-item-imgbox">
+                                                        <img src="'.$currentmeal['image'].'">
+                                                        <h3>'.$currentmeal['name'].'</h3>
+                                                    </div>
+                                                    <div class="fav-item-content">
+                                                    <div class="main-heart-fav">
                                                     <div>
                                                     <input type="checkbox" class="heart-checkbox"');
                                                     $favs=$_SESSION['user']['favorites'];
                                                     foreach($favs as $fav)
                                                     {
-                                                        if($fav['meal_id']==$meals_array[$j]['Id'])
+                                                        if($fav['meal_id']==$currentmeal['Id'])
                                                         {
                                                             echo('checked ');
                                                         }
                                                     }
                                                     
-                                                    echo('onclick="ManageFavorite(this,'.$meals_array[$j]["Id"].')" id="heart-checkbox-'.$meals_array[$j]["Id"].'"/>
-                                                    <label for="heart-checkbox-'.$meals_array[$j]["Id"].'">
+                                                    echo('onclick="ManageFavorite(this,'.$currentmeal["Id"].')" id="heart-checkbox-'.$currentmeal["Id"].'"/>
+                                                    <label for="heart-checkbox-'.$currentmeal["Id"].'">
                                                         <svg id="heart-svg" viewBox="467 392 58 57">
                                                         <g id="Group" fill="none" fill-rule="evenodd" transform="translate(467 392)">
                                                             <path d="M29.144 20.773c-.063-.13-4.227-8.67-11.44-2.59C7.63 28.795 28.94 43.256 29.143 43.394c.204-.138 21.513-14.6 11.44-25.213-7.214-6.08-11.377 2.46-11.44 2.59z" id="heart" fill="#AAB8C2"/>
@@ -343,182 +386,51 @@ include 'fetchmeals.php';
                                                     </label>
                                                     </div>
                                                 </div>
-                                                <div class="description">
-                                                        '.$meals_array[$j]['description'].'
-                                                </div>
-                                                <div class="ingredients">
+                                                        <div class="fav-item-desc">
+                                                            '.$currentmeal['description'].'
+                                                        </div>
+                                                        <div class="ingredients">
                                                 ');
-                                                for($k=0;$k<count($mealingredients_array[$j]);$k++)
+                                                $mealingredients_array=explode(',',$currentmeal['ingredients']);
+                                                for($k=0;$k<count($mealingredients_array);$k++)
                                                 {
                                                 echo('
                                                     <div>
-                                                        <input type="checkbox" name="'.$mealingredients_array[$j][$k].'" id="checkbox'.$checkboxCount.'" checked="true">
+                                                        <input type="checkbox" name="'.$mealingredients_array[$k].'" id="checkbox'.$checkboxCount.'" checked="true">
                                                         <label for="checkbox'.$checkboxCount.'"><img src="images/ingredients/'.
-                                                        $mealingredients_array[$j][$k].
+                                                        $mealingredients_array[$k].
                                                         '.png" /></label>
                                                     </div>');
                                                     $checkboxCount++;
                                                 }
                                                 echo('</div>
-                                                <div class="price"><h2>'.$meals_array[$j]['price'].'</h2></div>
+                                                <div class="price"><h2>'.$currentmeal['price'].'</h2></div>
                                                 <div class="order">
-                                                    <input type="button" id="add_'.$meals_array[$j]['Id'].' name="add" class="order-btn" value="Add to Card" onclick="cartAction(\'add\','.$meals_array[$j]['Id'].');">
+                                                    <input type="button" id="add_'.$currentmeal['Id'].' name="add" class="order-btn" value="Add to Card" onclick="cartAction(\'add\','.$currentmeal['Id'].');">
                                                     <input type="button" class="order-btn" value="Buy Now">
                                                 </div>
+                                                </div>
                                             </div>
-                                        </div>     
-                                   </div>'); 
-                                            }else
-                                            {
-                                                //echo('<div style="color:white;font-size:20px">Categorie is empty</div>');
-                                            }
+                                            </div>');
+                                        }
                                     }
-                                echo('</div>');
+                                    echo('</div>');
+
                                 }
                             }
-
+                            
                             ?>
-                            <!--<div class="container">
-                                <div class="item-card" onclick="EnableDescription(this)">
-                                    <div class="item-imgBox">
-                                        <img src="images/burgers/burger1.png">
-                                        <h2>Double Cheese Bacon Burger</h2>
-                                    </div>
-                                    <div class="item-content">
-                                        <div class="description">
-                                                <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus cumque natus, alias similique aut nemo. Illo dicta reiciendis quae rerum.</h3>
-                                        </div>
-                                        <div class="ingredients">
-                                            <div>
-                                                <input type="checkbox" id="checkbox1" checked="true">
-                                                <label for="checkbox1"><img src="images/burger-logo.png" /></label>
-                                            </div>
-                                            <div>
-                                                <input type="checkbox" id="checkbox2" checked="true">
-                                                <label for="checkbox2"><img src="images/burger-logo.png" /></label>
-                                            </div>
-                                            <div>
-                                                <input type="checkbox" id="checkbox3" checked="true">
-                                                <label for="checkbox3"><img src="images/burger-logo.png" /></label>
-                                            </div>
-                                        </div>
-                                        <div class="price"><h2>24,000LL</h2></div>
-                                        <div class="order">
-                                            <input type="button" value="Add to Card" onclick="AddToCart(this)">
-                                            <input type="button" value="Buy Now">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>-->
-                                                                  
-                        </div>
-                        <!--
-                        <div class="buymenu-categorie" style="display:none">
-                            <div class="container">
-                                <div class="item-card" onclick="EnableDescription(this)">
-                                    <div class="item-imgBox">
-                                        <img src="images/backgroundFood1.png">
-                                        <h2>Tomato Pizza</h2>
-                                    </div>
-                                    <div class="item-content">
-                                        <div class="description">
-                                                <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus cumque natus, alias similique aut nemo. Illo dicta reiciendis quae rerum.</h3>
-                                        </div>
-                                        <div class="ingredients">
-                                            <div>
-                                                <input type="checkbox" id="checkbox4" checked="true">
-                                                <label for="checkbox4"><img src="images/pizza-logo.png" /></label>
-                                            </div>
-                                            <div>
-                                                <input type="checkbox" id="checkbox5" checked="true">
-                                                <label for="checkbox5"><img src="images/burger-logo.png" /></label>
-                                            </div>
-                                            <div>
-                                                <input type="checkbox" id="checkbox6" checked="true">
-                                                <label for="checkbox6"><img src="images/pizza-logo.png" /></label>
-                                            </div>
-                                        </div>
-                                        <div class="price"><h2>36,000LL</h2></div>
-                                        <div class="order">
-                                            <input type="button" value="Add to Card" onclick="AddToCart(this)">
-                                            <input type="button" value="Buy Now">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>                                       
-                        </div>-->
-                    
-                </div>
-                <!--
-                <div class="buymenu-settings" id="buymenu-settings">
-                    <div class="title">
-                        <div class="cart" id="cart-title" onclick="EnableSidePanels(this,0)" style="background:#F3A800">
-                            <img src="images/icons/cart-icon.png">
-                        </div>
-                        <div class="profile" onclick="EnableSidePanels(this,1)">
-                            <img src="images/icons/profile-icon.png">
-                        </div>
-                        <div class="settings" onclick="EnableSidePanels(this,2)">
-                            <img src="images/icons/settings-icon.png">
-                        </div>
-                        <div class="admin" id="admin-control-div" onclick="EnableSidePanels(this,3)">
-                            <img src="images/icons/admin-icon.png">
+
                         </div>
                     </div>
-                    <div class="content" id="content">
-                        <div class="cart-content" id="cart-content">
-                            <div class="cart-content-items" id="cart-content-items">-->
-                            <!--
-                                <div class="item" style="margin-left: 0px;">
-                                    <img src="images/burgers/burger1.png">
-                                    <div class="desc">
-                                        <span class="name">Double Cheese Bacon Burger</span>
-                                        <div class="checkboxs">
-                                            <div class="not-included">
-                                                <img src="images/burger-logo.png">
-                                            </div>
-                                        </div>
-                                        <span class="price">24,000LL</span>
-                                    </div>
-                                    <div class="close">
-                                        <div class="x-button" onclick="RemoveFromCart(this)">
-                                        </div>
-                                    </div>
-                                </div>
-                            -->
-                            <!--
-                            </div>
-                            <div class="cart-content-buynow" id="cart-content-buynow">
-                                <div>
-                                    <span>Total:</span>
-                                    <input type="button" value="Buy Now">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="profile-content" id="profile-content" style="display:none">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, recusandae!
-                        </div>
-                        <div class="settings-content" id="settings-content" style="display:none">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, recusandae!
-                        </div>
-                        <div class="admin-content" id="admin-content" style="display:none">
-                            <div class="control-panel">
-                                <input type="button" id="add-meals-button" value="Add Meals" onclick="EnablePanel(0)">
-                                <input type="button" id="edit-meals-button" value="Edit Meals" onclick="EnablePanel(1)">
-                                <input type="button" id="add-ingredients-button" value="Add Ingredients" onclick="EnablePanel(2)">
-                                <input type="button" id="edit-ingredients-button" value="Edit Ingredients" onclick="EnablePanel(3)">
-                                </div>
-                            </div>
-                        </div>
-                    </div>-->
+            </div>    
+            <div class="mobile-menu" id="menu">
+                <div class="menu">
+                    <div onclick="location.href='BuyPage.php';">Menu</div>
+                    <div onclick="location.href='about.php';">About</div>
                 </div>
-                <div class="mobile-menu"  id="menu">
-                    <div class="menu">
-                        <div onclick="location.href='BuyPage.php';">Menu</div>
-                        <div onclick="location.href='about.php';">About</div>
-                    </div>
-                </div>
-                <?php
+            </div>
+            <?php
             if(isset($_SESSION['user']['status']))
             {
                 echo('<div id="user-settings-mobile" class="user-container">
@@ -530,7 +442,7 @@ include 'fetchmeals.php';
                         <img src="./images/icons/close.png" onclick="showUserSettingsMobile()">
                     </div>
                     <div class="user-links">
-                        <a class="user-link" href="account.php">
+                        <a class="user-link" href="#">
                             <img src="./images/icons/settings-icon.png">
                             <span>Settings</span>
                         </a>
@@ -608,28 +520,39 @@ include 'fetchmeals.php';
                                 }else
                                 {
                                     echo('<div class="total-hidden" style="display:none">0</div>');
-                                }    
+                                }  
                 echo('</div>
                 <div class="cart-footer">
                     <div class="footer-header">
                         <span class="total">Total</span>
-                        <span class="price" id="cart-total-mobile">0</span>
+                        <span id="cart-total-mobile" class="price">0</span>
                     </div>
                     <div class="cart-checkout">
                        BUY NOW
                     </div>
-                    <div class="cart-clear" onclick="cartAction(\'empty\')">
+                    <div class="cart-clear" onclick="cartAction(\'empty\');">
                        CLEAR CART
                     </div>
                 </div>
             </div>');
             }
             ?>
+            <div id="add-cards-container" style="display:none" class="add-cards-container">
+                <div class="add-cards-title">
+                    <h3>Add Card</h3>
+                    <img src="./images/icons/close.png" onclick="closeAddCard()">
+                </div>
+                <div id="add-cards-c" class="add-cards-c">  
+                </div>
+                <div class="add-cards-footer">
+                    <input type="button" value="Add" id="card-save" onclick="addCardDb()" class="button-disabled">
+                </div>
             </div>
+        </div>
         </div>
     </body>
     <script>
-        <?php
+         <?php
         if(isset($_SESSION['cart_item']))
         {
         echo('$(document).ready(function()
@@ -638,105 +561,6 @@ include 'fetchmeals.php';
         });');
         }
         ?>
-        var itemsCount=0;
-        
-        
-        function EnableSidePanels(element,num)
-        {
-            var elementParent=element.parentElement;
-            var parent=element.parentElement.nextElementSibling;
-            for(var i=0;i<parent.children.length;i++)
-            {
-                elementParent.children[i].style.removeProperty('background');
-                $(parent.children[i]).hide();
-            }
-            element.style.background="#F3A800";
-            $(parent.children[num]).show();
-        }
-        function EnableCategories(element,num)
-        {
-            var elementParent=element.parentElement;
-            var categorieParent=element.parentElement.nextElementSibling;
-            for(var i=0;i<categorieParent.children.length;i++)
-            {
-                elementParent.children[i].style.removeProperty('background');
-                $(categorieParent.children[i]).hide();
-            }
-            element.style.background="#F3A800";
-            $(categorieParent.children[num]).show();
-        }
-        function EnableDescription (element)
-        {
-            DisableAll();
-            var content=element.parentElement.children[1];
-
-            content.style.height="100%";
-            content.firstElementChild.firstElementChild.style.animation="rotate 0.5s forwards";
-        }
-        function DisableDescription(element)
-        {
-            var arrow=element;
-            var content=arrow.parentElement;
-
-            if(content.style.height=="100%")
-            {
-                content.style.height="5%";
-                content.firstElementChild.firstElementChild.style.animation="rotateback 0.5s forwards";
-            }else
-            {
-                content.style.height="100%";
-                content.firstElementChild.firstElementChild.style.animation="rotate 0.5s forwards";
-            }
-        }
-        function DisableAll()
-        {
-            var contents=$(".item-content");
-            for(var i=0;i<contents.length;i++)
-            {
-                contents[i].style.height="5%";  
-                contents[i].firstElementChild.firstElementChild.style.animation="rotateback 0.5s forwards";
-            }
-        }
-
-
-        function UpdateTotal()
-        {
-            var buynow=$('#cart-content-buynow');
-            var cartcontentitems=document.getElementById("cart-content-items");
-            var total=0;
-            var span=buynow.get(0).firstElementChild.firstElementChild;
-            if(itemsCount==0)
-            {
-                buynow.slideToggle();
-            }
-            for(var i=0;i<cartcontentitems.children.length;i++)
-            {
-                total+=fixPrice(cartcontentitems.children[i].children[1].children[2].innerHTML);
-            }
-            span.innerText="Total:"+total;
-
-            
-        }
-        function fixPrice(str)
-        {
-            /*if(Number.isInteger(str))
-            {
-                var price=str+"";
-                
-                for(var i=price.length;i>0;i--)
-                {
-                   if((i+1)%3==0){
-                       price=[price.slice(0,i),price.slice(i)].join();
-                        console.log(price);
-                    }
-                }
-
-                return price;
-            }*/
-            s=str.replace(",","");
-            s=s.replace("LL","");
-            return parseInt(s);
-        }
         //Scripts for mobile only
         $("#searchButton").click(function()
         {
@@ -748,10 +572,6 @@ include 'fetchmeals.php';
         {
             $("#searchDiv").slideToggle("fast");
         });
-        $('#loginButtonMobile').click(function()
-        {
-            $('#login-box').show(400);
-        });
         
         var cnt=0;
         function openMenu()
@@ -759,6 +579,7 @@ include 'fetchmeals.php';
             var menu=$('#menu');
             var img=$("#menu-img");
             cnt++;
+
             if(menu.css("display")=="none")
             {
                 if(cnt==1)
@@ -913,6 +734,40 @@ include 'fetchmeals.php';
         document.getElementById("cart-total").innerText=total[0].innerText;
         document.getElementById("cart-total-mobile").innerText=total[0].innerText;
     }
+    
+    var rot=180;
+    function toggleSort()
+    {
+        var dropdown=$('#sort-dropdown');
+        rot+=180;
+        rot%=360;
+        $('#sort-arrow').css("transform","rotate("+rot+"deg)");
+        
+        if($(dropdown).css("display")=="none")
+        {
+            $(dropdown).css("display","block");
+            $(dropdown).animate({"opacity":"1"},300);
+        }else
+        {   
+            $(dropdown).animate({"opacity":"0"},300,function()
+            {
+                $(dropdown).css("display","none");
+            });
+        }
+    }
+
+    function sort(element)
+    {
+        var text=$(element).first().text();
+        $('#sort-title').text(text);
+        $('.sort-dropdown-item').removeClass("sort-dropdown-item--active");
+        $(element).addClass("sort-dropdown-item--active");
+
+        switch(text)
+        {
+
+        }
+    }
     function ManageFavorite(element,id)
     {
         var queryString="";
@@ -941,7 +796,26 @@ include 'fetchmeals.php';
             {
                 $('#progress').hide();
             });
-            console.log(response);
+            if(response=="success")
+            {
+                var item=$(element).parent().parent().parent().parent().parent();
+                var categorie=$(item).parent();
+                var title=$(categorie).prev();
+                $(item).hide(200,function()
+                {
+                    $(item).remove();
+                        if($(categorie).children().length==0)
+                        {
+                            $(title).hide(200,function()
+                            {
+                                $(item).remove();
+                            });
+                        }
+                
+                });
+                
+            }
+            
         }
         });
     }
