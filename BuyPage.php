@@ -110,9 +110,9 @@ include 'fetchmeals.php';
                                         <span class="total">Total</span>
                                         <span id="cart-total" class="price">0</span>
                                     </div>
-                                    <div class="cart-checkout">
+                                    <a class="cart-checkout" href="checkout.php">
                                        BUY NOW
-                                    </div>
+                                    </a>
                                     <div class="cart-clear" onclick="cartAction(\'empty\',\'\');">
                                        CLEAR CART
                                     </div>

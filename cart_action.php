@@ -2,6 +2,7 @@
 session_start();
 include 'cnx.php';
 $total=0;
+$site="";
 
 if(!empty($_POST["action"])) {
 switch($_POST["action"]) {
@@ -39,6 +40,10 @@ switch($_POST["action"]) {
 	break;
 	case "remove":
 		if(!empty($_SESSION["cart_item"])) {
+            if(isset($_POST['site']))
+            {
+                $site=$_POST['site'];
+            }
 			foreach($_SESSION["cart_item"] as $k => $v) 
             {
                 if(is_array($v))
@@ -68,6 +73,8 @@ switch($_POST["action"]) {
 }
 ?>
 <?php
+if($site!="checkout")
+{
 echo('<div class="cart-items">');
 if(isset($_SESSION['cart_item']))
 {
@@ -118,4 +125,41 @@ foreach($_SESSION['cart_item'] as $kk => $item)
 echo('</div>
 <div class="total-hidden" style="display:none">'.$total.'</div>');
     $_SESSION['total']=$total;
+}else
+{
+    if(isset($_SESSION['cart_item']))
+    {
+    if(count($_SESSION['cart_item'])!=0)
+                                {
+                                    foreach($_SESSION['cart_item'] as $meal)
+                                    {
+                                      echo('
+                                                <div class="checkout-item">
+                                                <div class="citem-img">
+                                                    <img src="'.$meal['image'].'">
+                                                </div>
+                                                <div class="citem-desc">
+                                                    <div class="citem-name">'.$meal['name'].'</div>
+                                                    <div class="citem-notincluded">');
+                                                    if($meal['notIncluded']!="")
+                                                    {
+                                                        $notin=substr($meal['notIncluded'],0,-1);
+                                                        $ingrs=explode(",",$notin);
+                                                        foreach($ingrs as $ing)
+                                                        {
+                                                            echo('<img src="./images/ingredients/'.$ing.'.png">');
+                                                        }
+                                                    }
+                                                    echo('</div>
+                                                    <div class="citem-price">'.$meal['price'].'LL</div>
+                                                </div>
+                                                <div class="citem-remove">
+                                                    <div onclick="removeFromCart('.$meal['cartNumber'].')"></div>
+                                                </div>
+                                            </div>
+                                            ');
+                                    }
+                                }
+                            }
+}
 ?>

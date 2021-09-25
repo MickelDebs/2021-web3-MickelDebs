@@ -66,9 +66,9 @@ session_start();
                                         <span class="total">Total</span>
                                         <span class="price">200,000LL</span>
                                     </div>
-                                    <div class="cart-checkout">
+                                    <a class="cart-checkout" href="checkout.php">
                                        BUY NOW
-                                    </div>
+                                    </a>
                                     <div class="cart-clear">
                                        CLEAR CART
                                     </div>

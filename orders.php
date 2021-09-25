@@ -1,6 +1,5 @@
 <?php
 session_start();
-include 'cnx.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -138,11 +137,11 @@ include 'cnx.php';
                                             <img src="./images/icons/settings-icon.png">
                                             <span>Settings</span>
                                         </a>
-                                        <a class="user-link" href="#">
+                                        <a class="user-link" href="orders.php">
                                             <img src="./images/icons/orders.png">
                                             <span>Orders</span>
                                         </a>
-                                        <a class="user-link" href="#">
+                                        <a class="user-link" href="favorites.php">
                                             <img src="./images/icons/heart.png">
                                             <span>Favorites</span>
                                         </a>
@@ -233,15 +232,170 @@ include 'cnx.php';
             </div>
         <div class="background-flex">
         <div id="progress" class="progress"></div>
-            <div class="flex-column background-div-1">
-                <div class="background-div-3">
-                    <span class="s1">JUICY & HOT FOOD</span>
-                    <span class="s2">Delivering now all accross lebanon!</span>
-                    <input type="button" class="start-button" value="Order Now" id="order-button">
-                </div>
-            </div>
-            <div class="flex-column background-div-2">
-            </div>
+            <div class="favorites-container">
+                    <div class="favorites-content">
+                        <div class="favorites-tab">
+                                <a href="orders.php" class="settings-item"  style="filter: invert(15%) sepia(24%) saturate(7499%) brightness(100%) contrast(103%);">
+                                    <img src="./images/icons/orders.png">
+                                    <span>Orders</span>
+                                </a>
+                                <a href="favorites.php" class="settings-item">
+                                    <img src="./images/icons/heart.png">
+                                    <span>Favorites</span>
+                                </a>
+                                <a href="account.php" class="settings-item">
+                                    <img src="./images/icons/settings-icon.png">
+                                    <span>Settings</span>
+                                </a>
+                                
+                        </div>
+                        <div class="favorites-header">
+                            <div class="favorites-title">
+                                Orders
+                            </div>
+                        </div>
+                        <div class="favorites">
+                            <?php
+                            if(isset($_SESSION['user']['orders']))
+                            {
+                                include 'cnx.php';
+                                $checkboxCount=0;
+                                $allmeals=array();
+                                foreach($_SESSION['user']['favorites'] as $fav_meal)
+                                {
+                                $getFavQuery="SELECT * FROM `meals` WHERE Id='".$fav_meal['meal_id']."'";
+                                
+                                $resultGetFav=mysqli_query($database,$getFavQuery);
+                                    $mealArray=array();
+                                    if(mysqli_num_rows($resultGetFav) == 1)
+                                    {
+                                        while($row=mysqli_fetch_assoc($resultGetFav))
+                                        {
+                                            $mealArray[]=$row;
+                                        }
+                                        $meal=$mealArray[0];
+                                        array_push($allmeals,$meal);
+                                    }
+                                }
+                                $allcategories=array();
+                                foreach($allmeals as $currentmeal)
+                                {
+                                    array_push($allcategories,$currentmeal['categorie']);
+                                }
+                                $allcategories=array_unique($allcategories);
+                                foreach($allcategories as $cat)
+                                {
+                                    echo('<div class="favorites-categorie-title">'.$cat.'</div>
+                                        <div class="favorites-categorie">');
+                                    foreach($allmeals as $currentmeal)
+                                    {
+                                        
+                                        if($currentmeal['categorie']==$cat)
+                                        {
+                                            echo('
+                                            <div class="favorites-item-container">
+                                                <div class="favorites-item" id="meal'.$currentmeal['Id'].'">
+                                                    <div class="fav-item-imgbox">
+                                                        <img src="'.$currentmeal['image'].'">
+                                                        <h3>'.$currentmeal['name'].'</h3>
+                                                    </div>
+                                                    <div class="fav-item-content">
+                                                    <div class="main-heart-fav">
+                                                    <div>
+                                                    <input type="checkbox" class="heart-checkbox"');
+                                                    $favs=$_SESSION['user']['favorites'];
+                                                    foreach($favs as $fav)
+                                                    {
+                                                        if($fav['meal_id']==$currentmeal['Id'])
+                                                        {
+                                                            echo('checked ');
+                                                        }
+                                                    }
+                                                    
+                                                    echo('onclick="ManageFavorite(this,'.$currentmeal["Id"].')" id="heart-checkbox-'.$currentmeal["Id"].'"/>
+                                                    <label for="heart-checkbox-'.$currentmeal["Id"].'">
+                                                        <svg id="heart-svg" viewBox="467 392 58 57">
+                                                        <g id="Group" fill="none" fill-rule="evenodd" transform="translate(467 392)">
+                                                            <path d="M29.144 20.773c-.063-.13-4.227-8.67-11.44-2.59C7.63 28.795 28.94 43.256 29.143 43.394c.204-.138 21.513-14.6 11.44-25.213-7.214-6.08-11.377 2.46-11.44 2.59z" id="heart" fill="#AAB8C2"/>
+                                                            <circle id="main-circ" fill="#E2264D" opacity="0" cx="29.5" cy="29.5" r="1.5"/>
+                                                
+                                                            <g id="grp7" opacity="0" transform="translate(7 6)">
+                                                            <circle id="oval1" fill="#9CD8C3" cx="2" cy="6" r="2"/>
+                                                            <circle id="oval2" fill="#8CE8C3" cx="5" cy="2" r="2"/>
+                                                            </g>
+                                                
+                                                            <g id="grp6" opacity="0" transform="translate(0 28)">
+                                                            <circle id="oval1" fill="#CC8EF5" cx="2" cy="7" r="2"/>
+                                                            <circle id="oval2" fill="#91D2FA" cx="3" cy="2" r="2"/>
+                                                            </g>
+                                                
+                                                            <g id="grp3" opacity="0" transform="translate(52 28)">
+                                                            <circle id="oval2" fill="#9CD8C3" cx="2" cy="7" r="2"/>
+                                                            <circle id="oval1" fill="#8CE8C3" cx="4" cy="2" r="2"/>
+                                                            </g>
+                                                
+                                                            <g id="grp2" opacity="0" transform="translate(44 6)">
+                                                            <circle id="oval2" fill="#CC8EF5" cx="5" cy="6" r="2"/>
+                                                            <circle id="oval1" fill="#CC8EF5" cx="2" cy="2" r="2"/>
+                                                            </g>
+                                                
+                                                            <g id="grp5" opacity="0" transform="translate(14 50)">
+                                                            <circle id="oval1" fill="#91D2FA" cx="6" cy="5" r="2"/>
+                                                            <circle id="oval2" fill="#91D2FA" cx="2" cy="2" r="2"/>
+                                                            </g>
+                                                
+                                                            <g id="grp4" opacity="0" transform="translate(35 50)">
+                                                            <circle id="oval1" fill="#F48EA7" cx="6" cy="5" r="2"/>
+                                                            <circle id="oval2" fill="#F48EA7" cx="2" cy="2" r="2"/>
+                                                            </g>
+                                                
+                                                            <g id="grp1" opacity="0" transform="translate(24)">
+                                                            <circle id="oval1" fill="#9FC7FA" cx="2.5" cy="3" r="2"/>
+                                                            <circle id="oval2" fill="#9FC7FA" cx="7.5" cy="2" r="2"/>
+                                                            </g>
+                                                        </g>
+                                                        </svg>
+                                                    </label>
+                                                    </div>
+                                                </div>
+                                                        <div class="fav-item-desc">
+                                                            '.$currentmeal['description'].'
+                                                        </div>
+                                                        <div class="ingredients">
+                                                ');
+                                                $mealingredients_array=explode(',',$currentmeal['ingredients']);
+                                                for($k=0;$k<count($mealingredients_array);$k++)
+                                                {
+                                                echo('
+                                                    <div>
+                                                        <input type="checkbox" name="'.$mealingredients_array[$k].'" id="checkbox'.$checkboxCount.'" checked="true">
+                                                        <label for="checkbox'.$checkboxCount.'"><img src="images/ingredients/'.
+                                                        $mealingredients_array[$k].
+                                                        '.png" /></label>
+                                                    </div>');
+                                                    $checkboxCount++;
+                                                }
+                                                echo('</div>
+                                                <div class="price"><h2>'.$currentmeal['price'].'</h2></div>
+                                                <div class="order">
+                                                    <input type="button" id="add_'.$currentmeal['Id'].' name="add" class="order-btn" value="Add to Card" onclick="cartAction(\'add\','.$currentmeal['Id'].');">
+                                                    <input type="button" class="order-btn" value="Buy Now">
+                                                </div>
+                                                </div>
+                                            </div>
+                                            </div>');
+                                        }
+                                    }
+                                    echo('</div>');
+
+                                }
+                            }
+                            
+                            ?>
+
+                        </div>
+                    </div>
+            </div>    
             <div class="mobile-menu" id="menu">
                 <div class="menu">
                     <div onclick="location.href='BuyPage.php';">Menu</div>
@@ -260,7 +414,7 @@ include 'cnx.php';
                         <img src="./images/icons/close.png" onclick="showUserSettingsMobile()">
                     </div>
                     <div class="user-links">
-                        <a class="user-link" href="account.php">
+                        <a class="user-link" href="#">
                             <img src="./images/icons/settings-icon.png">
                             <span>Settings</span>
                         </a>
@@ -355,6 +509,17 @@ include 'cnx.php';
             </div>');
             }
             ?>
+            <div id="add-cards-container" style="display:none" class="add-cards-container">
+                <div class="add-cards-title">
+                    <h3>Add Card</h3>
+                    <img src="./images/icons/close.png" onclick="closeAddCard()">
+                </div>
+                <div id="add-cards-c" class="add-cards-c">  
+                </div>
+                <div class="add-cards-footer">
+                    <input type="button" value="Add" id="card-save" onclick="addCardDb()" class="button-disabled">
+                </div>
+            </div>
         </div>
         </div>
     </body>
@@ -458,7 +623,7 @@ include 'cnx.php';
                 cart.css("background-color","#F3A800");
             }
         }
-
+        
         var cartNumber=0;
         <?php
             if(isset($_SESSION['cartNumber']))
@@ -541,6 +706,90 @@ include 'cnx.php';
         document.getElementById("cart-total").innerText=total[0].innerText;
         document.getElementById("cart-total-mobile").innerText=total[0].innerText;
     }
+    
+    var rot=180;
+    function toggleSort()
+    {
+        var dropdown=$('#sort-dropdown');
+        rot+=180;
+        rot%=360;
+        $('#sort-arrow').css("transform","rotate("+rot+"deg)");
+        
+        if($(dropdown).css("display")=="none")
+        {
+            $(dropdown).css("display","block");
+            $(dropdown).animate({"opacity":"1"},300);
+        }else
+        {   
+            $(dropdown).animate({"opacity":"0"},300,function()
+            {
+                $(dropdown).css("display","none");
+            });
+        }
+    }
+
+    function sort(element)
+    {
+        var text=$(element).first().text();
+        $('#sort-title').text(text);
+        $('.sort-dropdown-item').removeClass("sort-dropdown-item--active");
+        $(element).addClass("sort-dropdown-item--active");
+
+        switch(text)
+        {
+
+        }
+    }
+    function ManageFavorite(element,id)
+    {
+        var queryString="";
+        if(element.checked)
+        {
+            queryString="&action=addToFavorites&id="+id;
+        }else
+        {
+            queryString="&action=removeFromFavorites&id="+id;
+        }
+        $('#progress').css("width","0");
+        $('#progress').show();
+        $('#progress').animate({"width":"49%"},400,function()
+        {
+            $('#progress').animate({"width":"50%"},300,function()
+            {
+                $('#progress').animate({"width":"70%"},600);
+            });
+        });
+        jQuery.ajax({
+        url: "./actions/favorites-action.php",
+        data:queryString,
+        type: "POST",
+        success:function(response){
+            $('#progress').animate({"width":"100%"},200,function()
+            {
+                $('#progress').hide();
+            });
+            if(response=="success")
+            {
+                var item=$(element).parent().parent().parent().parent().parent();
+                var categorie=$(item).parent();
+                var title=$(categorie).prev();
+                $(item).hide(200,function()
+                {
+                    $(item).remove();
+                        if($(categorie).children().length==0)
+                        {
+                            $(title).hide(200,function()
+                            {
+                                $(item).remove();
+                            });
+                        }
+                
+                });
+                
+            }
             
+        }
+        });
+    }
     </script>
 </html>

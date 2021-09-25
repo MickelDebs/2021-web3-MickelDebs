@@ -109,9 +109,9 @@ session_start();
                                         <span class="total">Total</span>
                                         <span id="cart-total"class="price">0</span>
                                     </div>
-                                    <div class="cart-checkout">
+                                    <a class="cart-checkout" href="checkout.php">
                                        BUY NOW
-                                    </div>
+                                    </a>
                                     <div class="cart-clear" onclick="cartAction(\'empty\');">
                                        CLEAR CART
                                     </div>
@@ -474,7 +474,7 @@ session_start();
                                                         ?>
                                                 </div>
                                                 <div class="cards" style="justify-content:flex-end">
-                                                    <div class="add-cards" onclick="addCard()">
+                                                    <div class="add-cards button-enabled" onclick="addCard()">
                                                     Add card
                                                     </div>
                                                 </div>

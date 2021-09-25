@@ -5,6 +5,202 @@ padding:0;
 box-sizing: border-box;
 font-family:'Courier';
 }
+.thank-you
+{
+    display: flex;
+    flex-direction: column;
+    color:white;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.thank-you img
+{
+    width:200px;
+    margin-bottom: 10px;
+}
+.order-end
+{
+    display: flex;
+    flex-direction: column;
+}
+.order-end-item
+{
+    padding:5px 30px;
+    margin-bottom: 10px;
+    color:white;
+    display: flex;
+    justify-content: space-between;
+}
+/* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+       #map {
+        height: 100%;
+        width:100%;
+      }
+      
+      /* Optional: Makes the sample page fill the window. */
+
+.custom-map-control-button {
+    background-color: #fff;
+    border: 0;
+    border-radius: 2px;
+    box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
+    margin: 10px;
+    padding: 0 0.5em;
+    font: 400 18px Roboto, Arial, sans-serif;
+    overflow: hidden;
+    height: 40px;
+    cursor: pointer;
+  }
+  .custom-map-control-button:hover {
+    background: #ebebeb;
+  }
+
+.checkout-location
+{
+    display: flex;
+    flex-direction: column;
+    height:100%;
+    width:100%;
+    position: relative;
+}
+.checkout
+{
+    display: flex;
+    width:100%;
+    height:100%;
+}
+.checkout-header
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    color:white;
+    margin-bottom: 30px;
+}
+.checkout-location-header
+{
+    font-weight: bold;
+    color:white;
+    margin-bottom: 30px;
+}
+
+.checkout-header img
+{
+    cursor: pointer;
+    width:22px;
+}
+
+.checkout-left
+{
+    border-right: 2px solid #1d2021;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 50px 50px;
+    max-width:600px;
+}
+.checkout-right
+{
+    display: flex;
+    flex-direction: column;
+    padding: 40px 30px 50px;
+    width: 410px;
+}
+.checkout-cart-item
+{
+    min-height:80px;
+    margin:10px 0;
+    display: flex;
+}
+.checkout-cart-item-imgbox
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:100%;
+}
+.checkout-cart-item-imgbox img
+{
+    width:70px;
+    margin-right:5px;
+    
+}
+.checkout-cart-item-desc
+{
+    display: flex;
+    flex-direction: column;
+    color:white;
+    border-left:1px solid #43484a;
+    padding-left:5px;
+    justify-content: space-between;
+}
+.checkout-cart-item-notincluded
+{
+    margin:5px 0;
+    width:100%;
+    font-size:13px;
+    margin-left:30px;
+}
+.checkout-cart-item-price
+{
+    font-size:15px;
+}
+.payment-option
+{
+    height:50px;
+    display: flex;
+    align-items: center;
+    margin-bottom:15px;
+    background-color: #323738;
+    cursor: pointer;
+    color:white;
+    padding:10px;
+}
+.payment-option img
+{
+    width:30px;
+    margin-right:15px;
+    margin-left:5px;
+}
+.payment-option:hover
+{
+    background-color: #3B4142;
+}
+
+.popup
+{
+    position: absolute;
+    height:100%;
+    width:100%;
+    top:0;
+    right:-100%;
+}
+.popup::before
+{
+    position: absolute;
+    content:'';
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    background: rgba(29,32,33,.91);
+}
+.popup-front
+{
+    position:absolute;
+    height:100%;
+    right:30px;
+    top:0;
+    background-color: #2B2F30;
+}
+
+.md
+{
+    margin:20px 0;
+    color:red;
+    font-size:16px;
+}
 .add-cards-container
 {
     position: absolute;
@@ -306,6 +502,12 @@ input:-webkit-autofill
     color:#747778;
     cursor: default;
 }
+.b-disabled
+{
+    background-color: #2B2F30;
+    color:#747778;
+    cursor: default;
+}
 .button-enabled
 {
     background-color: #F3A800;
@@ -325,6 +527,309 @@ input:-webkit-autofill
     width:100%;
     height:100%;
     padding:0px 30px;
+}
+.checkout-container
+{
+    width:100%;
+    height:100%;
+    padding:40px;
+    background-color: #2B2F30;
+}
+.checkout-items
+{
+    flex: 1;
+    height: 100%;
+    overflow-x: hidden;
+    position: relative;
+}
+.empty-cards
+{
+    display: flex;
+    height: 100%;
+    overflow-x: hidden;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+}
+.checkout-cards-empty img
+{
+    width:250px;
+}
+.checkout-cards-title
+{
+    color:#6B6E6F;
+}
+.checkout-footer
+{
+    border-top: 1px solid #43484a;
+    padding-top: 20px;
+}
+.choose-payment-footer
+{
+    border-top: 1px solid #43484a;
+    padding-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+.choose-payment-footer img
+{
+    width: 20px;
+    margin-right: 5px;
+    transform: translateY(-1.5px);
+}
+.choose-payment-footer .text
+{
+    color:white;
+    font-size:15px;
+}
+.choose-payment-footer .text a
+{
+    color:#F3A800;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.checkout-footer-total
+{
+    align-items: center;
+    display: flex;
+    font-weight: 400;
+    justify-content: space-between;
+    margin-top: 16px;
+}
+.checkout-footer-total .c-text,
+.checkout-footer-total .c-value
+{
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 12px;
+}
+
+.checkout-footer-total--large .c-text,
+.checkout-footer-total--large .c-value
+{
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 22px;
+}
+.checkout-footer-total .c-text
+{
+    color: #747778;
+}
+.checkout-footer-total .c-value
+{
+    color: white;
+}
+.checkout-layout
+{
+    display: flex;
+    width:100%;
+    height:100%;
+    flex-wrap: wrap;
+    overflow-y: auto;
+}
+.checkout-items-container
+{
+    flex-grow: 100;
+    flex-shrink: 0;
+    flex-basis: 0;
+    margin-right:40px;
+    width:100%;
+    min-width:400px;
+    height:calc(100% - 61px);
+}
+.checkout-items-header
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom:1px solid rgba( 255, 255, 255, 0.3);
+    padding-bottom: 20px;
+}
+.checkout-items-content
+{
+    height:100%;
+    overflow-y: auto;
+    min-height: 100px;
+}
+.checkout-item
+{
+    margin:20px 0;
+    height: 100px;
+    background: rgba(255,255,255,0.1);
+    box-shadow: 0 10px 25px rgba( 0, 0, 0, 0.05);
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+.citem-img
+{
+    margin-right: 10px;
+}
+.citem-img img
+{
+    width:190px;
+    
+}
+.citem-desc
+{
+    display: flex;
+    flex-direction: column;
+    margin:10px 0;
+    padding-right: 10px;
+    border-right:1px solid rgba(255, 255, 255, 0.3);
+    justify-content: space-between;
+    height:80%;
+    flex-shrink: 0;
+    width:calc(100% - 236px);
+}
+.citem-name
+{
+    color:white;
+    font-size:17px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.citem-notincluded
+{
+    display: grid;
+    justify-content: start;
+    align-items: center;
+    grid-template-columns: repeat(auto-fit,40px);
+}
+.citem-notincluded img
+{
+    width: 30px;
+    margin: 5px;
+    display: block;
+    position: relative;
+    background-color: red;
+    border-radius: 5px;
+}
+.citem-price
+{
+    text-align: end;
+    color:white;
+    font-size:18px;
+}
+.citem-remove
+{
+    
+}
+.citem-remove div
+{
+    width:20px;
+    height:20px;
+    margin:0 8px;
+    border-radius: 50%;
+    background-color: #FF5F58;
+    cursor: pointer;
+}
+.c-title
+{
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    color:white;
+}
+.c-title img
+{
+    width:40px;
+    margin-right:5px;
+}
+.c-itemcount
+{
+    color:#747778;
+    font-weight: bold;
+}
+.confirm-order
+{
+    width:400px;
+    background: #323738;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 30px;
+    flex-grow: 1;
+}
+
+.co-title
+{
+    font-size:23px;
+    color:white;
+    font-weight: bold;
+    margin-bottom:15px;
+}
+.co-subtitle
+{
+    color:#747778;
+}
+.co-list
+{
+    padding:20px 0;
+    border-bottom:1px solid rgba( 255, 255, 255, 0.2);
+}
+.co-item
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    line-height: 2;
+    font-size:15px;
+}
+.co-item-title
+{
+    color:#747778;
+}
+.co-item-total
+{
+    color:white;
+}
+.co-item:last-child
+{
+    font-size:20px;
+    font-weight: bold;
+}
+.co-accept
+{
+    display: flex;
+    margin:30px 0;
+    font-size:15px;
+}
+.co-accept-check input
+{
+    width:20px;
+    height:20px;
+    margin-right:10px;
+}
+.co-accept-terms
+{
+    color:white;
+}
+.co-accept-terms p:first-child
+{
+    margin-bottom:10px;
+}
+.co-pay input
+{
+    height:60px;
+    width:100%;
+    border-radius: 5px;
+    border:none;
+    outline:none;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom:20px;
+    font-size:14px;
+}
+.co-pay p
+{
+    color:white;
+    font-size:13px;
 }
 .favorites-container
 {
@@ -435,8 +940,9 @@ input:-webkit-autofill
     display:grid;
     justify-content:start;
     align-items: center;
-    grid-template-columns:repeat(5,1fr);
+    grid-template-columns:repeat(auto-fit,40px);
     margin-bottom: 10px;
+    grid-gap: 10px;
 }
 .fav-item-content .ingredients label
 {
@@ -445,7 +951,6 @@ input:-webkit-autofill
     display: block;
     position: relative;
     cursor: pointer;
-    margin: 5px;
     background-color: red;
     border-radius: 5px;
 }
@@ -680,7 +1185,7 @@ input:-webkit-autofill
   }
 /*End of radio button*/
 
-.account-info .info-title
+.info-title
 {
     color:white;
     font-size:17px;
@@ -883,8 +1388,6 @@ input:-webkit-autofill
 }
 .add-cards
 {
-    background-color: #F3A800;
-    color:white;
     font-weight: bold;
     font-size: 15px;
     border-radius: 10px;
@@ -897,7 +1400,8 @@ input:-webkit-autofill
     cursor: pointer;
 }
 
-.info input
+.info input,
+.info textarea
 {
    color:rgba( 255, 255, 255, 0.5);
    background-color: transparent;
@@ -1350,12 +1854,14 @@ form table tr td
 }
 .background-flex
 {
+    position: relative;
     height: 90%;
     width: 100%;
     background-image: url("./images/background.jpg");
     background-size: 75%;
     display:flex;
     flex-wrap: wrap;
+    overflow-x: hidden;
 }
 .flex-column
 {
@@ -1599,7 +2105,7 @@ form table tr td
 {
     margin:0 20px;
     height:70px;
-    border-radius: 10px;
+    border-radius: 5px;
     background-color: #F3A800;
     display: flex;
     justify-content: center;
@@ -1607,7 +2113,13 @@ form table tr td
     color:white;
     font-weight: bold;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 15px;
+    text-decoration: none;
+}
+.cart-footer .cart-checkout:hover
+{
+    background-color: #f3a600e0;
+    color:rgba( 255, 255, 255, 0.8);
 }
 .cart-footer .cart-clear
 {
@@ -2646,9 +3158,10 @@ svg #main-circ {
 .container .item-card .item-content .ingredients
 {
     display:grid;
-    justify-content:start;
+    justify-content:center;
     align-items: center;
-    grid-template-columns:repeat(5,1fr);
+    grid-template-columns:repeat(auto-fit,40px);
+    grid-gap:10px;
     padding:8px 20px;
 }
 .container .item-card .item-content .order-btn,
@@ -2748,10 +3261,13 @@ svg #main-circ {
     height:100%;
     display:flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-around;
     font-weight: 600;
     font-size:16px;
     line-height: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .cart-item .desc .checkboxs .not-included
 {
@@ -2850,6 +3366,11 @@ svg #main-circ {
   
   @media (max-width:599px),(min-width:600px) and (max-width:800px)
   {
+      .checkout-items-container
+      {
+        margin-right: 0;
+        height:unset;
+      }
       .favorites-tab
       {
           height:9%;
@@ -2965,6 +3486,53 @@ svg #main-circ {
   }
 @media (max-width:599px)
 {
+    .checkout-item
+    {
+        height:70px;
+    }
+    .citem-img img
+    {
+        width:133px;
+    }
+    .citem-name
+    {
+        font-size:14px;
+        
+    }
+    .citem-desc
+    {
+        width:calc(100% - 168px);
+    }
+    .checkout-container
+      {
+          padding:5px;
+      }
+      .checkout-items-container
+      {
+          width:100%;
+          min-width: 100%;
+      }
+      .citem-remove div
+      {
+          height:15px;
+          width:15px;
+          margin:0 6px;
+      }
+      .citem-price
+      {
+          font-size:15px;
+      }
+      .citem-notincluded
+      {
+        grid-template-columns: repeat(auto-fit,20px);
+        grid-gap: 5px;
+      }
+      .citem-notincluded img
+      {
+          width:20px;
+          height:20px;
+          margin:0;
+      }
     .favorites-tab
       {
           height:5%;
