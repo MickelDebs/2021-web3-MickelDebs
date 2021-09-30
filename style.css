@@ -5,6 +5,14 @@ padding:0;
 box-sizing: border-box;
 font-family:'Courier';
 }
+#chart_div text {
+    fill: white;
+}
+div.google-visualization-tooltip > ul > li > span 
+{
+    color:black;
+    font-size:13px;   
+}
 .thank-you
 {
     display: flex;
@@ -201,6 +209,11 @@ font-family:'Courier';
     color:red;
     font-size:16px;
 }
+.stats
+{
+    width:100%;
+    padding-top:30px;   
+}
 .add-cards-container
 {
     position: absolute;
@@ -216,7 +229,6 @@ font-family:'Courier';
     display:flex;
     flex-direction: column;
     justify-content: flex-start;
-    overflow:auto;
 }
 .add-cards-c
 {
@@ -3055,12 +3067,28 @@ form table tr td
 {
     width:20px;
 }
+.info-stats
+{
+    position: absolute;
+    left:10px;
+    top:10px;
+    cursor:pointer;
+    width:50px;
+    height:50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.info-stats img
+{
+    width:25px;
+}
 /*Add to favorite*/
 .main-heart
 {
     position: absolute;
-    right:25px;
-    top:25px;
+    right:10px;
+    top:10px;
     cursor:pointer;
     width:50px;
     height:50px;
@@ -3080,16 +3108,16 @@ form table tr td
     justify-content: center;
     align-items: center;
 }
-svg {
+#heart-svg {
     cursor: pointer;
     overflow: visible;
     width: 60px;
 }
-svg #heart {
+#heart-svg #heart {
     transform-origin: center;
     animation: animateHeartOut 0.3s linear forwards;
 }
-svg #main-circ {
+#heart-svg #main-circ {
     transform-origin: 29.5px 29.5px;
 }
 .heart-checkbox {
@@ -3517,8 +3545,13 @@ svg #main-circ {
   {
       .main-heart
       {
-          top:0;
-          right:0;
+          top:20;
+          right:10;
+      }
+      .info-stats
+      {
+          top:20;
+          left:10;
       }
       .favorites
       {
@@ -3615,7 +3648,8 @@ svg #main-circ {
           height:90%;
           top:10%;
           left:0;
-          transform: translate(0,0);
+          transform: translate(0,0);    
+          overflow:auto;
       }
       .card-container
       {

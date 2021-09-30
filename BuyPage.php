@@ -8,6 +8,29 @@ include 'fetchmeals.php';
         <link rel="stylesheet" href="style.css">
         <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
         <script src="jQuery.js"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+
+        function drawChart(name,data) {
+
+            var options = {
+            title: name,
+            hAxis: {title: 'Time'},
+            vAxis: {minValue: 0},
+            backgroundColor: 'transparent',
+            titleTextStyle: {fontSize:'20'},
+            colors:['#F3A800'],
+            tooltip:
+            {
+               isHtml:true
+            }
+            };
+
+            var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+        </script>
     </head>
     <body>
         <div class="root"> 
@@ -349,6 +372,9 @@ include 'fetchmeals.php';
                                                     </label>
                                                     </div>
                                                 </div>
+                                                <div class="info-stats" onclick="showStats('.$meals_array[$j]['Id'].')">
+                                                    <img src="./images/icons/info.png">
+                                                </div>
                                                 <div class="description">
                                                         '.$meals_array[$j]['description'].'
                                                 </div>
@@ -374,9 +400,6 @@ include 'fetchmeals.php';
                                             </div>
                                         </div>     
                                    </div>'); 
-                                            }else
-                                            {
-                                                //echo('<div style="color:white;font-size:20px">Categorie is empty</div>');
                                             }
                                     }
                                 echo('</div>');
@@ -384,139 +407,6 @@ include 'fetchmeals.php';
                             }
 
                             ?>
-                            <!--<div class="container">
-                                <div class="item-card" onclick="EnableDescription(this)">
-                                    <div class="item-imgBox">
-                                        <img src="images/burgers/burger1.png">
-                                        <h2>Double Cheese Bacon Burger</h2>
-                                    </div>
-                                    <div class="item-content">
-                                        <div class="description">
-                                                <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus cumque natus, alias similique aut nemo. Illo dicta reiciendis quae rerum.</h3>
-                                        </div>
-                                        <div class="ingredients">
-                                            <div>
-                                                <input type="checkbox" id="checkbox1" checked="true">
-                                                <label for="checkbox1"><img src="images/burger-logo.png" /></label>
-                                            </div>
-                                            <div>
-                                                <input type="checkbox" id="checkbox2" checked="true">
-                                                <label for="checkbox2"><img src="images/burger-logo.png" /></label>
-                                            </div>
-                                            <div>
-                                                <input type="checkbox" id="checkbox3" checked="true">
-                                                <label for="checkbox3"><img src="images/burger-logo.png" /></label>
-                                            </div>
-                                        </div>
-                                        <div class="price"><h2>24,000LL</h2></div>
-                                        <div class="order">
-                                            <input type="button" value="Add to Card" onclick="AddToCart(this)">
-                                            <input type="button" value="Buy Now">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>-->
-                                                                  
-                        </div>
-                        <!--
-                        <div class="buymenu-categorie" style="display:none">
-                            <div class="container">
-                                <div class="item-card" onclick="EnableDescription(this)">
-                                    <div class="item-imgBox">
-                                        <img src="images/backgroundFood1.png">
-                                        <h2>Tomato Pizza</h2>
-                                    </div>
-                                    <div class="item-content">
-                                        <div class="description">
-                                                <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus cumque natus, alias similique aut nemo. Illo dicta reiciendis quae rerum.</h3>
-                                        </div>
-                                        <div class="ingredients">
-                                            <div>
-                                                <input type="checkbox" id="checkbox4" checked="true">
-                                                <label for="checkbox4"><img src="images/pizza-logo.png" /></label>
-                                            </div>
-                                            <div>
-                                                <input type="checkbox" id="checkbox5" checked="true">
-                                                <label for="checkbox5"><img src="images/burger-logo.png" /></label>
-                                            </div>
-                                            <div>
-                                                <input type="checkbox" id="checkbox6" checked="true">
-                                                <label for="checkbox6"><img src="images/pizza-logo.png" /></label>
-                                            </div>
-                                        </div>
-                                        <div class="price"><h2>36,000LL</h2></div>
-                                        <div class="order">
-                                            <input type="button" value="Add to Card" onclick="AddToCart(this)">
-                                            <input type="button" value="Buy Now">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>                                       
-                        </div>-->
-                    
-                </div>
-                <!--
-                <div class="buymenu-settings" id="buymenu-settings">
-                    <div class="title">
-                        <div class="cart" id="cart-title" onclick="EnableSidePanels(this,0)" style="background:#F3A800">
-                            <img src="images/icons/cart-icon.png">
-                        </div>
-                        <div class="profile" onclick="EnableSidePanels(this,1)">
-                            <img src="images/icons/profile-icon.png">
-                        </div>
-                        <div class="settings" onclick="EnableSidePanels(this,2)">
-                            <img src="images/icons/settings-icon.png">
-                        </div>
-                        <div class="admin" id="admin-control-div" onclick="EnableSidePanels(this,3)">
-                            <img src="images/icons/admin-icon.png">
-                        </div>
-                    </div>
-                    <div class="content" id="content">
-                        <div class="cart-content" id="cart-content">
-                            <div class="cart-content-items" id="cart-content-items">-->
-                            <!--
-                                <div class="item" style="margin-left: 0px;">
-                                    <img src="images/burgers/burger1.png">
-                                    <div class="desc">
-                                        <span class="name">Double Cheese Bacon Burger</span>
-                                        <div class="checkboxs">
-                                            <div class="not-included">
-                                                <img src="images/burger-logo.png">
-                                            </div>
-                                        </div>
-                                        <span class="price">24,000LL</span>
-                                    </div>
-                                    <div class="close">
-                                        <div class="x-button" onclick="RemoveFromCart(this)">
-                                        </div>
-                                    </div>
-                                </div>
-                            -->
-                            <!--
-                            </div>
-                            <div class="cart-content-buynow" id="cart-content-buynow">
-                                <div>
-                                    <span>Total:</span>
-                                    <input type="button" value="Buy Now">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="profile-content" id="profile-content" style="display:none">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, recusandae!
-                        </div>
-                        <div class="settings-content" id="settings-content" style="display:none">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, recusandae!
-                        </div>
-                        <div class="admin-content" id="admin-content" style="display:none">
-                            <div class="control-panel">
-                                <input type="button" id="add-meals-button" value="Add Meals" onclick="EnablePanel(0)">
-                                <input type="button" id="edit-meals-button" value="Edit Meals" onclick="EnablePanel(1)">
-                                <input type="button" id="add-ingredients-button" value="Add Ingredients" onclick="EnablePanel(2)">
-                                <input type="button" id="edit-ingredients-button" value="Edit Ingredients" onclick="EnablePanel(3)">
-                                </div>
-                            </div>
-                        </div>
-                    </div>-->
                 </div>
                 <div class="mobile-menu"  id="menu">
                     <div class="menu">
@@ -626,6 +516,17 @@ include 'fetchmeals.php';
             </div>');
             }
             ?>
+            <div class="add-cards-container" id="stats-container" style="display:none">
+                <div class="add-cards-title">
+                    <h3>Stats</h3>
+                    <img src="./images/icons/close.png" onclick="closeStats()">
+                </div>
+                <div class="stats" id="stats" >  
+                    <div id="chart_div" style="width:100%;height:500px">
+
+                    </div>
+                </div>
+            </div>
             </div>
         </div>
     </body>
@@ -946,5 +847,45 @@ include 'fetchmeals.php';
         }
         });
     }
+    function closeStats()
+    {
+        $('#stats-container').hide(400);
+    }
+    function showStats(id)
+    {
+        var stats=$('#stats-container');
+        $(stats).show(400);
+        var statsinner=$('#chart_div');
+        $(statsinner).html('');
+        var queryString='id='+id;
+
+        jQuery.ajax({
+            url: "./actions/chart-action.php",
+            data:queryString,
+            type: "POST",
+            success:function(response){
+                $('#progress').animate({"width":"100%"},200,function()
+                {
+                    $('#progress').hide();
+                });
+                $('#cart-content').html(response);
+                $('#mobile-cart-content').html(response);
+                json=JSON.parse(response);
+                
+                meal=json.title;
+                jsonData=json.data;
+
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Time');
+                data.addColumn('number', 'Sales');
+
+                for (var i = 0; i < jsonData.length; i++) {
+                    data.addRow([jsonData[i].time, jsonData[i].number]);
+                }
+                drawChart(meal+" sales",data);
+            },
+            error:function (){}
+            });
+            }
     </script>
 </html>

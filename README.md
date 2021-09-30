@@ -10,3 +10,4 @@ on other pages.
 9/21/2021 commit: made progress in favorites page and added add to favorite button to meals in menu page .Favorites page still lacks the sorting by functionnality.
 9/25/2021 commit: finished chekout page , now the user can order their cart items fixed it on the user's orders page.
 9/30/2021 commit: added orders page ,filled in some hrefs and fixed the css for mobile resolutions.
+9/30/2021 commit 2:added google chart with info on how many meals were sold over time.

@@ -75,7 +75,9 @@ if(isset($_POST['action']))
                         }
                     }
                 }
+                updateSales($id);
                 echo(json_encode($allorders));
+                
             }else
             {
                 echo('fail');
@@ -277,5 +279,51 @@ function MakeOrder($location_type,$location_id)
 
         }
         return $allmeals;
+    }
+    function updateSales($order_id)
+    {
+        include '../cnx.php';
+        $all_meals=array();
+        $getOrderMeals="SELECT `meals` from `orders` WHERE order_id='".$order_id."'";
+        $resultMeals=mysqli_query($database,$getOrderMeals);
+
+        if(mysqli_num_rows($resultMeals) == 1)
+        {
+            $mealsStr=mysqli_fetch_assoc($resultMeals);
+        }
+        if(!empty($mealsStr))
+        {
+            $mealsArray=explode(',',$mealsStr['meals']);
+            foreach($mealsArray as $m)
+            {
+                $index=strpos($m,':');
+                $meal=$m;
+                if(!empty($index))
+                {
+                    $meal=substr($m,0,$index);
+                }
+                array_push($all_meals,$meal);
+            }
+        }
+        $date=date("Y/m/d");
+        foreach($all_meals as $me)
+        {
+            $selectQuery="SELECT `number`,`sales_id` FROM `sales` WHERE meal_id='".$me."' AND time='".$date."'";
+            $selectQueryResult=mysqli_query($database,$selectQuery);
+            if(mysqli_num_rows($selectQueryResult)==1)
+            {
+                
+                $sales=mysqli_fetch_assoc($selectQueryResult);
+                $number=(int)$sales['number'];
+                $number++;
+                $saleId=$sales['sales_id'];
+                $updateQuery="UPDATE `sales` SET number='".$number."' WHERE sales_id='".$saleId."'";
+                mysqli_query($database,$updateQuery);
+            }else
+            {
+                $insertQuery="INSERT INTO `sales` (`meal_id`,`number`,`time`) VALUES ('".$me."','1','".$date."')";
+                mysqli_query($database,$insertQuery);
+            }
+        }
     }
 ?>

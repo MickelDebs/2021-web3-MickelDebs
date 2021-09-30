@@ -831,7 +831,6 @@ if(!isset($_SESSION['user']))
             {
                 $('#progress').hide();
             });
-
             var result=JSON.parse(response);
             var active=result['active'];
             var finished=result['finished'];
