@@ -920,23 +920,7 @@ session_start();
                 return false;
             }
 
-            var lastfn="";
-            var lastln="";
-            var lastbd="";
-            <?php
-                if(isset($_SESSION['user']['firstname']))
-                {
-                    echo('lastfn="'.$_SESSION['user']['firstname'].'";');
-                }
-                if(isset($_SESSION['user']['lastname']))
-                {
-                    echo('lastln="'.$_SESSION['user']['lastname'].'";');
-                }
-                if(isset($_SESSION['user']['birthday']))
-                {
-                    echo('lastbd="'.$_SESSION['user']['birthday'].'";');
-                }
-            ?>
+            
 
             function updateInfo()
             {
@@ -952,13 +936,8 @@ session_start();
                 checkName(ln.val())&&
                 bday.val()!="")
                 {
-                    if(lastfn==""&&
-                    lastln==""&&
-                    lastbd=="")
-                    {
-                    }else
-                    {
-                        
+                    
+                    
                             $('#progress').css("width","0");
                                     $('#progress').show();
                                     $('#progress').animate({"width":"49%"},400,function()
@@ -986,7 +965,7 @@ session_start();
                                 },
                             });
                         
-                    }
+                    
                 }
             }
             function SetPayment(payment)
@@ -1108,7 +1087,7 @@ session_start();
                 $('#checkout-cards-empty').remove();
                 for(var i=0;i<cards.length;i++)
                 {
-                    var ht='<div class="payment-option" onclick="SelectCard('+cards[i]['number']+')">'
+                    var ht='<div class="payment-option" onclick="SelectCard(\''+cards[i]['number']+'\')">'
                             +cards[i]['number']
                             +'</div>';
                     $('#checkout-cards-select').append(ht);

@@ -94,7 +94,7 @@
                         <p class="forget"><a href="signin.php">Already have an account ? </a></p>
                         <div class="hr">
                         </div>
-                        <input type="submit" id="submit" class="submit" id="submit" value="Create account" name="signup">
+                        <input type="submit" id="submit" class="submit" value="Create account" name="signup">
                     </form>
                         </div>
                 </div>

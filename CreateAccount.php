@@ -42,12 +42,11 @@ if(isset($_POST['signup']))
         {
            $user_error=false;
 
-           $query = "INSERT INTO users (username,email,password,status) 
-      	   VALUES ('$username', '$email', '".password_hash($password,PASSWORD_DEFAULT)."','normal')";
+           $query = "INSERT INTO `users` (`username`,`email`,`password`,`status`) VALUES ('".$username."', '".$email."', '".password_hash($password,PASSWORD_DEFAULT)."','normal')";
            
            $results = mysqli_query($database, $query);
 
-           $idQuery="SELECT * from users WHERE `username`='".$username."'";
+           /*$idQuery="SELECT * from users WHERE `username`='".$username."'";
            $result_id = mysqli_query($database, $idQuery);
            $a=array();
            if(mysqli_num_rows($result_id) == 1)
@@ -56,10 +55,12 @@ if(isset($_POST['signup']))
                 {
                     $a[]=$row;
                 }
+            }*/
+            if($results==1)
+            {
+                mysqli_close($database);
+                header('location:signin.php');
             }
-           mysqli_close($database);
-           $_SESSION['user']=$a[0];
-           header('location:BuyPage.php');
         }
 
     }else

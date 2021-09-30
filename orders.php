@@ -292,6 +292,7 @@ if(!isset($_SESSION['user']))
                                 }
                                 //removing the duplicates
                                 $needed_meals=array_unique($needed_meals);
+                                print_r($needed_meals);
                                 $needed_ingredients=array_unique($needed_ingredients);
                                 //Preparing them for sql query
                                 $str_ids="";
@@ -299,7 +300,9 @@ if(!isset($_SESSION['user']))
                                 {
                                     $str_ids.=$nm.',';
                                 }
+
                                 $str_ids=substr($str_ids,0,-1);
+                                echo($str_ids);
                                 //Now they look like this 1,13,15
                                 //Same for ingredients
                                 $ing_ids="";
@@ -311,8 +314,9 @@ if(!isset($_SESSION['user']))
                                 //Trying to not make the sql query in for loop for better performance
                                 $get_orders_meals_query="SELECT * FROM `meals` WHERE `Id` IN (".$str_ids.")";
                                 $result_get_meals=mysqli_query($database,$get_orders_meals_query);
+                                
                                 $mealArray=array();
-
+                                
                                 if(mysqli_num_rows($result_get_meals) > 0)
                                 {
                                     while($row=mysqli_fetch_assoc($result_get_meals))
@@ -320,6 +324,7 @@ if(!isset($_SESSION['user']))
                                         $mealArray[]=$row;
                                     }
                                 }
+                                
                                 //Same for ingredients
                                 $get_orders_ingredients_query="SELECT * FROM `ingredients` WHERE `Id` IN (".$ing_ids.")";
                                 $result_get_ingredients=mysqli_query($database,$get_orders_ingredients_query);
