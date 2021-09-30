@@ -72,16 +72,8 @@ include 'fetchmeals.php';
                                                 <div class="not-included">');
                                                 for($i=0;$i<count($ingrArray);$i++)
                                                 {
-                                                    $query_ingr="SELECT * FROM `ingredients` WHERE name='".$ingrArray[$i]."'";
-                                                    $ingr = mysqli_query($database, $query_ingr);
-                                
-                                                    $ingr_array=array();
-                                                    while($row=mysqli_fetch_assoc($ingr))
-                                                    {
-                                                    $ingr_array[]=$row;
-                                                    }
                                                    echo('
-                                                        <img src="'.$ingr_array[0]['image'].'">
+                                                        <img src="./images/ingredients/'.$ingrArray[$i].'.png">
                                                     ');
                                                 }
                                                 echo('</div>
@@ -138,18 +130,21 @@ include 'fetchmeals.php';
                                             <img src="./images/icons/settings-icon.png">
                                             <span>Settings</span>
                                         </a>
-                                        <a class="user-link" href="#">
+                                        <a class="user-link" href="orders.php">
                                             <img src="./images/icons/orders.png">
                                             <span>Orders</span>
                                         </a>
-                                        <a class="user-link" href="#">
+                                        <a class="user-link" href="favorites.php">
                                             <img src="./images/icons/heart.png">
                                             <span>Favorites</span>
                                         </a>
                                     </div>
-                                    <a class="user-link" href="#" style="margin:0;">
+                                    <a class="user-link" href="#" onclick="document.getElementById(\'logout-pc\').click()" style="margin:0;">
                                         <img src="./images/icons/logout.png">
                                         <span>Logout</span>
+                                        <form style="display:none" method="POST" action="Logout.php">
+                                        <input type="submit" name="logout" id="logout-pc">
+                                        </form>
                                     </a>
                                 </div>
                             </div>
@@ -288,16 +283,27 @@ include 'fetchmeals.php';
                                                     <div class="main-heart">
                                                     <div>
                                                     <input type="checkbox" class="heart-checkbox"');
-                                                    $favs=$_SESSION['user']['favorites'];
-                                                    foreach($favs as $fav)
+                                                    if(isset($_SESSION['user']))
                                                     {
-                                                        if($fav['meal_id']==$meals_array[$j]['Id'])
+                                                        $favs=$_SESSION['user']['favorites'];
+                                                        foreach($favs as $fav)
                                                         {
-                                                            echo('checked ');
+                                                            if($fav['meal_id']==$meals_array[$j]['Id'])
+                                                            {
+                                                                echo('checked ');
+                                                            }
                                                         }
                                                     }
                                                     
-                                                    echo('onclick="ManageFavorite(this,'.$meals_array[$j]["Id"].')" id="heart-checkbox-'.$meals_array[$j]["Id"].'"/>
+                                                    echo('onclick="');
+                                                    if(isset($_SESSION['user']))
+                                                    {
+                                                        echo('ManageFavorite(this,'.$meals_array[$j]["Id"].')"');
+                                                    }else
+                                                    {
+                                                        echo('location.href=\'signin.php\'"');
+                                                    }
+                                                    echo('id="heart-checkbox-'.$meals_array[$j]["Id"].'"/>
                                                     <label for="heart-checkbox-'.$meals_array[$j]["Id"].'">
                                                         <svg id="heart-svg" viewBox="467 392 58 57">
                                                         <g id="Group" fill="none" fill-rule="evenodd" transform="translate(467 392)">
@@ -534,18 +540,21 @@ include 'fetchmeals.php';
                             <img src="./images/icons/settings-icon.png">
                             <span>Settings</span>
                         </a>
-                        <a class="user-link" href="#">
+                        <a class="user-link" href="orders.php">
                             <img src="./images/icons/orders.png">
                             <span>Orders</span>
                         </a>
-                        <a class="user-link" href="#">
+                        <a class="user-link" href="favorites.php">
                             <img src="./images/icons/heart.png">
                             <span>Favorites</span>
                         </a>
                     </div>
-                    <a class="user-link" href="#" style="margin:0;">
+                    <a class="user-link" href="#" onclick="document.getElementById(\'logout-mobile\').click()" style="margin:0;">
                         <img src="./images/icons/logout.png">
                         <span>Logout</span>
+                        <form style="display:none" method="POST" action="Logout.php">
+                            <input type="submit" name="logout" id="logout-mobile">
+                        </form>
                     </a>
                 </div>
 </div>
@@ -577,16 +586,8 @@ include 'fetchmeals.php';
                                 <div class="not-included">');
                                 for($i=0;$i<count($ingrArray);$i++)
                                 {
-                                    $query_ingr="SELECT * FROM `ingredients` WHERE name='".$ingrArray[$i]."'";
-                                    $ingr = mysqli_query($database, $query_ingr);
-                
-                                    $ingr_array=array();
-                                    while($row=mysqli_fetch_assoc($ingr))
-                                    {
-                                    $ingr_array[]=$row;
-                                    }
                                    echo('
-                                        <img src="'.$ingr_array[0]['image'].'">
+                                        <img src="./images/ingredients/'.$ingrArray[$i].'.png">
                                     ');
                                 }
                                 echo('</div>
@@ -615,7 +616,7 @@ include 'fetchmeals.php';
                         <span class="total">Total</span>
                         <span class="price" id="cart-total-mobile">0</span>
                     </div>
-                    <div class="cart-checkout">
+                    <div class="cart-checkout" onclick="location.href=\'checkout.php\';">
                        BUY NOW
                     </div>
                     <div class="cart-clear" onclick="cartAction(\'empty\')">

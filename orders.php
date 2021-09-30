@@ -1,5 +1,9 @@
 <?php
 session_start();
+if(!isset($_SESSION['user']))
+{
+    header('location:signin.php');
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -71,16 +75,8 @@ session_start();
                                                 <div class="not-included">');
                                                 for($i=0;$i<count($ingrArray);$i++)
                                                 {
-                                                    $query_ingr="SELECT * FROM `ingredients` WHERE name='".$ingrArray[$i]."'";
-                                                    $ingr = mysqli_query($database, $query_ingr);
-                                
-                                                    $ingr_array=array();
-                                                    while($row=mysqli_fetch_assoc($ingr))
-                                                    {
-                                                    $ingr_array[]=$row;
-                                                    }
                                                    echo('
-                                                        <img src="'.$ingr_array[0]['image'].'">
+                                                        <img src="./images/ingredients/'.$ingrArray[$i].'.png">
                                                     ');
                                                 }
                                                 echo('</div>
@@ -146,9 +142,12 @@ session_start();
                                             <span>Favorites</span>
                                         </a>
                                     </div>
-                                    <a class="user-link" href="#" style="margin:0;">
+                                    <a class="user-link" href="#" onclick="document.getElementById(\'logout-pc\').click()" style="margin:0;">
                                         <img src="./images/icons/logout.png">
                                         <span>Logout</span>
+                                        <form style="display:none" method="POST" action="Logout.php">
+                                        <input type="submit" name="logout" id="logout-pc">
+                                        </form>
                                     </a>
                                 </div>
                             </div>
@@ -254,140 +253,214 @@ session_start();
                                 Orders
                             </div>
                         </div>
-                        <div class="favorites">
+                        <div class="favorites" style="color:white">
                             <?php
-                            if(isset($_SESSION['user']['orders']))
+
+                            if(!empty($_SESSION['user']['orders']))
                             {
                                 include 'cnx.php';
-                                $checkboxCount=0;
-                                $allmeals=array();
-                                foreach($_SESSION['user']['favorites'] as $fav_meal)
+                                //getting the meals and the ingredients that are in all orders.
+                                $needed_meals=array();
+                                $needed_ingredients=array();
+                                foreach($_SESSION['user']['orders'] as $order)
                                 {
-                                $getFavQuery="SELECT * FROM `meals` WHERE Id='".$fav_meal['meal_id']."'";
-                                
-                                $resultGetFav=mysqli_query($database,$getFavQuery);
-                                    $mealArray=array();
-                                    if(mysqli_num_rows($resultGetFav) == 1)
+                                    $current_order_meals=explode(',',$order['meals']);
+                                    foreach($current_order_meals as $cm)
                                     {
-                                        while($row=mysqli_fetch_assoc($resultGetFav))
+                                        $index=strpos($cm,":");
+                                        //get meals
+                                        $m=$cm;
+                                        if(!empty($index))
                                         {
-                                            $mealArray[]=$row;
+                                            $m=substr($m,0,$index);
                                         }
-                                        $meal=$mealArray[0];
-                                        array_push($allmeals,$meal);
+                                        array_push($needed_meals,$m);
+                                        //get ingredients
+                                        $i=$cm;
+                                        if(!empty($index))
+                                        {
+                                            $i=substr($i,$index+1);
+                                            $ii=explode('-',$i);
+                                            foreach($ii as $ing)
+                                            {
+                                                array_push($needed_ingredients,$ing);
+                                            }
+                                        }
+                                        
+                                    }
+                                
+                                }
+                                //removing the duplicates
+                                $needed_meals=array_unique($needed_meals);
+                                $needed_ingredients=array_unique($needed_ingredients);
+                                //Preparing them for sql query
+                                $str_ids="";
+                                foreach($needed_meals as $nm)
+                                {
+                                    $str_ids.=$nm.',';
+                                }
+                                $str_ids=substr($str_ids,0,-1);
+                                //Now they look like this 1,13,15
+                                //Same for ingredients
+                                $ing_ids="";
+                                foreach($needed_ingredients as $ni)
+                                {
+                                    $ing_ids.=$ni.',';
+                                }
+                                $ing_ids=substr($ing_ids,0,-1);
+                                //Trying to not make the sql query in for loop for better performance
+                                $get_orders_meals_query="SELECT * FROM `meals` WHERE `Id` IN (".$str_ids.")";
+                                $result_get_meals=mysqli_query($database,$get_orders_meals_query);
+                                $mealArray=array();
+
+                                if(mysqli_num_rows($result_get_meals) > 0)
+                                {
+                                    while($row=mysqli_fetch_assoc($result_get_meals))
+                                    {
+                                        $mealArray[]=$row;
                                     }
                                 }
-                                $allcategories=array();
-                                foreach($allmeals as $currentmeal)
+                                //Same for ingredients
+                                $get_orders_ingredients_query="SELECT * FROM `ingredients` WHERE `Id` IN (".$ing_ids.")";
+                                $result_get_ingredients=mysqli_query($database,$get_orders_ingredients_query);
+                                $ingredientArray=array();
+
+                                if(mysqli_num_rows($result_get_ingredients) > 0)
                                 {
-                                    array_push($allcategories,$currentmeal['categorie']);
+                                    while($row=mysqli_fetch_assoc($result_get_ingredients))
+                                    {
+                                        $ingredientArray[]=$row;
+                                    }
                                 }
-                                $allcategories=array_unique($allcategories);
-                                foreach($allcategories as $cat)
+                                $_SESSION['user']['orderMeals']=$mealArray;
+                                $_SESSION['user']['orderIngredients']=$ingredientArray;
+
+                                $types=array("active","finished");
+                                foreach($types as $type)
                                 {
-                                    echo('<div class="favorites-categorie-title">'.$cat.'</div>
-                                        <div class="favorites-categorie">');
-                                    foreach($allmeals as $currentmeal)
+                                   echo('<div class="favorites-categorie-title">'.$type.'</div>
+                                   <div class="orders-categorie" id="'.$type.'">');
+                                foreach($_SESSION['user']['orders'] as $order)
+                                {
+                                    if($type==$order['eta'])
+                                    {
+                                    echo('
+                                        <div class="order-container">
+                                            <div class="order-item">
+                                                <div class="order-header">
+                                                    <div class="order-header-item" style="color:#F3A800">Order #'.$order['order_id'].'</div>
+                                                    <div class="order-header-item">
+                                                        <div>
+                                                            Order time: '.$order['time'].' '.$order['date'].'
+                                                        </div>
+                                                        <div>
+                                                            Order amount: '.$order['total'].'LL
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="meal-orders">
+                                    ');
+                                    $meals=$order['meals'];
+                                    $meals=explode(',',$meals);
+                                    foreach($meals as $meal)
                                     {
                                         
-                                        if($currentmeal['categorie']==$cat)
+                                        $dotIndex=strpos($meal,':');
+                                        $mealId='';
+                                        $thismealingredients=array();
+
+                                        if(empty($dotIndex))
                                         {
-                                            echo('
-                                            <div class="favorites-item-container">
-                                                <div class="favorites-item" id="meal'.$currentmeal['Id'].'">
-                                                    <div class="fav-item-imgbox">
-                                                        <img src="'.$currentmeal['image'].'">
-                                                        <h3>'.$currentmeal['name'].'</h3>
-                                                    </div>
-                                                    <div class="fav-item-content">
-                                                    <div class="main-heart-fav">
-                                                    <div>
-                                                    <input type="checkbox" class="heart-checkbox"');
-                                                    $favs=$_SESSION['user']['favorites'];
-                                                    foreach($favs as $fav)
+                                            $mealId=$meal;
+                                        }
+                                        else
+                                        {
+                                            $mealId=substr($meal,0,$dotIndex);
+
+                                            
+                                            $ingredients=explode('-',substr($meal,$dotIndex+1));
+                                            foreach($ingredients as $ingredient)
+                                            {
+                                                //Searching for each ingredient id in the array that i got from the database
+                                                foreach($ingredientArray as $ingsArray)
+                                                {
+                                                    foreach($ingsArray as $k => $v)
                                                     {
-                                                        if($fav['meal_id']==$currentmeal['Id'])
+                                                        if($k=='Id' && $v==$ingredient)
                                                         {
-                                                            echo('checked ');
+                                                            array_push($thismealingredients,$ingsArray);
                                                         }
                                                     }
-                                                    
-                                                    echo('onclick="ManageFavorite(this,'.$currentmeal["Id"].')" id="heart-checkbox-'.$currentmeal["Id"].'"/>
-                                                    <label for="heart-checkbox-'.$currentmeal["Id"].'">
-                                                        <svg id="heart-svg" viewBox="467 392 58 57">
-                                                        <g id="Group" fill="none" fill-rule="evenodd" transform="translate(467 392)">
-                                                            <path d="M29.144 20.773c-.063-.13-4.227-8.67-11.44-2.59C7.63 28.795 28.94 43.256 29.143 43.394c.204-.138 21.513-14.6 11.44-25.213-7.214-6.08-11.377 2.46-11.44 2.59z" id="heart" fill="#AAB8C2"/>
-                                                            <circle id="main-circ" fill="#E2264D" opacity="0" cx="29.5" cy="29.5" r="1.5"/>
-                                                
-                                                            <g id="grp7" opacity="0" transform="translate(7 6)">
-                                                            <circle id="oval1" fill="#9CD8C3" cx="2" cy="6" r="2"/>
-                                                            <circle id="oval2" fill="#8CE8C3" cx="5" cy="2" r="2"/>
-                                                            </g>
-                                                
-                                                            <g id="grp6" opacity="0" transform="translate(0 28)">
-                                                            <circle id="oval1" fill="#CC8EF5" cx="2" cy="7" r="2"/>
-                                                            <circle id="oval2" fill="#91D2FA" cx="3" cy="2" r="2"/>
-                                                            </g>
-                                                
-                                                            <g id="grp3" opacity="0" transform="translate(52 28)">
-                                                            <circle id="oval2" fill="#9CD8C3" cx="2" cy="7" r="2"/>
-                                                            <circle id="oval1" fill="#8CE8C3" cx="4" cy="2" r="2"/>
-                                                            </g>
-                                                
-                                                            <g id="grp2" opacity="0" transform="translate(44 6)">
-                                                            <circle id="oval2" fill="#CC8EF5" cx="5" cy="6" r="2"/>
-                                                            <circle id="oval1" fill="#CC8EF5" cx="2" cy="2" r="2"/>
-                                                            </g>
-                                                
-                                                            <g id="grp5" opacity="0" transform="translate(14 50)">
-                                                            <circle id="oval1" fill="#91D2FA" cx="6" cy="5" r="2"/>
-                                                            <circle id="oval2" fill="#91D2FA" cx="2" cy="2" r="2"/>
-                                                            </g>
-                                                
-                                                            <g id="grp4" opacity="0" transform="translate(35 50)">
-                                                            <circle id="oval1" fill="#F48EA7" cx="6" cy="5" r="2"/>
-                                                            <circle id="oval2" fill="#F48EA7" cx="2" cy="2" r="2"/>
-                                                            </g>
-                                                
-                                                            <g id="grp1" opacity="0" transform="translate(24)">
-                                                            <circle id="oval1" fill="#9FC7FA" cx="2.5" cy="3" r="2"/>
-                                                            <circle id="oval2" fill="#9FC7FA" cx="7.5" cy="2" r="2"/>
-                                                            </g>
-                                                        </g>
-                                                        </svg>
-                                                    </label>
+                                                }
+                                            }
+                                            
+                                            
+                                        }
+                                        $thismeal=array();
+                                        foreach($mealArray as $mealinfo)
+                                        {
+                                            foreach($mealinfo as $k=>$v)
+                                            {
+                                                if($k=='Id' && $v==$mealId)
+                                                {
+                                                    $thismeal=$mealinfo;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        echo('<div class="meal-order">
+                                                <div class="meal-order-info">
+                                                    <div class="meal-order-name">
+                                                        '.$thismeal['name'].'
+                                                    </div>
+                                                    <div class="meal-order-image">
+                                                        <img src="'.$thismeal['image'].'">
+                                                    </div>
+                                                    <div class="meal-order-price">
+                                                        '.$thismeal['price'].'LL
                                                     </div>
                                                 </div>
-                                                        <div class="fav-item-desc">
-                                                            '.$currentmeal['description'].'
-                                                        </div>
-                                                        <div class="ingredients">
-                                                ');
-                                                $mealingredients_array=explode(',',$currentmeal['ingredients']);
-                                                for($k=0;$k<count($mealingredients_array);$k++)
-                                                {
-                                                echo('
-                                                    <div>
-                                                        <input type="checkbox" name="'.$mealingredients_array[$k].'" id="checkbox'.$checkboxCount.'" checked="true">
-                                                        <label for="checkbox'.$checkboxCount.'"><img src="images/ingredients/'.
-                                                        $mealingredients_array[$k].
-                                                        '.png" /></label>
-                                                    </div>');
-                                                    $checkboxCount++;
-                                                }
-                                                echo('</div>
-                                                <div class="price"><h2>'.$currentmeal['price'].'</h2></div>
-                                                <div class="order">
-                                                    <input type="button" id="add_'.$currentmeal['Id'].' name="add" class="order-btn" value="Add to Card" onclick="cartAction(\'add\','.$currentmeal['Id'].');">
-                                                    <input type="button" class="order-btn" value="Buy Now">
-                                                </div>
-                                                </div>
-                                            </div>
+                                            
+                                        ');
+                                        if(!empty($thismealingredients))
+                                        {
+                                            echo('<div class="meal-order-ing">
+                                            <ul>');
+                                        foreach($thismealingredients as $ing)
+                                            {
+                                                echo('<li>no '.$ing['name'].'</li>');
+                                                
+                                            }
+                                            echo('<ul>
                                             </div>');
                                         }
+                                        echo('
+                                            </div>');
                                     }
-                                    echo('</div>');
-
+                                    echo('</div>
+                                            <div class="order-footer">
+                                                <div class="order-footer-info" >
+                                                    <img src="./images/icons/info.png">
+                                                    <div class="text">hover on the meals for more info</div>
+                                                </div>');
+                                                if($order['eta']=="finished")
+                                                {
+                                                    echo('<div>Order Finished</div>');
+                                                }else
+                                                {
+                                                    echo('
+                                                    <div class="finish-order">
+                                                        <div>Estimated Delivery Time: '.date("h:i A",strtotime($order['time']) + 60*60).'</div>
+                                                        <div class="finish-order-btn" onclick="ConfirmOrder('.$order['order_id'].')">Confirm Order Received</div>
+                                                    </div>');
+                                                }
+                                            echo('</div>
+                                    </div>
+                                </div>');
+                                    }
+                                }
+                                
+                                echo('</div>');
                                 }
                             }
                             
@@ -414,22 +487,25 @@ session_start();
                         <img src="./images/icons/close.png" onclick="showUserSettingsMobile()">
                     </div>
                     <div class="user-links">
-                        <a class="user-link" href="#">
+                        <a class="user-link" href="account.php">
                             <img src="./images/icons/settings-icon.png">
                             <span>Settings</span>
                         </a>
-                        <a class="user-link" href="#">
+                        <a class="user-link" href="orders.php">
                             <img src="./images/icons/orders.png">
                             <span>Orders</span>
                         </a>
-                        <a class="user-link" href="#">
+                        <a class="user-link" href="favorites.php">
                             <img src="./images/icons/heart.png">
                             <span>Favorites</span>
                         </a>
                     </div>
-                    <a class="user-link" href="#" style="margin:0;">
+                    <a class="user-link" href="#" onclick="document.getElementById(\'logout-mobile\').click()" style="margin:0;">
                         <img src="./images/icons/logout.png">
                         <span>Logout</span>
+                        <form style="display:none" method="POST" action="Logout.php">
+                            <input type="submit" name="logout" id="logout-mobile">
+                        </form>
                     </a>
                 </div>
 </div>
@@ -461,16 +537,8 @@ session_start();
                                 <div class="not-included">');
                                 for($i=0;$i<count($ingrArray);$i++)
                                 {
-                                    $query_ingr="SELECT * FROM `ingredients` WHERE name='".$ingrArray[$i]."'";
-                                    $ingr = mysqli_query($database, $query_ingr);
-                
-                                    $ingr_array=array();
-                                    while($row=mysqli_fetch_assoc($ingr))
-                                    {
-                                    $ingr_array[]=$row;
-                                    }
                                    echo('
-                                        <img src="'.$ingr_array[0]['image'].'">
+                                        <img src="./images/ingredients/'.$ingrArray[$i].'.png">
                                     ');
                                 }
                                 echo('</div>
@@ -499,7 +567,7 @@ session_start();
                         <span class="total">Total</span>
                         <span id="cart-total-mobile" class="price">0</span>
                     </div>
-                    <div class="cart-checkout">
+                    <div class="cart-checkout" onclick="location.href=\'checkout.php\';">
                        BUY NOW
                     </div>
                     <div class="cart-clear" onclick="cartAction(\'empty\');">
@@ -740,16 +808,11 @@ session_start();
 
         }
     }
-    function ManageFavorite(element,id)
+    function ConfirmOrder(id)
     {
-        var queryString="";
-        if(element.checked)
-        {
-            queryString="&action=addToFavorites&id="+id;
-        }else
-        {
-            queryString="&action=removeFromFavorites&id="+id;
-        }
+        var queryString = "action=confirm&id="+id;
+	    
+        
         $('#progress').css("width","0");
         $('#progress').show();
         $('#progress').animate({"width":"49%"},400,function()
@@ -760,7 +823,7 @@ session_start();
             });
         });
         jQuery.ajax({
-        url: "./actions/favorites-action.php",
+        url: "./actions/order-action.php",
         data:queryString,
         type: "POST",
         success:function(response){
@@ -768,28 +831,79 @@ session_start();
             {
                 $('#progress').hide();
             });
-            if(response=="success")
-            {
-                var item=$(element).parent().parent().parent().parent().parent();
-                var categorie=$(item).parent();
-                var title=$(categorie).prev();
-                $(item).hide(200,function()
-                {
-                    $(item).remove();
-                        if($(categorie).children().length==0)
-                        {
-                            $(title).hide(200,function()
-                            {
-                                $(item).remove();
-                            });
-                        }
-                
-                });
-                
-            }
+
+            var result=JSON.parse(response);
+            var active=result['active'];
+            var finished=result['finished'];
+
+            var activeElement=$('#active');
+            var finishedElement=$('#finished');
             
-        }
+            
+            activeElement.html(parseOrders('active',active));
+            finishedElement.html(parseOrders('finished',finished));
+
+        },
+        error:function (){}
         });
+    }
+    function parseOrders(type,a)
+    {
+        var ht='';
+        a.forEach(order => {
+                ht+='<div class="order-container">'
+                            +'<div class="order-item">'
+                                +'<div class="order-header">'
+                                    +'<div class="order-header-item" style="color:#F3A800">Order #'+order['order_id']
+                                    +'</div>'
+                                    +'<div class="order-header-item">'
+                                        +'<div>Order Time: '+order['time']+' '+order['date']+'</div>'
+                                        +'<div>Order amount: '+order['total']+'LL</div>'
+                                    +'</div>'
+                                +'</div>'
+                                +'<div class="meal-orders">';
+                                    var meals=order['meals'];
+                                    meals.forEach(meal => {
+                                        ht+='<div class="meal-order">'
+                                                    +'<div class="meal-order-info">'
+                                                        +'<div class="meal-order-name">'+meal['name']+'</div>'
+                                                        +'<div class="meal-order-image"><img src="'+meal['image']+'"></div>'
+                                                        +'<div class="meal-order-price">'+meal['price']+'LL</div>'
+                                                    +'</div>';
+                                                            var ings=meal['ingredients'];
+                                                            if(ings!='')
+                                                            {
+                                                                ht+='<div class="meal-order-ing">'
+                                                                +'<ul>';
+                                                            ings.forEach(ing => {
+                                                                ht+='<li>no '+ing['name']+'</li>';
+                                                            });
+                                                            ht+='</ul>'
+                                                            +'</div>'
+                                                            }
+                                                 ht+='</div>';
+                                    });
+                                ht+='</div>'
+                                +'<div class="order-footer">'
+                                    +'<div class="order-footer-info">'
+                                        +'<img src="./images/icons/info.png">'
+                                        +'<div class="text">hover on the meals for more info</div>'
+                                    +'</div>';
+                                    if(type=="active")
+                                    {
+                                        ht+='<div class="finish-order">'
+                                            +'<div>Estimated Delivery Time: '+order['deliveryTime']+'</div>'
+                                            +'<div class="finish-order-btn" onclick="ConfirmOrder('+order['order_id']+')">Confirm Order Received</div>'
+                                        +'</div>';
+                                    }else
+                                    {
+                                        ht+='<div>Order Finished</div>';
+                                    }
+                                ht+='</div>'
+                            +'</div>'
+                      +'</div>';
+            });
+        return(ht);
     }
     </script>
 </html>

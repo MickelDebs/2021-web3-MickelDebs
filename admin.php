@@ -94,18 +94,21 @@ session_start();
                                             <img src="./images/icons/settings-icon.png">
                                             <span>Settings</span>
                                         </a>
-                                        <a class="user-link" href="#">
+                                        <a class="user-link" href="orders.php">
                                             <img src="./images/icons/orders.png">
                                             <span>Orders</span>
                                         </a>
-                                        <a class="user-link" href="#">
+                                        <a class="user-link" href="favorites.php">
                                             <img src="./images/icons/heart.png">
                                             <span>Favorites</span>
                                         </a>
                                     </div>
-                                    <a class="user-link" href="#" style="margin:0;">
+                                    <a class="user-link" href="#" onclick="document.getElementById(\'logout-pc\').click()" style="margin:0;">
                                         <img src="./images/icons/logout.png">
                                         <span>Logout</span>
+                                        <form style="display:none" method="POST" action="Logout.php">
+                                        <input type="submit" name="logout" id="logout-pc">
+                                        </form>
                                     </a>
                                 </div>
                             </div>
@@ -211,22 +214,25 @@ session_start();
                         <img src="./images/icons/close.png" onclick="showUserSettingsMobile()">
                     </div>
                     <div class="user-links">
-                        <a class="user-link" href="#">
+                        <a class="user-link" href="account.php">
                             <img src="./images/icons/settings-icon.png">
                             <span>Settings</span>
                         </a>
-                        <a class="user-link" href="#">
+                        <a class="user-link" href="orders.php">
                             <img src="./images/icons/orders.png">
                             <span>Orders</span>
                         </a>
-                        <a class="user-link" href="#">
+                        <a class="user-link" href="favorites.php">
                             <img src="./images/icons/heart.png">
                             <span>Favorites</span>
                         </a>
                     </div>
-                    <a class="user-link" href="#" style="margin:0;">
+                    <a class="user-link" href="#" onclick="document.getElementById(\'logout-mobile\').click()" style="margin:0;">
                         <img src="./images/icons/logout.png">
                         <span>Logout</span>
+                        <form style="display:none" method="POST" action="Logout.php">
+                            <input type="submit" name="logout" id="logout-mobile">
+                        </form>
                     </a>
                 </div>
 </div>
@@ -242,7 +248,7 @@ session_start();
                         <span class="total">Total</span>
                         <span class="price">200,000LL</span>
                     </div>
-                    <div class="cart-checkout">
+                    <div class="cart-checkout" onclick="location.href=\'checkout.php\';">
                        BUY NOW
                     </div>
                     <div class="cart-clear">

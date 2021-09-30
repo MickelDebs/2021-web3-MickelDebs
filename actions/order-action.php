@@ -34,6 +34,53 @@ if(isset($_POST['action']))
                 MakeOrder("manual",$location_id);
             }
         break;
+        case 'confirm';
+            $id=$_POST['id'];
+            $confirmQuery="UPDATE `orders` SET eta='finished' WHERE order_id='".$id."'";
+            $resultConfirm=mysqli_query($database,$confirmQuery);
+
+            $order_array=array();
+            if($resultConfirm==1)
+            {
+                foreach($_SESSION['user']['orders'] as $order)
+                {
+                    foreach($order as $k =>$v)
+                    {
+                        if($k=='order_id' && $v==$id)
+                        {
+                            $order['eta']='finished';
+                        }
+                    }
+                    array_push($order_array,$order);
+                }
+                $_SESSION['user']['orders']=$order_array;
+
+                $allorders=array("active"=>array(),"finished"=>array());
+                foreach($_SESSION['user']['orders'] as $order)
+                {
+                    $meals=parseMeals($order);
+                    foreach($order as $k => $v)
+                    {
+                        $order['meals']=$meals;
+                        $order['deliveryTime']=date("h:i A",strtotime($order['time']) + 60*60);
+                        if($k=="eta")
+                        {
+                            if($v=="finished")
+                            {
+                                array_push($allorders['finished'],$order);
+                            }else
+                            {
+                                array_push($allorders['active'],$order);
+                            }
+                        }
+                    }
+                }
+                echo(json_encode($allorders));
+            }else
+            {
+                echo('fail');
+            }
+        break;
     }
 }
 function MakeOrder($location_type,$location_id)
@@ -45,10 +92,11 @@ function MakeOrder($location_type,$location_id)
         $quantity=count($_SESSION['cart_item']);
         $total=$_SESSION['total'];
         date_default_timezone_set('Asia/Beirut');
-        $time=date('h:i');
+        $time=date('h:i A');
+        $date=date('d,m,Y');
         
-        $order_query="INSERT INTO `orders` (`user_id`,`location_type`,`location_id`,`meals`,`quantity`,`total`,`time`)
-        VALUES ('".$user_id."','".$location_type."','".$location_id."','".$str_meals."','".$quantity."','".$total."','".$time."')";
+        $order_query="INSERT INTO `orders` (`user_id`,`location_type`,`location_id`,`meals`,`quantity`,`total`,`time`,`date`)
+        VALUES ('".$user_id."','".$location_type."','".$location_id."','".$str_meals."','".$quantity."','".$total."','".$time."','".$date."')";
 
         $result_order=mysqli_query($database,$order_query);
         $order_id=mysqli_insert_id($database);
@@ -88,6 +136,17 @@ function MakeOrder($location_type,$location_id)
                     <div class="text">You can get more info about your orders in <a href="./orders.php">order history</a></div>
                 </div>
             ');
+            $new_order=array("order_id"=>$order_id,"user_id"=>$user_id,"location_type"=>$location_type,"location_id"=>$location_id,"meals"=>$str_meals,"quantity"=>$quantity,"total"=>$total,"time"=>$time,"date"=>$date,"eta"=>"active");
+            if(isset($_SESSION['user']['orders']))
+            {
+                $orders=$_SESSION['user']['orders'];
+            }else
+            {
+                $orders=array();
+            }
+            array_push($orders,$new_order);
+            $_SESSION['user']['orders']=$orders;
+
             unset($_SESSION['cart_item']);
             $_SESSION['total']=0;
         }
@@ -102,7 +161,7 @@ function MakeOrder($location_type,$location_id)
         for($j=0;$j<count($meals);$j++)
         {
             $str='';
-            $id=$_SESSION['user']['Id'];
+            $id=$meals[$j]['Id'];
             if(!empty($meals[$j]['notIncluded']))
             {
                 //remove the last ','
@@ -148,5 +207,75 @@ function MakeOrder($location_type,$location_id)
             $result.=$str;
         }
         return $result;
+    }
+    function parseMeals($order)
+    {
+        $meals=$order['meals'];
+        $meals=explode(',',$meals);
+        $allmeals=array();
+        foreach($meals as $meal)
+        {
+            
+            $dotIndex=strpos($meal,':');
+            $mealId='';
+
+            if(empty($dotIndex))
+            {
+                $mealId=$meal;
+
+                
+                foreach($_SESSION['user']['orderMeals'] as $mealinfo)
+                {
+                    foreach($mealinfo as $k=>$v)
+                    {
+                        if($k=='Id' && $v==$mealId)
+                        {
+                            unset($mealinfo['ingredients']);
+                            $mealinfo['ingredients']=array();
+                            array_push($allmeals,$mealinfo);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                $mealId=substr($meal,0,$dotIndex);
+                $ings=array();
+
+                $ingredients=explode('-',substr($meal,$dotIndex+1));
+                foreach($ingredients as $ingredient)
+                {
+                    //Searching for each ingredient id in the array that i got from the database
+                    foreach($_SESSION['user']['orderIngredients'] as $ingsArray)
+                    {
+                        foreach($ingsArray as $k => $v)
+                        {
+                            if($k=='Id' && $v==$ingredient)
+                            {
+                                array_push($ings,$ingsArray);
+                            }
+                        }
+                    }
+                }
+                foreach($_SESSION['user']['orderMeals'] as $mealinfo)
+                {
+                    foreach($mealinfo as $k=>$v)
+                    {
+                        if($k=='Id' && $v==$mealId)
+                        {
+                            unset($mealinfo['ingredients']);
+                            $mealinfo['ingredients']=array();
+                            $mealinfo['ingredients']=$ings;
+                            array_push($allmeals,$mealinfo);
+                        }
+                    }
+                }
+                
+                
+            }
+            
+
+        }
+        return $allmeals;
     }
 ?>

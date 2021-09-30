@@ -1,6 +1,5 @@
 <?php
 session_start();
-include 'cnx.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -72,16 +71,8 @@ include 'cnx.php';
                                                 <div class="not-included">');
                                                 for($i=0;$i<count($ingrArray);$i++)
                                                 {
-                                                    $query_ingr="SELECT * FROM `ingredients` WHERE name='".$ingrArray[$i]."'";
-                                                    $ingr = mysqli_query($database, $query_ingr);
-                                
-                                                    $ingr_array=array();
-                                                    while($row=mysqli_fetch_assoc($ingr))
-                                                    {
-                                                    $ingr_array[]=$row;
-                                                    }
                                                    echo('
-                                                        <img src="'.$ingr_array[0]['image'].'">
+                                                        <img src="./images/ingredients/'.$ingrArray[$i].'.png">
                                                     ');
                                                 }
                                                 echo('</div>
@@ -138,18 +129,21 @@ include 'cnx.php';
                                             <img src="./images/icons/settings-icon.png">
                                             <span>Settings</span>
                                         </a>
-                                        <a class="user-link" href="#">
+                                        <a class="user-link" href="orders.php">
                                             <img src="./images/icons/orders.png">
                                             <span>Orders</span>
                                         </a>
-                                        <a class="user-link" href="#">
+                                        <a class="user-link" href="favorites.php">
                                             <img src="./images/icons/heart.png">
                                             <span>Favorites</span>
                                         </a>
                                     </div>
-                                    <a class="user-link" href="#" style="margin:0;">
+                                    <a class="user-link" href="#" onclick="document.getElementById(\'logout-pc\').click()" style="margin:0;">
                                         <img src="./images/icons/logout.png">
                                         <span>Logout</span>
+                                        <form style="display:none" method="POST" action="Logout.php">
+                                        <input type="submit" name="logout" id="logout-pc">
+                                        </form>
                                     </a>
                                 </div>
                             </div>
@@ -237,7 +231,7 @@ include 'cnx.php';
                 <div class="background-div-3">
                     <span class="s1">JUICY & HOT FOOD</span>
                     <span class="s2">Delivering now all accross lebanon!</span>
-                    <input type="button" class="start-button" value="Order Now" id="order-button">
+                    <input type="button" class="start-button" onclick="location.href='BuyPage.php'" value="Order Now" id="order-button">
                 </div>
             </div>
             <div class="flex-column background-div-2">
@@ -264,18 +258,21 @@ include 'cnx.php';
                             <img src="./images/icons/settings-icon.png">
                             <span>Settings</span>
                         </a>
-                        <a class="user-link" href="#">
+                        <a class="user-link" href="orders.php">
                             <img src="./images/icons/orders.png">
                             <span>Orders</span>
                         </a>
-                        <a class="user-link" href="#">
+                        <a class="user-link" href="favorites.php">
                             <img src="./images/icons/heart.png">
                             <span>Favorites</span>
                         </a>
                     </div>
-                    <a class="user-link" href="#" style="margin:0;">
+                    <a class="user-link" href="#" onclick="document.getElementById(\'logout-mobile\').click()" style="margin:0;">
                         <img src="./images/icons/logout.png">
                         <span>Logout</span>
+                        <form style="display:none" method="POST" action="Logout.php">
+                            <input type="submit" name="logout" id="logout-mobile">
+                        </form>
                     </a>
                 </div>
 </div>
@@ -307,16 +304,8 @@ include 'cnx.php';
                                 <div class="not-included">');
                                 for($i=0;$i<count($ingrArray);$i++)
                                 {
-                                    $query_ingr="SELECT * FROM `ingredients` WHERE name='".$ingrArray[$i]."'";
-                                    $ingr = mysqli_query($database, $query_ingr);
-                
-                                    $ingr_array=array();
-                                    while($row=mysqli_fetch_assoc($ingr))
-                                    {
-                                    $ingr_array[]=$row;
-                                    }
                                    echo('
-                                        <img src="'.$ingr_array[0]['image'].'">
+                                        <img src="./images/ingredients/'.$ingrArray[$i].'.png">
                                     ');
                                 }
                                 echo('</div>
@@ -345,7 +334,7 @@ include 'cnx.php';
                         <span class="total">Total</span>
                         <span id="cart-total-mobile" class="price">0</span>
                     </div>
-                    <div class="cart-checkout">
+                    <div class="cart-checkout" onclick="location.href=\'checkout.php\';">
                        BUY NOW
                     </div>
                     <div class="cart-clear" onclick="cartAction(\'empty\');">

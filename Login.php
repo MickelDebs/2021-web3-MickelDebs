@@ -64,6 +64,17 @@ if(isset($_POST["login"]))
                         }
                         $_SESSION['user']['favorites']=$fav;
 
+                        $ordersQuery="SELECT * FROM `orders` WHERE user_id='".$_SESSION['user']['Id']."'";
+                        $resultorders=mysqli_query($database,$ordersQuery);
+                        $orders=array();
+                        if(mysqli_num_rows($resultorders) > 0)
+                        {
+                            while($row=mysqli_fetch_assoc($resultorders))
+                            {
+                                $orders[]=$row;
+                            }
+                        }
+                        $_SESSION['user']['orders']=$orders;
                         header('location:BuyPage.php');
                     }else
                     {
